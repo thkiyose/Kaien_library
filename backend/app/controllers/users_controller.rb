@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: { status:"SUCCESS", data: @user}
     else
-      render json: { @user.errors, status: 500 }
+      render json: { status: 500 }
     end
   end
 
