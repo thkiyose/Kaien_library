@@ -9,7 +9,7 @@ export const Login = () => {
       <Header />
       <Wrapper>
         <p>ログイン</p>
-        <Link to='' >新規登録</Link>
+        <Link to='/signup' >新規登録</Link>
       </Wrapper>
     </>
   );
