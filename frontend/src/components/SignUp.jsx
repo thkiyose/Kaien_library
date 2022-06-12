@@ -13,6 +13,7 @@ export const SignUp = (props) => {
     <>
       <Header />
       <Wrapper>
+      <p>新規ユーザー登録</p>
       <form
         onSubmit={handleSubmit(async(data) => {
           try {
