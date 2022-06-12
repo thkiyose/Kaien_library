@@ -9,6 +9,7 @@ export const Login = (props) => {
       <Header />
       <Wrapper>
         <p>ログイン</p>
+        <h2>ログイン状態: {props.loggedInStatus}</h2>
         <Link to='/signup' >新規登録</Link>
       </Wrapper>
     </>
