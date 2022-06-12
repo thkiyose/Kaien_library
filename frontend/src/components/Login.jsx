@@ -3,7 +3,7 @@ import { Header } from './parts/Header'
 import { Wrapper } from './parts/Wrapper'
 import { Link } from 'react-router-dom';
 
-export const Login = () => {
+export const Login = (props) => {
   return (
     <>
       <Header />
