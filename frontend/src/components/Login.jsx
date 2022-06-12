@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { logIn } from '../lib/api/session';
 import { Header } from './parts/Header'
 import { Wrapper } from './parts/Wrapper'
 import { Link } from 'react-router-dom';
@@ -16,14 +17,15 @@ export const Login = (props) => {
         <p>ログイン</p>
         <h2>ログイン状態: {props.loggedInStatus}</h2>
         <form
-          // onSubmit={handleSubmit(async(data) => {
-          //   try {
-          //     const res = await createUser({user:data},{withCredentials: true});
-          //     props.handleLogin(res);
-          //     navigate('/');
-          //   } catch (e) {
-          //   }
-          // })}
+          onSubmit={handleSubmit(async(data) => {
+            try {
+              const res = await logIn({user:data},{withCredentials: true});
+              if (res.data.status === 'SUCCESS') {
+                props.handleLogin(res);
+                navigate('/');}
+            } catch (e) {
+            }
+          })}
           >
             <div>
               <label>名前</label>

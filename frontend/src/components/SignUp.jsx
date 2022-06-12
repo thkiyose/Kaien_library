@@ -18,8 +18,9 @@ export const SignUp = (props) => {
         onSubmit={handleSubmit(async(data) => {
           try {
             const res = await createUser({user:data},{withCredentials: true});
-            props.handleLogin(res);
-            navigate('/');
+            if (res.data.status === 'SUCCESS') {
+              props.handleLogin(res);
+              navigate('/');}
           } catch (e) {
           }
         })}
