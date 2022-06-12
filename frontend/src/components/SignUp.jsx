@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ReactDOM from "react-dom";
+import React from 'react';
 import { Header } from './parts/Header';
 import { Wrapper } from './parts/Wrapper';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +13,15 @@ export const SignUp = () => {
     <>
       <Header />
       <Wrapper>
-        <form onSubmit={handleSubmit(async (data) => await createUser({user: data}))}>
+      <form
+        onSubmit={handleSubmit(async(data) => {
+          try {
+            const res = await createUser({user:data});
+            navigate('/');
+          } catch (e) {
+          }
+        })}
+        >
           <div>
             <label>名前</label>
             <input type="text" name="name" {...register("name", { required: true, maxLength: 15 })}/>
