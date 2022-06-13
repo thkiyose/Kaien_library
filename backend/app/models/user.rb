@@ -1,11 +1,9 @@
-class User < ApplicationRecord
-  has_secure_password
-  before_validation :email_downcase
+# frozen_string_literal: true
 
-  validates :name, presence: true, length: { maximum: 15 }
-  validates :email, presence: true, length: { maximum: 255}, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
-
-  def email_downcase
-    self.email.downcase!
-  end
+class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+  include DeviseTokenAuth::Concerns::User
 end
