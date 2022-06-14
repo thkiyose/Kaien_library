@@ -22,7 +22,6 @@ export const SignUp = () => {
         onSubmit={handleSubmit(async(data) => {
           try {
             const res = await signUp({user:data});
-            console.log(res);
             if (res.data.status === 'SUCCESS') {
               const login_res = await signIn(data);
               Cookies.set('_access_token', login_res.headers['access-token']);

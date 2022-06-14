@@ -9,7 +9,7 @@ export const AuthContext = createContext();
 export const App = () => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState({});
 
   const handleGetCurrentUser = async () => {
   try {
@@ -17,7 +17,6 @@ export const App = () => {
     if (res?.data.isLogin === true) {
       setIsSignedIn(true);
       setCurrentUser(res?.data.data);
-      console.log(res?.data.data.name);
     } else {
       console.log('no current user');
     }

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 export const Login = (props) => {
   const navigate = useNavigate();
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext);
   const [ errorMessage, setErrorMessage ] = useState();
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -19,6 +19,7 @@ export const Login = (props) => {
       <Header />
       <Wrapper>
         <p>ログイン</p>
+        <p>ログイン中:{currentUser.name}</p>
         <p>{errorMessage}</p>
         <form
           onSubmit={handleSubmit(async(data) => {
