@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
@@ -11,15 +11,14 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState();
+  const navigate = useNavigate();
 
   const handleGetCurrentUser = async () => {
   try {
     const res = await getCurrentUser();
-    console.log(res)
     if (res?.data.isLogin === true) {
       setIsSignedIn(true);
       setCurrentUser(res?.data.data);
-      console.log(res?.data.data);
     } else {
       console.log('no current user');
     }
@@ -33,6 +32,18 @@ export const App = () => {
   useEffect(() => {
     handleGetCurrentUser();
   }, [setCurrentUser]);
+
+  const Private = ({ children }) => {
+    if (!loading) {
+      if (isSignedIn) {
+        return children;
+      } else {
+        navigate("/");
+      }
+    } else {
+      return <></>;
+    }
+  };
 
   return (
     <AuthContext.Provider

@@ -17,7 +17,7 @@ export const SignUp = () => {
       <form
         onSubmit={handleSubmit(async(data) => {
           try {
-            const res = await createUser({user:data},{withCredentials: true});
+            const res = await createUser({user:data});
             if (res.data.status === 'SUCCESS') {
               navigate('/');}
           } catch (e) {

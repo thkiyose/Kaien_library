@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 export const Login = (props) => {
   const navigate = useNavigate();
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const [ errorMessage, setErrorMessage ] = useState();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   return (
@@ -18,12 +19,12 @@ export const Login = (props) => {
       <Header />
       <Wrapper>
         <p>ログイン</p>
+        <p>{errorMessage}</p>
         <form
           onSubmit={handleSubmit(async(data) => {
             try {
               const res = await signIn(data);
               if (res.status === 200) {
-                console.log(res);
                 Cookies.set('_access_token', res.headers['access-token']);
                 Cookies.set('_client', res.headers['client']);
                 Cookies.set('_uid', res.headers['uid']);
@@ -32,6 +33,7 @@ export const Login = (props) => {
                 navigate('/');}
             } catch (e) {
               console.log(e);
+              setErrorMessage("ログインに失敗しました。メールアドレスとパスワードをご確認下さい。");
             }
           })}
           >
