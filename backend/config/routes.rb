@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
-  resources :sessions, only: [:new,:create,:destroy] do
-    collection do
-      get "/logged_in", to: "sessions#logged_in?"
+  namespace :api do
+    namespace :v1 do
+
+      mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+        registrations: 'api/v1/auth/registrations'
+      }
+
+      namespace :auth do
+        resources :sessions, only: %i[index]
+      end
     end
   end
 end
