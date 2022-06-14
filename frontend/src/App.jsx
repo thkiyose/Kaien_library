@@ -1,21 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import axios from 'axios'
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
+import { getCurrentUser } from './lib/api/session';
+
+export const AuthContext = createContext();
 
 export const App = () => {
-  const [loggedInStatus, setLoggedInStatus] = useState("未ログイン");
-  const [user,setUser] = useState({});
-  const handleLogin = (data) => {
-  setLoggedInStatus("ログイン中")
-  setUser(data.user)
-}
+  const [loading, setLoading] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState();
+
+  const handleGetCurrentUser = async () => {
+  try {
+    const res = await getCurrentUser();
+    console.log(res)
+    if (res?.data.isLogin === true) {
+      setIsSignedIn(true);
+      setCurrentUser(res?.data.data);
+      console.log(res?.data.data);
+    } else {
+      console.log('no current user');
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    handleGetCurrentUser();
+  }, [setCurrentUser]);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route exact path={"/"} element={<Login handleLogin={handleLogin} loggedInStatus={loggedInStatus} />} />
-        <Route exact path={"/signup"} element={<SignUp handleLogin={handleLogin} />} />
-      </Routes>
-     </BrowserRouter>
+    <AuthContext.Provider
+         value={{
+           loading,
+           setLoading,
+           isSignedIn,
+           setIsSignedIn,
+           currentUser,
+           setCurrentUser,
+         }}
+       >
+      <BrowserRouter>
+        <Routes>
+          <Route exact path={"/"} element={<Login />} />
+          <Route exact path={"/signup"} element={<SignUp />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 };

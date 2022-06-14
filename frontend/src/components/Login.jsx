@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { logIn } from '../lib/api/session';
+import { signIn } from '../lib/api/session';
+import Cookies from 'js-cookie';
+import { AuthContext } from '../App';
 import { Header } from './parts/Header'
 import { Wrapper } from './parts/Wrapper'
 import { Link } from 'react-router-dom';
 
 export const Login = (props) => {
   const navigate = useNavigate();
+  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   return (
@@ -15,24 +18,23 @@ export const Login = (props) => {
       <Header />
       <Wrapper>
         <p>ログイン</p>
-        <h2>ログイン状態: {props.loggedInStatus}</h2>
         <form
           onSubmit={handleSubmit(async(data) => {
             try {
-              const res = await logIn({user:data},{withCredentials: true});
-              if (res.data.status === 'SUCCESS') {
-                props.handleLogin(res);
+              const res = await signIn(data);
+              if (res.status === 200) {
+                console.log(res);
+                Cookies.set('_access_token', res.headers['access-token']);
+                Cookies.set('_client', res.headers['client']);
+                Cookies.set('_uid', res.headers['uid']);
+                setIsSignedIn(true);
+                setCurrentUser(res.data.data);
                 navigate('/');}
             } catch (e) {
+              console.log(e);
             }
           })}
           >
-            <div>
-              <label>名前</label>
-              <input type="text" name="name" {...register("name", { required: true, maxLength: 15 })}/>
-              {errors.name?.type === "required" && <span>名前を入力して下さい。</span>}
-              {errors.name?.type === "maxLength" && <span>15文字以内で入力して下さい。</span>}
-            </div>
             <div>
               <label>メールアドレス</label>
               <input type="email" name="email" {...register("email", { required: true, maxLength: 255, pattern: /[\w\-._]+@[\w\-._]+\.[A-Za-z]+/ })}/>

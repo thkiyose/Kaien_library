@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { createUser } from '../lib/api/user';
 import { useForm } from 'react-hook-form';
 
-export const SignUp = (props) => {
+export const SignUp = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -19,7 +19,6 @@ export const SignUp = (props) => {
           try {
             const res = await createUser({user:data},{withCredentials: true});
             if (res.data.status === 'SUCCESS') {
-              props.handleLogin(res);
               navigate('/');}
           } catch (e) {
           }
