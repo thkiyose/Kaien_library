@@ -12,7 +12,7 @@ export const Login = (props) => {
   const navigate = useNavigate();
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const [ errorMessage, setErrorMessage ] = useState();
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   return (
     <>

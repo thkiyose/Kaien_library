@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import Cookies from 'js-cookie';
 import { Header } from './parts/Header';
 import { Wrapper } from './parts/Wrapper';
 import { useNavigate } from 'react-router-dom';
-import { createUser } from '../lib/api/user';
+import { AuthContext } from '../App';
+import { signUp } from '../lib/api/session';
+import { signIn } from '../lib/api/session';
 import { useForm } from 'react-hook-form';
 
 export const SignUp = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
 
   return (
     <>
@@ -17,10 +21,18 @@ export const SignUp = () => {
       <form
         onSubmit={handleSubmit(async(data) => {
           try {
-            const res = await createUser({user:data});
+            const res = await signUp({user:data});
+            console.log(res);
             if (res.data.status === 'SUCCESS') {
+              const login_res = await signIn(data);
+              Cookies.set('_access_token', login_res.headers['access-token']);
+              Cookies.set('_client', login_res.headers['client']);
+              Cookies.set('_uid', login_res.headers['uid']);
+              setIsSignedIn(true);
+              setCurrentUser(res.data.data);
               navigate('/');}
           } catch (e) {
+            console.log(e);
           }
         })}
         >
@@ -39,8 +51,9 @@ export const SignUp = () => {
           </div>
           <div>
             <label>パスワード</label>
-            <input type="password" name="password" {...register("password", { required: true, maxLength: 71 })}/>
+            <input type="password" name="password" {...register("password", { required: true, minLength: 6,maxLength: 71 })}/>
             {errors.password?.type === "required" && <span>パスワードを入力して下さい。</span>}
+            {errors.password?.type === "minLength" && <span>パスワードが短すぎます。(最小6文字)</span>}
             {errors.password?.type === "maxLength" && <span>パスワードが長すぎます。(最大71文字)</span>}
           </div>
           <div>

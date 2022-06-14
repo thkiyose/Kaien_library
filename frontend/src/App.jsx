@@ -1,6 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import axios from 'axios'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { getCurrentUser } from './lib/api/session';
@@ -11,7 +10,6 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState();
-  const navigate = useNavigate();
 
   const handleGetCurrentUser = async () => {
   try {
@@ -19,16 +17,15 @@ export const App = () => {
     if (res?.data.isLogin === true) {
       setIsSignedIn(true);
       setCurrentUser(res?.data.data);
+      console.log(res?.data.data.name);
     } else {
       console.log('no current user');
     }
   } catch (e) {
     console.log(e);
   }
-
     setLoading(false);
   };
-
   useEffect(() => {
     handleGetCurrentUser();
   }, [setCurrentUser]);
@@ -38,7 +35,7 @@ export const App = () => {
       if (isSignedIn) {
         return children;
       } else {
-        navigate("/");
+        return <Navigate to='/' />;
       }
     } else {
       return <></>;
@@ -61,6 +58,8 @@ export const App = () => {
           <Route exact path={"/"} element={<Login />} />
           <Route exact path={"/signup"} element={<SignUp />} />
         </Routes>
+        <Private>
+        </Private>
       </BrowserRouter>
     </AuthContext.Provider>
   );

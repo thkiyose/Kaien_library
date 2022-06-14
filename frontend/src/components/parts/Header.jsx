@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../../App';
 
 export const Header = () => {
+  const currentUser = useContext(AuthContext);
   const style = {
     width:"100%",
     backgroundColor:"rgb(249, 254, 207)",
@@ -10,6 +12,11 @@ export const Header = () => {
     left:"0"
   };
   return (
-    <div style={style}>Header</div>
+    <>
+    <div style={style}>
+      Header
+      <p>{currentUser.name}</p>
+    </div>
+    </>
   )
 };
