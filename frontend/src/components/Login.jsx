@@ -19,7 +19,6 @@ export const Login = (props) => {
       <Header />
       <Wrapper>
         <p>ログイン</p>
-        <p>ログイン中:{currentUser.name}</p>
         <p>{errorMessage}</p>
         <form
           onSubmit={handleSubmit(async(data) => {
