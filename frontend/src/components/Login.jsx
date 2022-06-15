@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 export const Login = (props) => {
   const navigate = useNavigate();
-  const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const [ errorMessage, setErrorMessage ] = useState();
   const { register, handleSubmit, formState: { errors } } = useForm();
 

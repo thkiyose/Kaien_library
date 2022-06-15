@@ -23,7 +23,7 @@ export const App = () => {
   } catch (e) {
     console.log(e);
   }
-    // setLoading(false);
+    setLoading(false);
   };
   useEffect(() => {
     handleGetCurrentUser();
@@ -57,8 +57,6 @@ export const App = () => {
           <Route exact path={"/"} element={<Login />} />
           <Route exact path={"/signup"} element={<SignUp />} />
         </Routes>
-        <Private>
-        </Private>
       </BrowserRouter>
     </AuthContext.Provider>
   );
