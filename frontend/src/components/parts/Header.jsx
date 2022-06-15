@@ -3,7 +3,7 @@ import { AuthContext } from '../../App';
 import { LogOut } from '../Logout';
 
 export const Header = () => {
-  const {currentUser} = useContext(AuthContext);
+  const {currentUser, setCurrentUser} = useContext(AuthContext);
   const style = {
     width:"100%",
     backgroundColor:"rgb(249, 254, 207)",
@@ -16,7 +16,7 @@ export const Header = () => {
     <>
     <div style={style}>
       <p>ログイン中:{currentUser.email}</p>
-      <LogOut />
+      <LogOut setCurrentUser={setCurrentUser} />
     </div>
     </>
   )

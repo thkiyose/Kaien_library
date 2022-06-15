@@ -23,11 +23,11 @@ export const App = () => {
   } catch (e) {
     console.log(e);
   }
-    setLoading(false);
+    // setLoading(false);
   };
   useEffect(() => {
     handleGetCurrentUser();
-  }, []);
+  }, [setCurrentUser]);
 
   const Private = ({ children }) => {
     if (!loading) {
