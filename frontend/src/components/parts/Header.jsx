@@ -3,7 +3,7 @@ import { AuthContext } from '../../App';
 import { LogOut } from '../Logout';
 
 export const Header = () => {
-  const {currentUser, setCurrentUser} = useContext(AuthContext);
+  const {currentUser, setCurrentUser, isSignedIn, setIsSignedIn } = useContext(AuthContext);
   const style = {
     width:"100%",
     backgroundColor:"rgb(249, 254, 207)",
@@ -15,8 +15,8 @@ export const Header = () => {
   return (
     <>
     <div style={style}>
-      <p>ログイン中:{currentUser.email}</p>
-      <LogOut setCurrentUser={setCurrentUser} />
+      {isSignedIn && <p>ログイン中:{currentUser.email}</p>}
+      {isSignedIn && <LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} />}
     </div>
     </>
   )
