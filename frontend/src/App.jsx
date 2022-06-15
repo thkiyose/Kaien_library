@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
+import { MyPage } from './components/MyPage';
 import { getCurrentUser } from './lib/api/session';
 
 export const AuthContext = createContext();
@@ -29,17 +30,6 @@ export const App = () => {
     handleGetCurrentUser();
   }, [setCurrentUser]);
 
-  const Private = ({ children }) => {
-    if (!loading) {
-      if (isSignedIn) {
-        return children;
-      } else {
-        return <Navigate to='/' />;
-      }
-    } else {
-      return <></>;
-    }
-  };
 
   return (
     <AuthContext.Provider
@@ -56,6 +46,10 @@ export const App = () => {
         <Routes>
           <Route exact path={"/"} element={<Login />} />
           <Route exact path={"/signup"} element={<SignUp />} />
+          <Route exact path={"/user/:id"} element={<MyPage />} />
+          <Route path={"/users"} element={<MyPage />}>
+            <Route path={":userId"} element={<MyPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
