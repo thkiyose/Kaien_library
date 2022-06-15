@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   def show
-    render json: {message: "aaa"}
+    @user = User.find_by(id: params[:id])
+    render json: { user: @user }
   end
 end
