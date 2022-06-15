@@ -4,4 +4,10 @@ class User < ActiveRecord::Base
   before_validation :email_downcase
 
   validates :name, presence: true, length: { maximum: 15 }
+
+  private
+  
+  def email_downcase
+    self.email.downcase!
+  end
 end
