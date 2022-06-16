@@ -41,6 +41,17 @@ export const App = () => {
       return <></>;
     }
   };
+  const NotLoggedInRoute = ( {children} ) => {
+    if (!loading) {
+      if (!isSignedIn) {
+        return children ;
+      } else {
+        return <Navigate to="/users" />;
+      }
+    } else {
+      return <></>;
+    }
+  };
 
   return (
     <AuthContext.Provider
@@ -55,8 +66,8 @@ export const App = () => {
        >
       <BrowserRouter>
         <Routes>
-          <Route path={"/"} element={<Login />} />
-          <Route path={"/signup"} element={<SignUp />} />
+            <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
+            <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
           <Route
             path={"/users"}
             element={
