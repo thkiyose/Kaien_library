@@ -48,6 +48,7 @@ export const App = () => {
           <Route path={"/users"} element={<MyPage />}>
             <Route path={":userId"} element={<MyPage />} />
           </Route>
+          <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
