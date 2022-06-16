@@ -1,5 +1,5 @@
 import React, { useState,useContext,useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import { getMyPageInfo } from '../lib/api/user';
 import { Header } from './parts/Header';
@@ -8,10 +8,15 @@ import { LogOut } from './Logout';
 
 export const MyPage = () => {
   const [ user, setUser ] = useState({});
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const style = {
   };
   const { userId } = useParams();
   const getUserInfo = async(userId) => {
+    if (userId !== currentUser.id) {
+      navigate(`${currentUser.id}`);
+    }
     try {
       const res = await getMyPageInfo(userId);
       setUser(res.data.user);
