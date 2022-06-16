@@ -29,7 +29,7 @@ export const SignUp = () => {
               Cookies.set('_uid', login_res.headers['uid']);
               setIsSignedIn(true);
               setCurrentUser(res.data.data);
-              navigate(`/user/${res.data.data.id}`);}
+              navigate(`/users/${res.data.data.id}`);}
           } catch (e) {
             console.log(e);
           }
