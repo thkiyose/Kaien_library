@@ -30,7 +30,7 @@ export const Login = (props) => {
                 Cookies.set('_uid', res.headers['uid']);
                 setIsSignedIn(true);
                 setCurrentUser(res.data.data);
-                navigate('/user/{res.data.data.id}');}
+                navigate(`/user/${res.data.data.id}`);}
             } catch (e) {
               console.log(e);
               setErrorMessage("ログインに失敗しました。メールアドレスとパスワードをご確認下さい。");
