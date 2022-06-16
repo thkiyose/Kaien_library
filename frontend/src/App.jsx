@@ -1,5 +1,5 @@
-import React, { useState, useEffect, createContext } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect, createContext} from 'react';
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { MyPage } from './components/MyPage';
@@ -30,7 +30,6 @@ export const App = () => {
     handleGetCurrentUser();
   }, [setCurrentUser]);
 
-
   return (
     <AuthContext.Provider
          value={{
@@ -44,9 +43,8 @@ export const App = () => {
        >
       <BrowserRouter>
         <Routes>
-          <Route exact path={"/"} element={<Login />} />
-          <Route exact path={"/signup"} element={<SignUp />} />
-          <Route exact path={"/user/:id"} element={<MyPage />} />
+          <Route path={"/"} element={<Login />} />
+          <Route path={"/signup"} element={<SignUp />} />
           <Route path={"/users"} element={<MyPage />}>
             <Route path={":userId"} element={<MyPage />} />
           </Route>
