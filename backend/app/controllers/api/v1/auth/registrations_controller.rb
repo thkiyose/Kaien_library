@@ -8,10 +8,6 @@ class Api::V1::Auth::RegistrationsController < ApplicationController
     end
   end
 
-  def check_email_unique
-    render json: { message:"test" }
-  end
-
   private
 
   def sign_up_params
