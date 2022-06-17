@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
+import './index.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';

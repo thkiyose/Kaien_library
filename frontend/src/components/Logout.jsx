@@ -13,8 +13,8 @@ export const LogOut = (props) => {
     borderRadius:"5px",
     float:"right",
     marginRight:"50px",
-    marginTop:"7px"
-
+    marginTop:"7px",
+    fontWeight:"bold",
   };
 
   const handleLogOut = async() => {
