@@ -1,11 +1,12 @@
-class User < ApplicationRecord
-  has_secure_password
+class User < ActiveRecord::Base
+  devise :database_authenticatable, :registerable, :validatable
+  include DeviseTokenAuth::Concerns::User
   before_validation :email_downcase
 
   validates :name, presence: true, length: { maximum: 15 }
-  validates :email, presence: true, length: { maximum: 255}, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }
-  validates :admin, presence: true
 
+  private
+  
   def email_downcase
     self.email.downcase!
   end
