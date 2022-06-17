@@ -11,8 +11,9 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks], controllers: {
         registrations: 'api/v1/auth/registrations'
       }
-      resources :users, except: [:create,:index]
-
+      resources :users, except: [:create,:index] do
+        get 'registrations/check_email_unique', on: :collection
+      end
       namespace :auth do
         resources :sessions, only: %i[index]
       end

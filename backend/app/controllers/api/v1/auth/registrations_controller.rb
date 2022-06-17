@@ -4,8 +4,12 @@ class Api::V1::Auth::RegistrationsController < ApplicationController
     if @user.save!
       render json: { status:"SUCCESS", data: @user}
     else
-      render json: { status: 500 }
+      render json: { status: 500, message: "aaa" }
     end
+  end
+
+  def check_email_unique
+    render json: { message:"test" }
   end
 
   private
