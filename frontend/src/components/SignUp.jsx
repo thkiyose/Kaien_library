@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Header } from './parts/Header';
 import { Wrapper } from './parts/Wrapper';
@@ -6,12 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import { signUp } from '../lib/api/session';
 import { signIn } from '../lib/api/session';
+import { emailUniqueCheck } from '../lib/api/session';
 import { useForm } from 'react-hook-form';
 
 export const SignUp = () => {
   const navigate = useNavigate();
+  const [ error, setError ] = useState();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const emailIsUnique = async (email) => {
+    const res = await emailUniqueCheck({email:email});
+    return res.data.userExistence === false
+  };
 
   return (
     <>
@@ -43,10 +49,11 @@ export const SignUp = () => {
           </div>
           <div>
             <label>メールアドレス</label>
-            <input type="email" name="email" {...register("email", { required: true, maxLength: 255, pattern: /[\w\-._]+@[\w\-._]+\.[A-Za-z]+/ })}/>
+            <input type="email" name="email" {...register("email", { required: true, maxLength: 255, pattern: /[\w\-._]+@[\w\-._]+\.[A-Za-z]+/, validate: emailIsUnique })}/>
             {errors.email?.type === "required" && <span>メールアドレスを入力して下さい。</span>}
             {errors.email?.type === "maxLength" && <span>255字以内で入力して下さい。</span>}
             {errors.email?.type === "pattern" && <span>正しい形式で入力して下さい。</span>}
+            {errors.email && errors.email.type === "validate" && <span>このメールアドレスは既に使用されています。</span>}
           </div>
           <div>
             <label>パスワード</label>

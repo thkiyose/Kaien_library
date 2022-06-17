@@ -5,6 +5,10 @@ export const signUp = (params) => {
   return client.post('/auth', params);
 };
 
+export const emailUniqueCheck = (params) => {
+  return client.post('/users/check_email_unique',params);
+};
+
 export const signIn = (params) => {
   return client.post('/auth/sign_in', params);
 };

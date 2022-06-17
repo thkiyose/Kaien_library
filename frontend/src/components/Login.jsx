@@ -8,6 +8,15 @@ import { Header } from './parts/Header'
 import { Wrapper } from './parts/Wrapper'
 import { Link } from 'react-router-dom';
 
+const buttonStyle = {
+  padding:"7px",
+  border:"None",
+  backgroundColor:"rgb(39, 93, 54)",
+  color:"white",
+  borderRadius:"5px",
+  fontWeight:"bold",
+}
+
 export const Login = (props) => {
   const navigate = useNavigate();
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
@@ -24,6 +33,7 @@ export const Login = (props) => {
           onSubmit={handleSubmit(async(data) => {
             try {
               const res = await signIn(data);
+              console.log(res);
               if (res.status === 200) {
                 Cookies.set('_access_token', res.headers['access-token']);
                 Cookies.set('_client', res.headers['client']);
@@ -49,7 +59,7 @@ export const Login = (props) => {
               <input type="password" name="password" {...register("password", { required: true })}/>
               {errors.password?.type === "required" && <span>パスワードを入力して下さい。</span>}
             </div>
-            <input value="ログイン" type="submit" />
+            <input value="ログイン" type="submit" style={buttonStyle} />
           </form>
         <Link to='/signup' >新規登録</Link>
       </Wrapper>
