@@ -8,6 +8,7 @@ import { signUp } from '../lib/api/session';
 import { signIn } from '../lib/api/session';
 import { emailUniqueCheck } from '../lib/api/session';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ export const SignUp = () => {
           </div>
           <input value="アカウント作成" type="submit" />
         </form>
+        <p>既にアカウントをお持ちの方は:<Link to='/' >ログイン</Link></p>
       </Wrapper>
     </>
   );
