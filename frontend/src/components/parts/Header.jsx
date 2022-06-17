@@ -10,12 +10,17 @@ export const Header = () => {
     height:"50px",
     position:"fixed",
     top:"0",
-    left:"0",
+    left:"0"
   };
+  const styleLoginDisplay = {
+    display:"inline",
+    lineHeight:"50px",
+    marginLeft:"50px"
+  }
   return (
     <>
     <div style={style}>
-      {isSignedIn && <p>ログイン中:{currentUser.email}</p>}
+      {isSignedIn && <p style={styleLoginDisplay}>ログイン中:{currentUser.email}</p>}
       {isSignedIn && <LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} />}
     </div>
     </>

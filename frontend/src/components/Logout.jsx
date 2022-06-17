@@ -5,6 +5,17 @@ import { useNavigate } from 'react-router-dom';
 export const LogOut = (props) => {
   const { setCurrentUser, setIsSignedIn } = props;
   const navigate = useNavigate();
+  const style = {
+    padding:"7px",
+    border:"None",
+    backgroundColor:"rgb(39, 93, 54)",
+    color:"white",
+    borderRadius:"5px",
+    float:"right",
+    marginRight:"50px",
+    marginTop:"7px"
+
+  };
 
   const handleLogOut = async() => {
     try {
@@ -16,5 +27,5 @@ export const LogOut = (props) => {
       console.log(e);
     }
   };
-  return <button onClick={handleLogOut}>ログアウト</button>
+  return <button style={style} onClick={handleLogOut}>ログアウト</button>
 };
