@@ -1,10 +1,12 @@
 import React, { useState, useEffect, createContext } from 'react';
 import './index.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from './components/Layout';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { MyPage } from './components/MyPage';
 import { AdminMenu } from './components/AdminMenu';
+import { RegisterBook } from './components/RegisterBook';
 import { getCurrentUser } from './lib/api/session';
 
 export const AuthContext = createContext();
@@ -81,20 +83,24 @@ export const App = () => {
        >
       <BrowserRouter>
         <Routes>
-          <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
-          <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
-          <Route
-            path={"/users"}
-            element={
-              <LoggedInRoute currentUser={currentUser}>
-                <MyPage />
-              </LoggedInRoute>
-            }
-            >
-            <Route path={":userId"} element={<MyPage />} />
+          <Route path={"/"} element={<Layout/>} >
+            <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
+            <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
+            <Route
+              path={"/users"}
+              element={
+                <LoggedInRoute currentUser={currentUser}>
+                  <MyPage />
+                </LoggedInRoute>
+              }
+              >
+              <Route path={":userId"} element={<MyPage />} />
+            </Route>
+            <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} >
+              <Route path={"book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
+            </Route>
+            <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>
-          <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
-          <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>

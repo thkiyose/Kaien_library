@@ -22,8 +22,6 @@ export const SignUp = () => {
 
   return (
     <>
-      <Header />
-      <Wrapper>
       <p>新規ユーザー登録</p>
       <form
         onSubmit={handleSubmit(async(data) => {
@@ -71,7 +69,6 @@ export const SignUp = () => {
           <input value="アカウント作成" type="submit" />
         </form>
         <p>既にアカウントをお持ちの方は:<Link to='/' >ログイン</Link></p>
-      </Wrapper>
     </>
   );
 };

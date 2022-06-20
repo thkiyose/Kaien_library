@@ -25,8 +25,6 @@ export const Login = (props) => {
 
   return (
     <>
-      <Header />
-      <Wrapper>
         <p>ログイン</p>
         <p>{errorMessage}</p>
         <form
@@ -62,7 +60,6 @@ export const Login = (props) => {
             <input value="ログイン" type="submit" style={buttonStyle} />
           </form>
         <Link to='/signup' >新規登録</Link>
-      </Wrapper>
     </>
   );
 };

@@ -31,14 +31,11 @@ export const MyPage = () => {
 
   return (
     <>
-    <Header />
-    <Wrapper>
     { user ?
       <div>
         <p>{user.name}のマイページ</p>
       </div>
     : <p>ユーザーが見つかりませんでした。</p>}
-    </Wrapper>
     </>
   )
 };

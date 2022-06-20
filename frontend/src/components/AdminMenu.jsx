@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet, Link } from 'react-router-dom'
 import { Header } from './parts/Header'
 import { Wrapper } from './parts/Wrapper'
 
@@ -13,15 +14,12 @@ const styledTitle= {
 export const AdminMenu = () => {
   return(
     <>
-      <Header />
-      <Wrapper>
         <div style={style}>
           <h1 style={styledTitle}>管理者メニュー</h1>
           <ul>
-            <li><p>書籍の登録</p></li>
+            <li><Link to='/admin/book_registration'>本の登録</Link></li>
           </ul>
         </div>
-      </Wrapper>
     </>
   );
 };
