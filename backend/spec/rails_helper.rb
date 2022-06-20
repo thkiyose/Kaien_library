@@ -13,7 +13,6 @@ end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
-  # DatabaseCleanerの設定
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
   end
@@ -28,6 +27,7 @@ RSpec.configure do |config|
 
   config.before(:all) do
     DatabaseCleaner.start
+    FactoryBot.reload
   end
 
   config.after(:all) do
