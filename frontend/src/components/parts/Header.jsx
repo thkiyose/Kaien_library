@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../../App';
 import { LogOut } from '../Logout';
 
@@ -10,7 +11,7 @@ export const Header = () => {
     height:"50px",
     position:"fixed",
     top:"0",
-    left:"0"
+    left:"0",
   };
   const styleLoginDisplay = {
     display:"inline",
@@ -20,7 +21,8 @@ export const Header = () => {
   return (
     <>
     <div style={style}>
-      {isSignedIn && <p style={styleLoginDisplay}>ログイン中:{currentUser.email}</p>}
+      {isSignedIn && <Link to="/users/${currentUser.id}" style={styleLoginDisplay}>ログイン中:{currentUser.email}</Link>}
+      {isSignedIn && currentUser.admin ? <Link to="/admin">管理画面</Link> : "" }
       {isSignedIn && <LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} />}
     </div>
     </>

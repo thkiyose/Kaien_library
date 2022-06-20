@@ -96,9 +96,8 @@ export const App = () => {
               >
               <Route path={":userId"} element={<MyPage />} />
             </Route>
-            <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} >
-              <Route path={"book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
-            </Route>
+            <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
+            <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>
         </Routes>
