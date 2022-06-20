@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { MyPage } from './components/MyPage';
+import { AdminMenu } from './components/AdminMenu';
 import { getCurrentUser } from './lib/api/session';
 
 export const AuthContext = createContext();
@@ -42,9 +43,22 @@ export const App = () => {
       return <></>;
     }
   };
+
   const NotLoggedInRoute = ( {children} ) => {
     if (!loading) {
       if (!isSignedIn) {
+        return children ;
+      } else {
+        return <Navigate to="/users" />;
+      }
+    } else {
+      return <></>;
+    }
+  };
+
+  const AdminProtectedRoute = ( {children} ) => {
+    if (!loading) {
+      if (isSignedIn && currentUser.admin === true) {
         return children ;
       } else {
         return <Navigate to="/users" />;
@@ -67,8 +81,8 @@ export const App = () => {
        >
       <BrowserRouter>
         <Routes>
-            <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
-            <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
+          <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
+          <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
           <Route
             path={"/users"}
             element={
@@ -79,6 +93,7 @@ export const App = () => {
             >
             <Route path={":userId"} element={<MyPage />} />
           </Route>
+          <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </BrowserRouter>
