@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_15_051118) do
+ActiveRecord::Schema.define(version: 2022_06_20_021448) do
+
+  create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "isbn"
+    t.string "title", null: false
+    t.string "author", null: false
+    t.bigint "category_id_id", null: false
+    t.date "published_date", null: false
+    t.text "description", null: false
+    t.text "image_url"
+    t.bigint "location_id_id", null: false
+    t.integer "version"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id_id"], name: "index_books_on_category_id_id"
+    t.index ["location_id_id"], name: "index_books_on_location_id_id"
+  end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "provider", default: "email", null: false
