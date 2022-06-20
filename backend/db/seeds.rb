@@ -8,7 +8,7 @@ Book.create(
   title:"テスト",
   author:"夏目漱石",
   category_id:1,
-  published_date:"2022-06-01",
+  published_year:"2022",
   description:"テストデータ",
   location_id: 1
 )

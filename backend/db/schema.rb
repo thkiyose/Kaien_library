@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_20_022716) do
+ActiveRecord::Schema.define(version: 2022_06_20_030348) do
 
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "isbn"
     t.string "title", null: false
     t.string "author", null: false
     t.bigint "category_id", null: false
-    t.date "published_date", null: false
+    t.string "published_year", null: false
     t.text "description", null: false
     t.text "image_url"
     t.bigint "location_id", null: false
