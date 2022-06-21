@@ -1,7 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Cookies from 'js-cookie';
-import { Header } from './parts/Header';
-import { Wrapper } from './parts/Wrapper';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import { signUp } from '../lib/api/session';
@@ -12,7 +10,6 @@ import { Link } from 'react-router-dom';
 
 export const SignUp = () => {
   const navigate = useNavigate();
-  const [ error, setError ] = useState();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const emailIsUnique = async (email) => {
@@ -34,7 +31,7 @@ export const SignUp = () => {
               Cookies.set('_uid', login_res.headers['uid']);
               setIsSignedIn(true);
               setCurrentUser(res.data.data);
-              navigate(`/users/${res.data.data.id}`);}
+              navigate('/mypage');}
           } catch (e) {
             console.log(e);
           }

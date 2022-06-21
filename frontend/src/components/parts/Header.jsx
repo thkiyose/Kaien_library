@@ -21,7 +21,7 @@ export const Header = () => {
   return (
     <>
     <div style={style}>
-      {isSignedIn && <Link to="/users/${currentUser.id}" style={styleLoginDisplay}>ログイン中:{currentUser.email}</Link>}
+      {isSignedIn && <Link to="/mypage" style={styleLoginDisplay}>ログイン中:{currentUser.email}</Link>}
       {isSignedIn && currentUser.admin ? <Link to="/admin">管理画面</Link> : "" }
       {isSignedIn && <LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} />}
     </div>

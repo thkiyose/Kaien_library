@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 import { signIn } from '../lib/api/session';
 import Cookies from 'js-cookie';
 import { AuthContext } from '../App';
-import { Header } from './parts/Header'
-import { Wrapper } from './parts/Wrapper'
 import { Link } from 'react-router-dom';
 
 const buttonStyle = {
@@ -38,7 +36,7 @@ export const Login = (props) => {
                 Cookies.set('_uid', res.headers['uid']);
                 setIsSignedIn(true);
                 setCurrentUser(res.data.data);
-                navigate(`/users/${res.data.data.id}`);}
+                navigate('/mypage');}
             } catch (e) {
               console.log(e);
               setErrorMessage("ログインに失敗しました。メールアドレスとパスワードをご確認下さい。");

@@ -51,7 +51,7 @@ export const App = () => {
       if (!isSignedIn) {
         return children ;
       } else {
-        return <Navigate to="/users" />;
+        return <Navigate to="/mypage" />;
       }
     } else {
       return <></>;
@@ -63,7 +63,7 @@ export const App = () => {
       if (isSignedIn && currentUser.admin === true) {
         return children ;
       } else {
-        return <Navigate to="/users" />;
+        return <Navigate to="/mypage" />;
       }
     } else {
       return <></>;
@@ -86,16 +86,7 @@ export const App = () => {
           <Route path={"/"} element={<Layout/>} >
             <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
             <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
-            <Route
-              path={"/users"}
-              element={
-                <LoggedInRoute currentUser={currentUser}>
-                  <MyPage />
-                </LoggedInRoute>
-              }
-              >
-              <Route path={":userId"} element={<MyPage />} />
-            </Route>
+            <Route path={"/mypage"} element={<LoggedInRoute currentUser={currentUser}><MyPage /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />

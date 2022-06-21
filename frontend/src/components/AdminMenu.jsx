@@ -1,7 +1,5 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom'
-import { Header } from './parts/Header'
-import { Wrapper } from './parts/Wrapper'
+import { Link } from 'react-router-dom'
 
 const style= {
   listStyle:"none"
