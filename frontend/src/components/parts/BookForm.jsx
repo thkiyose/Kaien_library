@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { fetchBookInfo } from '../../lib/api/book';
 
 export const BookForm = () => {
-  const { register, setValue, formState: { errors } } = useForm();
+  const { register, setValue, getValues, handleSubmit,formState: { errors } } = useForm();
+  const [ isbnError, setIsbnError ] = useState();
+  const fetchBookInfo = async(isbn) => {
+    const isbnInput = getValues("isbn");
+    if (isbnInput.length !== 10 && isbnInput.length !== 13 ) {
+      setIsbnError("ISBNの長さが正しくありません。(10桁または13桁)");
+    } else {
+      setIsbnError("");
+    }
+  };
 
   return (
     <>
       <form>
         <div className="isbnInput">
-          <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={()=> setValue("description", 'aaa')}>ISBNから情報を取得</button>
+          <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={fetchBookInfo}>ISBNから情報を取得</button>
+          <p>{isbnError}</p>
         </div>
           <div>
             <label>タイトル</label>
