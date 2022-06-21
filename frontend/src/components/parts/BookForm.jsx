@@ -5,12 +5,21 @@ import { fetchBookInfo } from '../../lib/api/book';
 export const BookForm = () => {
   const { register, setValue, getValues, handleSubmit,formState: { errors } } = useForm();
   const [ isbnError, setIsbnError ] = useState();
-  const fetchBookInfo = async(isbn) => {
+  const handleFetchBookInfo = async() => {
     const isbnInput = getValues("isbn");
     if (isbnInput.length !== 10 && isbnInput.length !== 13 ) {
       setIsbnError("ISBNの長さが正しくありません。(10桁または13桁)");
     } else {
       setIsbnError("");
+      try {
+        const res = await fetchBookInfo({isbn:isbnInput});
+        setValue("title",res.data.data.items[0].volumeInfo.title);
+        setValue("author",res.data.data.items[0].volumeInfo.authors);
+        setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
+        setValue("description",res.data.data.items[0].volumeInfo.description);
+      } catch(e) {
+        console.log(e);
+      }
     }
   };
 
@@ -18,7 +27,7 @@ export const BookForm = () => {
     <>
       <form>
         <div className="isbnInput">
-          <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={fetchBookInfo}>ISBNから情報を取得</button>
+          <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={handleFetchBookInfo}>ISBNから情報を取得</button>
           <p>{isbnError}</p>
         </div>
           <div>
@@ -34,7 +43,7 @@ export const BookForm = () => {
             <select name="category_id" {...register("category_id", { required: true })}/>
             {errors.category_id?.type === "required" && <span>カテゴリーを選んで下さい。</span>}
             <label>出版年</label>
-            <input type="text" name="published_year" {...register("password_confirmation", { required: true, pattern: /[0-9]{4}/ })}/>
+            <input type="text" name="published_year" {...register("published_year", { required: true, pattern: /[0-9]{4}/ })}/>
             {errors.published_year?.type === "pattern" && <span>出版年の形式が正しくありません。半角数字4桁で入力して下さい。</span>}
             <label>版数</label>
             <input type="text" name="version" {...register("version", { maxLength: 2 })} />版
