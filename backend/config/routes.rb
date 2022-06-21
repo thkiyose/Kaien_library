@@ -8,7 +8,9 @@ Rails.application.routes.draw do
       resources :users, except: [:create,:index] do
         post 'check_email_unique', on: :collection
       end
-      resources :books
+      resources :books do
+        get 'get_book_info', on: :collection
+      end
       namespace :auth do
         resources :sessions, only: %i[index]
       end
