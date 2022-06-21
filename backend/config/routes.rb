@@ -9,7 +9,7 @@ Rails.application.routes.draw do
         post 'check_email_unique', on: :collection
       end
       resources :books do
-        get 'get_book_info', on: :collection
+        post 'fetch_book_info', on: :collection
       end
       namespace :auth do
         resources :sessions, only: %i[index]
