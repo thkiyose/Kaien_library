@@ -2,12 +2,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 export const BookForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, setValue, formState: { errors } } = useForm();
+
   return (
     <>
       <form>
         <div className="isbnInput">
-          <input type="text" name="isbn" {...register("isbn")}/><button>ISBNから情報を取得</button>
+          <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={()=> setValue("description", 'aaa')}>ISBNから情報を取得</button>
         </div>
           <div>
             <label>タイトル</label>

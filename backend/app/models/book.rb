@@ -9,5 +9,5 @@ class Book < ApplicationRecord
   validates :published_year, presence: true, length: { minimum: 4, maximum: 4 }
   validates :description, presence: true
   validates :location_id, presence: true
-  validates :version, length: { maximum: 3 }
+  validates :version, length: { maximum: 2 }
 end
