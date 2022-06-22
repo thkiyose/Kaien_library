@@ -1,15 +1,21 @@
 import React from 'react';
+import styled from "styled-components";
 import { Outlet } from 'react-router-dom';
 import { Header } from './parts/Header';
 import { Wrapper } from './parts/Wrapper';
 
+const Div = styled.div`
+  background: linear-gradient(#2e8b57 30%, #257a4a 90%);
+  min-height: 100vh;
+  height: auto;
+  padding-bottom: 100px;
+`
+
 export const Layout = () => {
   return (
-    <div>
+    <Div>
       <Header />
-      <Wrapper>
-        <Outlet />
-      </Wrapper>
-    </div>
+      <Outlet />
+    </Div>
   )
 }
