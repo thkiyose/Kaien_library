@@ -134,8 +134,8 @@ export const BookForm = () => {
 
   const handleFetchBookInfo = async() => {
     const isbnInput = getValues("isbn");
-    if (isbnInput.length !== 10 && isbnInput.length !== 13 ) {
-      setIsbnError("ISBNの長さが正しくありません。(10桁または13桁)");
+    if (/^[0-9]{10}$/.test(isbnInput) === false && /^[0-9]{13}$/.test(isbnInput) === false ) {
+      setIsbnError("ISBNの形式が正しくありません。(10桁または13桁の半角数字)");
     } else {
       setIsbnError("");
       try {
