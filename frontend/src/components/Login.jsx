@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { signIn } from '../lib/api/session';
 import Cookies from 'js-cookie';
-import { AuthContext } from '../App';
+import { Context } from '../App';
 import { Link } from 'react-router-dom';
 
 const LoginTitle = styled.h1`
@@ -60,7 +60,7 @@ const SignUpGuide = styled.span`
 
 export const Login = (props) => {
   const navigate = useNavigate();
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useContext(Context);
   const [ errorMessage, setErrorMessage ] = useState();
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -73,7 +73,6 @@ export const Login = (props) => {
           onSubmit={handleSubmit(async(data) => {
             try {
               const res = await signIn(data);
-              console.log(res);
               if (res.status === 200) {
                 Cookies.set('_access_token', res.headers['access-token']);
                 Cookies.set('_client', res.headers['client']);

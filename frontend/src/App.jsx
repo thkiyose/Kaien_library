@@ -7,13 +7,17 @@ import { MyPage } from './components/MyPage';
 import { AdminMenu } from './components/AdminMenu';
 import { RegisterBook } from './components/RegisterBook';
 import { getCurrentUser } from './lib/api/session';
+import { fetchCategories } from './lib/api/book';
+import { fetchLocations } from './lib/api/book';
 
-export const AuthContext = createContext();
+export const Context = createContext();
 
 export const App = () => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   const handleGetCurrentUser = async () => {
   try {
@@ -32,6 +36,19 @@ export const App = () => {
   useEffect(() => {
     handleGetCurrentUser();
   }, [setCurrentUser]);
+
+  const handleFetchCategories= async() => {
+    const res = await fetchCategories();
+    setCategories(res.data.category);
+  }
+
+  const handleFetchLocations= async() => {
+    const res = await fetchLocations();
+    setLocations(res.data.location);
+  }
+
+  useEffect(() => { handleFetchCategories() }, []);
+  useEffect(() => { handleFetchLocations() }, []);
 
   const LoggedInRoute = ( {children} ) => {
     if (!loading) {
@@ -70,7 +87,7 @@ export const App = () => {
   };
 
   return (
-    <AuthContext.Provider
+    <Context.Provider
          value={{
            loading,
            setLoading,
@@ -78,6 +95,8 @@ export const App = () => {
            setIsSignedIn,
            currentUser,
            setCurrentUser,
+           categories,
+           locations
          }}
        >
       <BrowserRouter>
@@ -92,6 +111,6 @@ export const App = () => {
           </Route>
         </Routes>
       </BrowserRouter>
-    </AuthContext.Provider>
+    </Context.Provider>
   );
 };

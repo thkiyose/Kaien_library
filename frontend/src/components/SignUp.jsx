@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App';
+import { Context } from '../App';
 import { signUp } from '../lib/api/session';
 import { signIn } from '../lib/api/session';
 import { emailUniqueCheck } from '../lib/api/session';
@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 export const SignUp = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useContext(Context);
   const emailIsUnique = async (email) => {
     const res = await emailUniqueCheck({email:email});
     return res.data.userExistence === false

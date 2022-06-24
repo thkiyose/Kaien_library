@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../App';
+import { Context } from '../../App';
 import { LogOut } from '../Logout';
 
 const HeaderDiv = styled.div`
@@ -20,7 +20,7 @@ const HeaderDiv = styled.div`
 `
 
 export const Header = () => {
-  const {currentUser, setCurrentUser, isSignedIn, setIsSignedIn } = useContext(AuthContext);
+  const {currentUser, setCurrentUser, isSignedIn, setIsSignedIn } = useContext(Context);
   const style = {
     width:"100%",
     backgroundColor:"#e6fff1",

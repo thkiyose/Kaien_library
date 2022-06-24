@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Context } from '../../App';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 import { fetchBookInfo } from '../../lib/api/book';
@@ -115,6 +116,8 @@ export const BookForm = () => {
   const { register, setValue, getValues, handleSubmit,formState: { errors } } = useForm();
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isbnError, setIsbnError ] = useState();
+  const { categories, locations } = useContext(Context);
+
   const handleFetchBookInfo = async() => {
     const isbnInput = getValues("isbn");
     if (isbnInput.length !== 10 && isbnInput.length !== 13 ) {
@@ -173,13 +176,25 @@ export const BookForm = () => {
           </VersionDiv>
           <CategoryDiv>
             <label>カテゴリー</label><Required>*</Required>
-            <select name="category_id" {...register("category_id", { required: true })}/>
+            <select name="category_id" {...register("category_id", { required: true })}>
+              {Object.keys(categories).map((key) => {
+                return (
+                  <option key={key} value={categories[key].id}>{categories[key].category}</option>
+                );
+              })}
+            </select>
             {errors.category_id?.type === "required" && <span>カテゴリーを選んで下さい。</span>}
           </CategoryDiv>
           <ClearFix/>
           <LocationDiv>
             <label>場所</label><Required>*</Required>
-            <select name="location_id" {...register("location_id", { required: true })}/>
+            <select name="location_id" {...register("location_id", { required: true })}>
+              {Object.keys(locations).map((key) => {
+                return (
+                  <option key={key} value={locations[key].id}>{locations[key].location}</option>
+                );
+              })}
+            </select>
           </LocationDiv>
           <RegisterButton value="登録" type="submit" />
         </Form>
