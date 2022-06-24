@@ -3,6 +3,7 @@ import { Context } from '../../App';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 import { fetchBookInfo } from '../../lib/api/book';
+import { createBook } from '../../lib/api/book';
 
 const RegisterButton = styled.input`
   display: block;
@@ -143,7 +144,7 @@ export const BookForm = () => {
         const res = await fetchBookInfo({isbn:isbnInput});
         if (res.data.data.totalItems > 0) {
           setValue("title",res.data.data.items[0].volumeInfo.title);
-          setValue("author",res.data.data.items[0].volumeInfo.authors);
+          setValue("author",res.data.data.items[0].volumeInfo.authors.join(","));
           setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
           setValue("description",res.data.data.items[0].volumeInfo.description);
         } else {
@@ -159,7 +160,15 @@ export const BookForm = () => {
   return (
     <>
       <RegisterTitle>書籍の登録</RegisterTitle>
-      <Form>
+      <Form onSubmit={handleSubmit(async(data) => {
+        try {
+          const res = await createBook({book:data});
+          if (res.data.status === 'SUCCESS') {
+            // 成功後の分岐を後から設定（暫定）
+          }
+        } catch (e) {
+          console.log(e);
+        }})}>
         <div className="isbnInput">
           <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={handleFetchBookInfo}>ISBNから情報を取得</button>
           <p>{isbnError}</p>

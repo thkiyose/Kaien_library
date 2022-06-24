@@ -11,3 +11,7 @@ export const fetchCategories = () => {
 export const fetchLocations = () => {
   return client.get("/books/fetch_locations");
 };
+
+export const createBook = (params) => {
+  return client.post("/books",params);
+};

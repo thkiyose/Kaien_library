@@ -21,13 +21,7 @@ const HeaderDiv = styled.div`
 
 export const Header = () => {
   const {currentUser, setCurrentUser, isSignedIn, setIsSignedIn } = useContext(Context);
-  const style = {
-    width:"100%",
-    backgroundColor:"#e6fff1",
-    height:"50px",
-    top:"0",
-    left:"0",
-  };
+
   const styleLoginDisplay = {
     display:"inline",
     lineHeight:"50px",
