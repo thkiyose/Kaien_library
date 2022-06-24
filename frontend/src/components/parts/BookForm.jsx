@@ -141,10 +141,14 @@ export const BookForm = () => {
       try {
         setIsLoading(true);
         const res = await fetchBookInfo({isbn:isbnInput});
-        setValue("title",res.data.data.items[0].volumeInfo.title);
-        setValue("author",res.data.data.items[0].volumeInfo.authors);
-        setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
-        setValue("description",res.data.data.items[0].volumeInfo.description);
+        if (res.data.data.totalItems > 0) {
+          setValue("title",res.data.data.items[0].volumeInfo.title);
+          setValue("author",res.data.data.items[0].volumeInfo.authors);
+          setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
+          setValue("description",res.data.data.items[0].volumeInfo.description);
+        } else {
+          setIsbnError("書籍情報が見つかりませんでした。")
+        }
         setIsLoading(false);
       } catch(e) {
         console.log(e);
