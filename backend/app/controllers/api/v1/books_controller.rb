@@ -6,4 +6,12 @@ class Api::V1::BooksController < ApplicationController
   )))
     render json: { data:res }
   end
+
+  def fetch_categories
+    render json: { category: Category.all}
+  end
+
+  def fetch_locations
+    render json: { location: Location.all}
+  end
 end

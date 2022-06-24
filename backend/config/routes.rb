@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       end
       resources :books do
         post 'fetch_book_info', on: :collection
+        get 'fetch_categories', on: :collection
+        get 'fetch_locations', on: :collection
       end
       namespace :auth do
         resources :sessions, only: %i[index]
