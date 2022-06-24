@@ -119,7 +119,12 @@ const RegisterTitle = styled.h1`
   text-align: center;
   font-weight: lighter;
   color: rgb(85, 85, 85);
-  }
+`
+const ErrorMessage = styled.p`
+  margin: 0;
+  margin-top: 0;
+  font-size: 0.8rem;
+  padding-left: 2px;
 `
 const ClearFix = styled.div`
   content: "";
@@ -178,28 +183,31 @@ export const BookForm = () => {
           <TitleDiv>
             <label>タイトル</label><Required>*</Required>
             <input type="text" name="title" {...register("title", { required: true, maxLength: 255 })}/>
-            {errors.title?.type === "required" && <span>タイトルを入力して下さい。</span>}
-            {errors.title?.type === "maxLength" && <span>タイトルが長すぎます。255文字以内で入力して下さい。</span>}
+            {errors.title?.type === "required" && <ErrorMessage>タイトルを入力して下さい。</ErrorMessage>}
+            {errors.title?.type === "maxLength" && <ErrorMessage>タイトルが長すぎます。255文字以内で入力して下さい。</ErrorMessage>}
           </TitleDiv>
           <AuthorDiv>
             <label>著者名</label><Required>*</Required>
             <input type="text" name="author" {...register("author", { required: true, maxLength: 255 })}/>
-            {errors.author?.type === "required" && <span>著者名を入力して下さい。</span>}
-            {errors.author?.type === "maxLength" && <span>著者名が長すぎます。255字以内で入力して下さい。</span>}
+            {errors.author?.type === "required" && <ErrorMessage>著者名を入力して下さい。</ErrorMessage>}
+            {errors.author?.type === "maxLength" && <ErrorMessage>著者名が長すぎます。255字以内で入力して下さい。</ErrorMessage>}
           </AuthorDiv>
+          <ClearFix/>
           <PublishedYearDiv>
             <label>出版年</label><Required>*</Required>
             <input type="text" name="published_year" {...register("published_year", { required: true, pattern: /[0-9]{4}/ })}/>
-            {errors.published_year?.type === "pattern" && <span>出版年の形式が正しくありません。半角数字4桁で入力して下さい。</span>}
+            {errors.published_year?.type === "required" && <ErrorMessage>出版年を入力して下さい。</ErrorMessage>}
+            {errors.published_year?.type === "pattern" && <ErrorMessage>出版年の形式が正しくありません。半角数字4桁で入力して下さい。</ErrorMessage>}
           </PublishedYearDiv>
           <div>
             <label>本の詳細</label><Required>*</Required>
             <textarea name="description" {...register("description", { required: true })}/>
+            {errors.description?.type === "required" && <ErrorMessage>説明文を入力して下さい。</ErrorMessage>}
           </div>
           <VersionDiv>
             <label>版数</label>
             <p><input type="text" name="version" {...register("version", { maxLength: 2 })} />版</p>
-            {errors.version?.type === "maxLength" && <span>2桁以内で入力して下さい。</span>}
+            {errors.version?.type === "maxLength" && <ErrorMessage>2桁以内で入力して下さい。</ErrorMessage>}
           </VersionDiv>
           <CategoryDiv>
             <label>カテゴリー</label><Required>*</Required>
@@ -210,7 +218,7 @@ export const BookForm = () => {
                 );
               })}
             </select>
-            {errors.category_id?.type === "required" && <span>カテゴリーを選んで下さい。</span>}
+            {errors.category_id?.type === "required" && <ErrorMessage>カテゴリーを選んで下さい。</ErrorMessage>}
           </CategoryDiv>
           <ClearFix/>
           <LocationDiv>
@@ -222,6 +230,7 @@ export const BookForm = () => {
                 );
               })}
             </select>
+            {errors.location_id?.type === "required" && <ErrorMessage>場所を選んで下さい。</ErrorMessage>}
           </LocationDiv>
           <RegisterButton value="登録" type="submit" />
         </Form>
