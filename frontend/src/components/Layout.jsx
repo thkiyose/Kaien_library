@@ -8,7 +8,8 @@ const Div = styled.div`
   background: linear-gradient(#2e8b57 30%, #257a4a 90%);
   min-height: 100vh;
   height: auto;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
+  padding-top: 20px;
 `
 
 export const Layout = () => {

@@ -7,6 +7,7 @@ import { LogOut } from '../Logout';
 const HeaderDiv = styled.div`
   background-color:#e6fff1;
   height: 50px;
+  position: fixed;
   top: 0;
   left: 0;
   width:100%;
