@@ -24,29 +24,43 @@ const Required = styled.span`
 `
 const Form = styled.form`
   .isbnInput {
-    border-bottom: solid gray 1px;
+    border-bottom: solid rgb(213, 213, 213) 1px;
     margin-bottom: 10px;
   }
   button {
-    background: #2e8b57;
+    padding: 7px;
+    font-size: 0.8rem;
+    background-color: #2e8b57;
     border: 0;
     outline: 0;
     color: white;
+    margin-left: 10px;
   }
   input[type="text"]{
     background: white;
-    border: solid 1px gray;
+    border: none;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1) inset;
     padding: 5px;
     box-sizing: border-box;
     font-size: 14px;
     margin-bottom: 10px;
   }
+  select{
+    background: white;
+    border: none;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1) inset;
+  }
   textarea {
     background: white;
-    border: solid 1px gray;
+    border: none;
     padding: 5px;
     width: 800px;
     height: 150px;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1) inset;
   }
 `
 const TitleDiv = styled.div`
@@ -77,7 +91,7 @@ const VersionDiv = styled.div`
   float: left;
   label {
     display: inline;
-    padding-right: 10px;
+    padding-right: 17px;
   }
   p {
     display: inline;
