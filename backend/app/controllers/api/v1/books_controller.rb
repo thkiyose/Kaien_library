@@ -17,7 +17,9 @@ class Api::V1::BooksController < ApplicationController
 
   def create
     book = Book.new(book_params)
+
     if book.save
+      book.remote_image_url_url = params[:book][:image_url]
       render json: { status:"SUCCESS", data: book}
     else
       render json:  book.errors, status: 422
@@ -26,6 +28,6 @@ class Api::V1::BooksController < ApplicationController
 
   private
   def book_params
-    params.require(:book).permit(:isbn,:title,:author,:published_year,:description,:version,:category_id,:location_id)
+    params.require(:book).permit(:isbn,:title,:author,:published_year,:description,:version,:category_id,:location_id,:image_url)
   end
 end

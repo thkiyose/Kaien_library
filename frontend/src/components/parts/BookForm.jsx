@@ -210,7 +210,7 @@ export const BookForm = () => {
         </div>
           <RequireGuide><Required>*</Required>は必須項目です。</RequireGuide>
           <ImageDiv>
-            { getValues("image_url") && <img src={getValues("image_url")} />}
+            { getValues("image_url") && <img alt="bookimage" src={getValues("image_url")} />}
             <div>
               <label>書影URL</label>
               <input type="text" name="image_url" {...register("image_url")} />
