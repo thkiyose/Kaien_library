@@ -133,9 +133,10 @@ const ClearFix = styled.div`
 `
 
 export const BookForm = () => {
-  const { register, setValue, getValues, handleSubmit,formState: { errors } } = useForm();
+  const { register, setValue, getValues, reset, handleSubmit,formState: { errors } } = useForm();
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isbnError, setIsbnError ] = useState();
+  const [ afterCreatedGuide, setAfterCreatedGuide ] = useState();
   const { categories, locations } = useContext(Context);
 
   const handleFetchBookInfo = async() => {
@@ -169,7 +170,8 @@ export const BookForm = () => {
         try {
           const res = await createBook({book:data});
           if (res.data.status === 'SUCCESS') {
-            // 成功後の分岐を後から設定（暫定）
+            setAfterCreatedGuide("登録成功")
+            reset();
           }
         } catch (e) {
           console.log(e);
@@ -234,6 +236,7 @@ export const BookForm = () => {
           </LocationDiv>
           <RegisterButton value="登録" type="submit" />
         </Form>
+        { afterCreatedGuide && <div>{afterCreatedGuide}</div> }
       </>
     );
 };
