@@ -26,7 +26,6 @@ const Required = styled.span`
 const Form = styled.form`
   .isbnInput {
     border-bottom: solid rgb(213, 213, 213) 1px;
-    margin-bottom: 10px;
   }
   button {
     padding: 7px;
@@ -64,7 +63,29 @@ const Form = styled.form`
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1) inset;
   }
 `
+const ImageDiv = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #bde6cf;
+  border-radius: 10px;
+  text-align :center;
+  label {
+    display:block;
+  }
+  input {
+    padding-top: 20px;
+    text-align: center;
+    width: 60%;
+  }
+  img {
+    max-width: 128px;
+    display:block;
+    float: left;
+  }
+`
 const TitleDiv = styled.div`
+  margin-top: 20px;
   width: 50%;
   float: left;
   input {
@@ -73,6 +94,7 @@ const TitleDiv = styled.div`
 `
 const AuthorDiv = styled.div`
   width:50%;
+  margin-top: 20px;
   float: right;
   input {
     width: 60%;
@@ -133,7 +155,7 @@ const ClearFix = styled.div`
 `
 
 export const BookForm = () => {
-  const { register, setValue, getValues, reset, handleSubmit,formState: { errors } } = useForm();
+  const { register, setValue, getValues, reset, resetField, handleSubmit,formState: { errors } } = useForm();
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isbnError, setIsbnError ] = useState();
   const [ afterCreatedGuide, setAfterCreatedGuide ] = useState();
@@ -153,6 +175,7 @@ export const BookForm = () => {
           setValue("author",res.data.data.items[0].volumeInfo.authors.join(","));
           setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
           setValue("description",res.data.data.items[0].volumeInfo.description);
+          setValue("image_url", res.data.data.items[0].volumeInfo.imageLinks.thumbnail);
         } else {
           setIsbnError("書籍情報が見つかりませんでした。")
         }
@@ -162,6 +185,9 @@ export const BookForm = () => {
       }
     }
   };
+  const deleteImage = () => {
+    resetField("image_url");
+  }
 
   return (
     <>
@@ -172,6 +198,7 @@ export const BookForm = () => {
           if (res.data.status === 'SUCCESS') {
             setAfterCreatedGuide("登録成功")
             reset();
+            resetField("image_url");
           }
         } catch (e) {
           console.log(e);
@@ -182,6 +209,15 @@ export const BookForm = () => {
           { !isLoading || <p>書籍データを検索しています…</p>}
         </div>
           <RequireGuide><Required>*</Required>は必須項目です。</RequireGuide>
+          <ImageDiv>
+            { getValues("image_url") && <img src={getValues("image_url")} />}
+            <div>
+              <label>書影URL</label>
+              <input type="text" name="image_url" {...register("image_url")} />
+              { getValues("image_url") && <button onClick={deleteImage}>削除</button> }
+            </div>
+            <ClearFix/>
+          </ImageDiv>
           <TitleDiv>
             <label>タイトル</label><Required>*</Required>
             <input type="text" name="title" {...register("title", { required: true, maxLength: 255 })}/>
