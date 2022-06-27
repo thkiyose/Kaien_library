@@ -1,31 +1,39 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
-import { Link } from 'react-router-dom';
+import { deleteBook } from '../lib/api/book';
+import { fetchBooks } from '../lib/api/book';
 
 export const AdminBookIndex = () => {
-  const { books } = useContext(Context);
+  const [ books, setBooks ] = useState({});
 
-  const handleDeleteBook = () => {
+  const handleFetchBooks= async() => {
+    const res = await fetchBooks();
+    setBooks(res.data);
+  }
+  useEffect(() => { handleFetchBooks() }, []);
 
+  const handleDeleteBook = async(book_id) => {
+    const res = await deleteBook(book_id);
+    handleFetchBooks();
   };
 
 
   return(
     <>
       <Wrapper width={"800px"}>
-        <div>
-          <h1>書籍一覧</h1>
-          <table>
+        <h1>書籍一覧</h1>
+        <table>
+          <tbody>
             {Object.keys(books).map((key) => {
               return (
-                <tr>
-                  <td key={key}>{books[key].title}</td><td><Link to="#">削除</Link></td>
+                <tr key={key}>
+                  <td>{books[key].title}</td><td><button onClick={() => handleDeleteBook(books[key].id)}>削除</button></td>
                 </tr>
               );
             })}
-          </table>
-        </div>
+          </tbody>
+        </table>
       </Wrapper>
     </>
   );

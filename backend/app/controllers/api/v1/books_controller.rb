@@ -1,6 +1,6 @@
 class Api::V1::BooksController < ApplicationController
   def index
-    render json: Book.all
+    render json: Book.where(deleted:false)
   end
 
   def fetch_book_info
@@ -35,7 +35,8 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def delete_book
-    render json: {data:"test"}
+    book = Book.find_by(id: params[:id])
+    book.update(deleted:true)
   end
 
   private
