@@ -1,5 +1,9 @@
 import { client } from './client';
 
+export const fetchBooks = () => {
+  return client.get("/books");
+};
+
 export const fetchBookInfo = (params) => {
   return client.post("/books/fetch_book_info",params);
 };

@@ -10,6 +10,7 @@ import { RegisterBook } from './components/RegisterBook';
 import { getCurrentUser } from './lib/api/session';
 import { fetchCategories } from './lib/api/book';
 import { fetchLocations } from './lib/api/book';
+import { fetchBooks } from './lib/api/book';
 
 export const Context = createContext();
 
@@ -19,6 +20,7 @@ export const App = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [books, setBooks] = useState([]);
 
   const handleGetCurrentUser = async () => {
   try {
@@ -48,8 +50,14 @@ export const App = () => {
     setLocations(res.data.location);
   }
 
+  const handleFetchBooks= async() => {
+    const res = await fetchBooks();
+    setBooks(res.data);
+  }
+
   useEffect(() => { handleFetchCategories() }, []);
   useEffect(() => { handleFetchLocations() }, []);
+  useEffect(() => { handleFetchBooks() }, []);
 
   const LoggedInRoute = ( {children} ) => {
     if (!loading) {
@@ -97,7 +105,8 @@ export const App = () => {
            currentUser,
            setCurrentUser,
            categories,
-           locations
+           locations,
+           books
          }}
        >
       <BrowserRouter>
