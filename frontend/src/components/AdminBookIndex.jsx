@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom';
 
 export const AdminBookIndex = () => {
   const { books } = useContext(Context);
+
+  const handleDeleteBook = () => {
+
+  };
+
+
   return(
     <>
       <Wrapper width={"800px"}>

@@ -34,6 +34,10 @@ class Api::V1::BooksController < ApplicationController
     end
   end
 
+  def delete_book
+    render json: {data:"test"}
+  end
+
   private
   def book_params
     params.require(:book).permit(:isbn,:title,:author,:published_year,:description,:version,:category_id,:location_id,:image_url)

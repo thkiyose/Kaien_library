@@ -8,7 +8,8 @@ Rails.application.routes.draw do
       resources :users, except: [:create,:index] do
         post 'check_email_unique', on: :collection
       end
-      resources :books do
+      resources :books, only: [:index, :create] do
+        patch 'delete_book', on: :member
         post 'fetch_book_info', on: :collection
         get 'fetch_categories', on: :collection
         get 'fetch_locations', on: :collection
