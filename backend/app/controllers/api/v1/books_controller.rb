@@ -18,10 +18,15 @@ class Api::V1::BooksController < ApplicationController
   def create
     book = Book.new(book_params)
     book.remote_image_url_url = params[:book][:image_url]
-    if book.save!
-      render json: { status:"SUCCESS", data: book}
-    else
-      render json:  book.errors, status: 422
+    begin
+      if book.save!
+        render json: { status:"SUCCESS", data: book}
+      else
+        render json:  book.errors, status: 422
+      end
+    rescue ActiveRecord::RecordInvalid
+      book.image_url = nil
+      book.save!
     end
   end
 
