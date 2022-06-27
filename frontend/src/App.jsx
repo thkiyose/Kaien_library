@@ -5,6 +5,7 @@ import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { MyPage } from './components/MyPage';
 import { AdminMenu } from './components/AdminMenu';
+import { AdminBookIndex } from './components/AdminBookIndex';
 import { RegisterBook } from './components/RegisterBook';
 import { getCurrentUser } from './lib/api/session';
 import { fetchCategories } from './lib/api/book';
@@ -106,6 +107,7 @@ export const App = () => {
             <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
             <Route path={"/mypage"} element={<LoggedInRoute currentUser={currentUser}><MyPage /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
+            <Route path={"/admin/books/index"} element={<AdminProtectedRoute><AdminBookIndex /></AdminProtectedRoute>} />
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>

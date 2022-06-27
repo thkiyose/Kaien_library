@@ -15,6 +15,7 @@ const RegisterButton = styled.input`
   color: white;
   margin: 0 auto;
   width: 60%;
+  cursor: pointer;
 `
 const RequireGuide = styled.p`
   font-size:0.8rem;
@@ -35,6 +36,7 @@ const Form = styled.form`
     outline: 0;
     color: white;
     margin-left: 10px;
+    cursor: pointer;
   }
   input[type="text"]{
     background: white;
@@ -158,6 +160,7 @@ export const BookForm = () => {
   const { register, setValue, getValues, reset, resetField, handleSubmit,formState: { errors } } = useForm();
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isbnError, setIsbnError ] = useState();
+  const [ imageError, setImageError ] = useState();
   const [ afterCreatedGuide, setAfterCreatedGuide ] = useState();
   const { categories, locations } = useContext(Context);
   const [ imageInputed, setImageInputed ] = useState("");
@@ -170,6 +173,7 @@ export const BookForm = () => {
       setIsbnError("");
       try {
         setIsLoading(true);
+        setImageError("")
         const res = await fetchBookInfo({isbn:isbnInput});
         if (res.data.data.totalItems > 0) {
           setValue("title",res.data.data.items[0].volumeInfo.title);
@@ -189,6 +193,13 @@ export const BookForm = () => {
   };
   const deleteImage = () => {
     resetField("image_url");
+    setImageInputed("");
+    setImageError("");
+  }
+
+  const handleImageError = (e) => {
+    setImageInputed("");
+    setImageError("画像を読み込めませんでした。");
   }
 
   return (
@@ -201,9 +212,12 @@ export const BookForm = () => {
             setAfterCreatedGuide("登録成功")
             reset();
             resetField("image_url");
+            setImageInputed("");
+            setImageError("");
           }
         } catch (e) {
           console.log(e);
+          setAfterCreatedGuide("登録に失敗しました。")
         }})}>
         <div className="isbnInput">
           <input type="text" name="isbn" {...register("isbn")}/><button type="button" onClick={handleFetchBookInfo}>ISBNから情報を取得</button>
@@ -212,12 +226,13 @@ export const BookForm = () => {
         </div>
           <RequireGuide><Required>*</Required>は必須項目です。</RequireGuide>
           <ImageDiv>
-            { imageInputed && <img alt="bookimage" src={imageInputed} />}
+            { imageInputed && <img alt="bookimage" src={imageInputed}　onError={handleImageError}  />}
             <div>
               <label>書影URL</label>
               <input type="text" name="image_url" {...register("image_url")} />
               <button type="button" onClick={() => setImageInputed(getValues("image_url"))}>プレビュー</button>
               { getValues("image_url") && <button onClick={deleteImage}>削除</button> }
+              <p>{imageError}</p>
             </div>
             <ClearFix/>
           </ImageDiv>
