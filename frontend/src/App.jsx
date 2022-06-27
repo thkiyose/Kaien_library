@@ -1,17 +1,24 @@
 import React, { useState, useEffect, createContext } from 'react';
-import './index.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from './components/Layout';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { MyPage } from './components/MyPage';
+import { AdminMenu } from './components/AdminMenu';
+import { AdminBookIndex } from './components/AdminBookIndex';
+import { RegisterBook } from './components/RegisterBook';
 import { getCurrentUser } from './lib/api/session';
+import { fetchCategories } from './lib/api/book';
+import { fetchLocations } from './lib/api/book';
 
-export const AuthContext = createContext();
+export const Context = createContext();
 
 export const App = () => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   const handleGetCurrentUser = async () => {
   try {
@@ -31,6 +38,19 @@ export const App = () => {
     handleGetCurrentUser();
   }, [setCurrentUser]);
 
+  const handleFetchCategories= async() => {
+    const res = await fetchCategories();
+    setCategories(res.data.category);
+  }
+
+  const handleFetchLocations= async() => {
+    const res = await fetchLocations();
+    setLocations(res.data.location);
+  }
+
+  useEffect(() => { handleFetchCategories() }, []);
+  useEffect(() => { handleFetchLocations() }, []);
+
   const LoggedInRoute = ( {children} ) => {
     if (!loading) {
       if (isSignedIn) {
@@ -42,12 +62,25 @@ export const App = () => {
       return <></>;
     }
   };
+
   const NotLoggedInRoute = ( {children} ) => {
     if (!loading) {
       if (!isSignedIn) {
         return children ;
       } else {
-        return <Navigate to="/users" />;
+        return <Navigate to="/mypage" />;
+      }
+    } else {
+      return <></>;
+    }
+  };
+
+  const AdminProtectedRoute = ( {children} ) => {
+    if (!loading) {
+      if (isSignedIn && currentUser.admin === true) {
+        return children ;
+      } else {
+        return <Navigate to="/mypage" />;
       }
     } else {
       return <></>;
@@ -55,7 +88,7 @@ export const App = () => {
   };
 
   return (
-    <AuthContext.Provider
+    <Context.Provider
          value={{
            loading,
            setLoading,
@@ -63,25 +96,23 @@ export const App = () => {
            setIsSignedIn,
            currentUser,
            setCurrentUser,
+           categories,
+           locations,
          }}
        >
       <BrowserRouter>
         <Routes>
+          <Route path={"/"} element={<Layout/>} >
             <Route path={"/"} element={<NotLoggedInRoute><Login /></NotLoggedInRoute>} />
             <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
-          <Route
-            path={"/users"}
-            element={
-              <LoggedInRoute currentUser={currentUser}>
-                <MyPage />
-              </LoggedInRoute>
-            }
-            >
-            <Route path={":userId"} element={<MyPage />} />
+            <Route path={"/mypage"} element={<LoggedInRoute currentUser={currentUser}><MyPage /></LoggedInRoute>} />
+            <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
+            <Route path={"/admin/books/index"} element={<AdminProtectedRoute><AdminBookIndex /></AdminProtectedRoute>} />
+            <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
+            <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>
-          <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </BrowserRouter>
-    </AuthContext.Provider>
+    </Context.Provider>
   );
 };

@@ -9,12 +9,20 @@ gem 'puma', '~> 5.0'
 gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
+gem 'carrierwave', '~> 2.0'
+gem 'mini_magick'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'rack-cors'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
+  gem 'capybara'
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'spring-commands-rspec'
+  gem 'database_cleaner'
 end
 
 group :development do
