@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 
 const Wrapper_div = styled.div`
-  background-color: #e6fff1;
+  background-color:rgb(236, 236, 236);
   margin:100px auto 0px auto;
   width: ${props => props.width};
   padding: 40px;

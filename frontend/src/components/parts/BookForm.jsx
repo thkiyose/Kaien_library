@@ -76,7 +76,7 @@ const ImageDiv = styled.div`
   input {
     padding-top: 20px;
     text-align: center;
-    width: 60%;
+    width: 50%;
   }
   img {
     max-width: 128px;
@@ -160,6 +160,7 @@ export const BookForm = () => {
   const [ isbnError, setIsbnError ] = useState();
   const [ afterCreatedGuide, setAfterCreatedGuide ] = useState();
   const { categories, locations } = useContext(Context);
+  const [ imageInputed, setImageInputed ] = useState("");
 
   const handleFetchBookInfo = async() => {
     const isbnInput = getValues("isbn");
@@ -176,6 +177,7 @@ export const BookForm = () => {
           setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
           setValue("description",res.data.data.items[0].volumeInfo.description);
           setValue("image_url", res.data.data.items[0].volumeInfo.imageLinks.thumbnail);
+          setImageInputed(res.data.data.items[0].volumeInfo.imageLinks.thumbnail);
         } else {
           setIsbnError("書籍情報が見つかりませんでした。")
         }
@@ -210,10 +212,11 @@ export const BookForm = () => {
         </div>
           <RequireGuide><Required>*</Required>は必須項目です。</RequireGuide>
           <ImageDiv>
-            { getValues("image_url") && <img alt="bookimage" src={getValues("image_url")} />}
+            { imageInputed && <img alt="bookimage" src={imageInputed} />}
             <div>
               <label>書影URL</label>
               <input type="text" name="image_url" {...register("image_url")} />
+              <button type="button" onClick={() => setImageInputed(getValues("image_url"))}>プレビュー</button>
               { getValues("image_url") && <button onClick={deleteImage}>削除</button> }
             </div>
             <ClearFix/>

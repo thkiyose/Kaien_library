@@ -5,7 +5,7 @@ import { Context } from '../../App';
 import { LogOut } from '../Logout';
 
 const HeaderDiv = styled.div`
-  background-color:#e6fff1;
+  background-color:rgb(236, 236, 236);
   height: 50px;
   position: fixed;
   top: 0;
