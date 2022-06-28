@@ -11,7 +11,6 @@ import { RegisterBook } from './components/RegisterBook';
 import { getCurrentUser } from './lib/api/session';
 import { fetchCategories } from './lib/api/book';
 import { fetchLocations } from './lib/api/book';
-
 export const Context = createContext();
 
 export const App = () => {
