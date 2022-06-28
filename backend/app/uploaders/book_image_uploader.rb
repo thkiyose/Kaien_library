@@ -6,14 +6,11 @@ class BookImageUploader < CarrierWave::Uploader::Base
 
   configure do |config|
     config.validate_download = false
+    config.asset_host = "http://localhost:3000"
   end
 
   def store_dir
        "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-     end
-
-     def default_url
-          "/images/" + [version_name, "noimage.png"].compact.join('_')
      end
 
      def extension_allowlist
