@@ -12,11 +12,43 @@ const BookList = styled.ul`
   justify-content: flex-start;
   align-items: flex-start;
 `
+const ImageWrap = styled.li`
+  width: 100px;
+  margin: 0px 10px;
+  position: relative;
+`
+
 const Image = styled.img`
   border: solid 2px gray;
   width: 100px;
   height: 140px;
-  margin: 10px 8px;
+`
+const BookTitle = styled.p`
+  margin: 0px 0px 5px 0px;
+  width: 100%;
+  font-size: 0.7rem;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+const FigCaption = styled.figcaption`
+  background: rgba(0, 0, 0, .7);
+  bottom: 0;
+  color: #fff;
+  display: flex;
+  height: auto;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: solid 2px black;
+  width: 100px;
+  height: 140px;
+  :hover {
+    opacity: 1;
+  }
 `
 const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
@@ -73,7 +105,15 @@ export const Index = () => {
         <BookList>
           {Object.keys(books).slice(start, start + perPage).map((key) => {
             return (
-              <li key={books[key].id}>{books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}</li>
+              <>
+                <ImageWrap key={books[key].id}>
+                  {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
+                  <BookTitle>{books[key].title}</BookTitle>
+                  <FigCaption>
+                    {books[key].title}
+                  </FigCaption>
+                </ImageWrap>
+              </>
             );
           })}
         </BookList>
