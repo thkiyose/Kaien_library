@@ -85,10 +85,10 @@ export const SignUp = () => {
                 Cookies.set('_uid', login_res.headers['uid']);
                 setIsSignedIn(true);
                 setCurrentUser(res.data.data);
-                navigate('/mypage');}
+                navigate('/books');}
             } catch (e) {
               console.log(e);
-              setErrorMessage("アカウント作成に失敗しました。");
+              setErrorMessage("アカウント作成に失敗しました。パスワードをご確認下さい。");
             }
           })}
           >

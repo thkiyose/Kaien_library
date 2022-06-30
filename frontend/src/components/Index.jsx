@@ -53,7 +53,7 @@ const FigCaption = styled.figcaption`
 const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
 })`
-  margin-bottom: 2rem;
+  margin: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
