@@ -1,21 +1,22 @@
 import React from 'react';
 import { signOut } from '../lib/api/session';
 import { useNavigate } from 'react-router-dom';
+import styled from "styled-components";
+
+const Button = styled.button`
+  padding: 7px;
+  border: none;
+  background-color: rgb(39, 93, 54);
+  color: white;
+  border-radius: 5px;
+  margin-right: 50px;
+  font-weight: bold;
+  cursor: pointer;
+`
 
 export const LogOut = (props) => {
   const { setCurrentUser, setIsSignedIn } = props;
   const navigate = useNavigate();
-  const style = {
-    padding:"7px",
-    border:"None",
-    backgroundColor:"rgb(39, 93, 54)",
-    color:"white",
-    borderRadius:"5px",
-    float:"right",
-    marginRight:"50px",
-    marginTop:"7px",
-    fontWeight:"bold",
-  };
 
   const handleLogOut = async() => {
     try {
@@ -27,5 +28,5 @@ export const LogOut = (props) => {
       console.log(e);
     }
   };
-  return <button style={style} onClick={handleLogOut}>ログアウト</button>
+  return <Button onClick={handleLogOut}>ログアウト</Button>
 };

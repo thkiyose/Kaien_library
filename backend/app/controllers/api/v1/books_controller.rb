@@ -1,6 +1,11 @@
 class Api::V1::BooksController < ApplicationController
+  require "open-uri"
+
   def index
-    render json: Book.where(deleted:false)
+    books = Book.where(deleted:false)
+    render json: {
+      books: books
+    }
   end
 
   def fetch_book_info
@@ -21,16 +26,22 @@ class Api::V1::BooksController < ApplicationController
 
   def create
     book = Book.new(book_params)
-    book.remote_image_url_url = params[:book][:image_url]
-    begin
-      if book.save!
-        render json: { status:"SUCCESS", data: book}
-      else
-        render json:  book.errors, status: 422
+    # book.remote_image_url_url = params[:book][:image_url]
+
+    if book.save!
+      if !book.image_url.nil?
+        url = book.image_url
+        file = "./public/#{book.id}.jpg"
+        URI.open(file, 'w') do |pass|
+          URI.open(url) do |recieve|
+            pass.write(recieve.read.force_encoding(Encoding::UTF_8))
+          end
+        end
+        book.update(image_url: file)
       end
-    rescue ActiveRecord::RecordInvalid
-      book.image_url = nil
-      book.save!
+      render json: { status:"SUCCESS", data: book}
+    else
+      render json:  book.errors, status: 422
     end
   end
 
@@ -40,6 +51,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   private
+
   def book_params
     params.require(:book).permit(:isbn,:title,:author,:published_year,:description,:version,:category_id,:location_id,:image_url)
   end

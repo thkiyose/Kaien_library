@@ -1,12 +1,11 @@
 import React, { useContext } from 'react'
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
 import { Context } from '../../App';
 import { LogOut } from '../Logout';
 
 const HeaderDiv = styled.div`
   background-color:rgb(236, 236, 236);
-  height: 50px;
+  height: 60px;
   position: fixed;
   top: 0;
   left: 0;
@@ -19,21 +18,49 @@ const HeaderDiv = styled.div`
     list-style :none;
   }
 `
+const HeaderLink = styled.a`
+  display: inline;
+`
+
+const HeaderNavLeft = styled.ul`
+  display:flex;
+  float :left;
+  margin: 0;
+  li {
+    line-height:60px;
+    padding: 0px 10px;
+  }
+`
+const HeaderNavRight = styled.ul`
+  display:flex;
+  float :right;
+  margin: 0;
+  li {
+    line-height:60px;
+    padding: 0px 10px;
+  }
+`
+
+const Logo = styled.span`
+  font-weight: bold;
+  font-size: 1.5rem;
+`
 
 export const Header = () => {
   const {currentUser, setCurrentUser, isSignedIn, setIsSignedIn } = useContext(Context);
 
-  const styleLoginDisplay = {
-    display:"inline",
-    lineHeight:"50px",
-    marginLeft:"50px"
-  }
   return (
     <>
     <HeaderDiv>
-      {isSignedIn && <Link to="/mypage" style={styleLoginDisplay}>ログイン中:{currentUser.email}</Link>}
-      {isSignedIn && currentUser.admin ? <Link to="/admin">管理画面</Link> : "" }
-      {isSignedIn && <LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} />}
+      <HeaderNavLeft>
+        <li><Logo>Library</Logo></li>
+        {isSignedIn && <li><HeaderLink href="/books">書籍を探す</HeaderLink></li> }
+        {isSignedIn && currentUser.admin ? <li><HeaderLink href="/admin">管理画面</HeaderLink></li> : "" }
+      </HeaderNavLeft>
+      <HeaderNavRight>
+        {isSignedIn && <li><HeaderLink href="/mypage">ログイン中:{currentUser.email}</HeaderLink></li>}
+        {isSignedIn && <li><LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} /></li>}
+      </HeaderNavRight>
     </HeaderDiv>
     </>
   )

@@ -1,7 +1,7 @@
 class Book < ApplicationRecord
   belongs_to :category
   belongs_to :location
-  mount_uploader :image_url, BookImageUploader
+  self.per_page = 18
 
   validates :isbn, length: { minimum:10, maximum:13 }, allow_blank: true
   validates :title, presence: true, length: { maximum:255 }

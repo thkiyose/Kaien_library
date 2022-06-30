@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 
-const Wrapper_div = styled.div`
+const WrapperDiv = styled.div`
   background-color:rgb(236, 236, 236);
   margin:100px auto 0px auto;
   width: ${props => props.width};
@@ -18,8 +18,8 @@ const Wrapper_div = styled.div`
 export const Wrapper = (props) => {
 
   return (
-    <Wrapper_div width={props.width}>
+    <WrapperDiv width={props.width}>
       {props.children}
-    </Wrapper_div>
+    </WrapperDiv>
   )
 };

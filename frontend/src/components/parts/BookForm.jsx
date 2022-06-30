@@ -175,13 +175,14 @@ export const BookForm = () => {
         setIsLoading(true);
         setImageError("")
         const res = await fetchBookInfo({isbn:isbnInput});
+        console.log(res)
         if (res.data.data.totalItems > 0) {
           setValue("title",res.data.data.items[0].volumeInfo.title);
-          setValue("author",res.data.data.items[0].volumeInfo.authors.join(","));
-          setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate.slice(0,4));
+          setValue("author",res.data.data.items[0].volumeInfo.authors?.join(","));
+          setValue("published_year",res.data.data.items[0].volumeInfo.publishedDate?.slice(0,4));
           setValue("description",res.data.data.items[0].volumeInfo.description);
-          setValue("image_url", res.data.data.items[0].volumeInfo.imageLinks.thumbnail);
-          setImageInputed(res.data.data.items[0].volumeInfo.imageLinks.thumbnail);
+          setValue("image_url", res.data.data.items[0].volumeInfo.imageLinks?.thumbnail);
+          setImageInputed(res.data.data.items[0].volumeInfo.imageLinks?.thumbnail);
         } else {
           setIsbnError("書籍情報が見つかりませんでした。")
         }
