@@ -12,12 +12,44 @@ const BookList = styled.ul`
   justify-content: flex-start;
   align-items: flex-start;
 `
-
 const Image = styled.img`
   border: solid 2px gray;
   width: 100px;
   height: 140px;
   margin: 10px 8px;
+`
+const MyPaginate = styled(ReactPaginate).attrs({
+  activeClassName: 'active',
+})`
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0 5rem;
+
+  li a {
+    border-radius: 7px;
+    padding: 0.1rem 1rem;
+    cursor: pointer;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: #bde6cf;
+    border-color: transparent;
+    min-width: 32px;
+  }
+  li.disabled a {
+    color: grey;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
 `
 
 export const Index = () => {
@@ -45,7 +77,7 @@ export const Index = () => {
             );
           })}
         </BookList>
-        <ReactPaginate
+        <MyPaginate
           onPageChange={handlePageChange}
           pageCount={Math.ceil(books.length / perPage)} //総ページ数。今回は一覧表示したいデータ数 / 1ページあたりの表示数としてます。
           marginPagesDisplayed={2} //先頭と末尾に表示するページの数。今回は2としたので1,2…今いるページの前後…後ろから2番目, 1番目 のように表示されます。
