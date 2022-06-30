@@ -54,7 +54,7 @@ const MyPaginate = styled(ReactPaginate).attrs({
 
 export const Index = () => {
   const [ books, setBooks ] = useState({});
-  const [ perPage, setPerPage ] = useState(18);
+  const [ perPage ] = useState(18);
   const [ start, setStart ] = useState(0);
 
   const handleFetchBooks= async() => {
@@ -73,7 +73,7 @@ export const Index = () => {
         <BookList>
           {Object.keys(books).slice(start, start + perPage).map((key) => {
             return (
-              <li key={books[key].id}>{books[key].imageUrl.url ? <Image src={books[key].imageUrl.url} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}</li>
+              <li key={books[key].id}>{books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}</li>
             );
           })}
         </BookList>
