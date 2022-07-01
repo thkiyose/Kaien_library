@@ -20,6 +20,7 @@ export const App = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
+  const secondary = "#DEEFE7";
 
   const handleGetCurrentUser = async () => {
   try {
@@ -99,6 +100,7 @@ export const App = () => {
            setCurrentUser,
            categories,
            locations,
+           secondary
          }}
        >
       <BrowserRouter>

@@ -2,11 +2,12 @@ import React from 'react';
 import { signOut } from '../lib/api/session';
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import Color from './parts/Color';
 
 const Button = styled.button`
   padding: 7px;
   border: none;
-  background-color: rgb(39, 93, 54);
+  background-color: ${Color.primary};
   color: white;
   margin-right: 50px;
   font-weight: bold;

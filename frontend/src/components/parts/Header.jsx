@@ -2,15 +2,16 @@ import React, { useContext } from 'react'
 import styled from "styled-components";
 import { Context } from '../../App';
 import { LogOut } from '../Logout';
+import Color from './Color';
 
 const HeaderDiv = styled.div`
-  background-color:rgb(236, 236, 236);
+  background-color: ${Color.secondary};
   height: 60px;
   position: fixed;
   top: 0;
   left: 0;
   width:100%;
-  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.2);
   a {
     text-decoration: none;
   }

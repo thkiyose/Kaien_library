@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
+import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
 
@@ -40,7 +41,7 @@ const Rent = styled.button`
 `
 const Description = styled.div`
   margin: 20px auto;
-  background-color: #bde6cf;
+  background-color:${Color.text};
   padding: 20px;
 `
 

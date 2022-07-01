@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Context } from '../../App';
+import Color from './Color';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 import { fetchBookInfo } from '../../lib/api/book';
@@ -9,7 +10,7 @@ const RegisterButton = styled.input`
   display: block;
   padding: 10px;
   font-size: 1rem;
-  background-color: #2e8b57;
+  background-color: ${Color.primary};
   border: 0;
   outline: 0;
   color: white;
@@ -31,7 +32,7 @@ const Form = styled.form`
   button {
     padding: 7px;
     font-size: 0.8rem;
-    background-color: #2e8b57;
+    background-color: ${Color.primary};
     border: 0;
     outline: 0;
     color: white;
@@ -69,7 +70,7 @@ const ImageDiv = styled.div`
   width: 80%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #bde6cf;
+  background-color: ${Color.text};
   border-radius: 10px;
   text-align :center;
   label {

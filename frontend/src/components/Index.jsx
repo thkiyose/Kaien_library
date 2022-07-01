@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
+import Color from './parts/Color';
 import { fetchBooks } from '../lib/api/book';
 
 const BookList = styled.ul`
@@ -72,7 +73,8 @@ const MyPaginate = styled(ReactPaginate).attrs({
     border-color: transparent;
   }
   li.active a {
-    background-color: #bde6cf;
+    background-color: ${Color.primary};
+    color: white;
     border-color: transparent;
     min-width: 32px;
   }
