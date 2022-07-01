@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
@@ -97,7 +98,7 @@ export const Index = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
-  };
+  }
 
   return(
     <>
@@ -105,15 +106,17 @@ export const Index = () => {
         <BookList>
           {Object.keys(books).slice(start, start + perPage).map((key) => {
             return (
-              <>
+              <React.Fragment key={books[key].id}>
                 <ImageWrap key={books[key].id}>
-                  {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-                  <BookTitle>{books[key].title}</BookTitle>
-                  <FigCaption>
-                    {books[key].title}
-                  </FigCaption>
+                  <Link to={`${books[key].id}`} >
+                    {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
+                    <BookTitle>{books[key].title}</BookTitle>
+                    <FigCaption>
+                      {books[key].title}
+                    </FigCaption>
+                  </Link>
                 </ImageWrap>
-              </>
+              </React.Fragment>
             );
           })}
         </BookList>
