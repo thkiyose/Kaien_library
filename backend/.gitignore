@@ -27,4 +27,4 @@
 /config/master.key
 
 #Ignore image files for books
-/public/uploads
+/public
