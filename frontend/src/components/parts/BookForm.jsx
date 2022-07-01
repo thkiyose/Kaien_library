@@ -160,6 +160,7 @@ const ClearFix = styled.div`
 export const BookForm = () => {
   const { register, setValue, getValues, reset, resetField, handleSubmit,formState: { errors } } = useForm();
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
   const [ isbnError, setIsbnError ] = useState();
   const [ imageError, setImageError ] = useState();
   const [ afterCreatedGuide, setAfterCreatedGuide ] = useState();
@@ -210,15 +211,18 @@ export const BookForm = () => {
       <Form onSubmit={handleSubmit(async(data) => {
         try {
           const res = await createBook({book:data});
+          setIsSubmitting(true);
           if (res.data.status === 'SUCCESS') {
             setAfterCreatedGuide("登録成功")
             reset();
             resetField("image_url");
             setImageInputed("");
             setImageError("");
+            setIsSubmitting(false);
           }
         } catch (e) {
           console.log(e);
+          setIsSubmitting(false);
           setAfterCreatedGuide("登録に失敗しました。")
         }})}>
         <div className="isbnInput">
@@ -292,7 +296,8 @@ export const BookForm = () => {
           </LocationDiv>
           <RegisterButton value="登録" type="submit" />
         </Form>
-        { afterCreatedGuide && <div>{afterCreatedGuide}</div> }
+        { isSubmitting && <div>書籍を登録しています…</div>}
+        { afterCreatedGuide && !isSubmitting && <div>{afterCreatedGuide}</div> }
       </>
     );
 };
