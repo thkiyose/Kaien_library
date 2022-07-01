@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import { Index } from './components/Index';
+import { BookDetail } from './components/BookDetail';
 import { MyPage } from './components/MyPage';
 import { AdminMenu } from './components/AdminMenu';
 import { AdminBookIndex } from './components/AdminBookIndex';
@@ -107,6 +108,7 @@ export const App = () => {
             <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
             <Route path={"/mypage"} element={<LoggedInRoute currentUser={currentUser}><MyPage /></LoggedInRoute>} />
             <Route path={"/books"} element={<LoggedInRoute currentUser={currentUser}><Index /></LoggedInRoute>} />
+            <Route path={"/books/:id"} element={<LoggedInRoute currentUser={currentUser}><BookDetail /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
             <Route path={"/admin/books/index"} element={<AdminProtectedRoute><AdminBookIndex /></AdminProtectedRoute>} />
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
