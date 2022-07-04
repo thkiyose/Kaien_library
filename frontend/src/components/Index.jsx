@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
@@ -88,9 +89,11 @@ const MyPaginate = styled(ReactPaginate).attrs({
 `
 
 export const Index = () => {
+  const { register, setValue, getValues, reset } = useForm();
   const [ books, setBooks ] = useState({});
   const [ perPage ] = useState(18);
   const [ start, setStart ] = useState(0);
+  const navigate = useNavigate();
 
   const handleFetchBooks= async() => {
     const res = await fetchBooks();
@@ -102,9 +105,16 @@ export const Index = () => {
     setStart(e.selected * perPage);
   }
 
+  const handleSearch = () => {
+  };
+
   return(
     <>
       <Wrapper width={"800px"}>
+        <div>
+          <input type="text" name="search" {...register("searchParam")}/>
+          <button onClick={handleSearch}>検索</button>
+        </div>
         <BookList>
           {Object.keys(books).slice(start, start + perPage).map((key) => {
             return (
