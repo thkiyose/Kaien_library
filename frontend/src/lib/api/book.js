@@ -4,6 +4,10 @@ export const fetchBooks = () => {
   return client.get("/books");
 };
 
+export const showBook = (book_id) => {
+  return client.get(`/books/${book_id}`);
+};
+
 export const fetchBookInfo = (params) => {
   return client.post("/books/fetch_book_info",params);
 };

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
+import Color from './parts/Color';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../App';
@@ -38,7 +39,7 @@ const SignUpButton = styled.input`
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #2e8b57;
+  background: ${Color.primary};
   font-size: 1rem;
   width: 100%;
   border: 0;
@@ -52,7 +53,7 @@ const SignUpButton = styled.input`
 const ErrorMessage = styled.span`
   font-size: 0.8rem;
   display: block;
-  background-color: #bde6cf;
+  background-color: ${Color.text};
 `
 const LogInGuide = styled.span`
   font-size: 0.9rem;

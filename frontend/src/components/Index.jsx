@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
+import Color from './parts/Color';
 import { fetchBooks } from '../lib/api/book';
 
 const BookList = styled.ul`
@@ -71,7 +73,8 @@ const MyPaginate = styled(ReactPaginate).attrs({
     border-color: transparent;
   }
   li.active a {
-    background-color: #bde6cf;
+    background-color: ${Color.primary};
+    color: white;
     border-color: transparent;
     min-width: 32px;
   }
@@ -97,7 +100,7 @@ export const Index = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
-  };
+  }
 
   return(
     <>
@@ -105,37 +108,39 @@ export const Index = () => {
         <BookList>
           {Object.keys(books).slice(start, start + perPage).map((key) => {
             return (
-              <>
+              <React.Fragment key={books[key].id}>
                 <ImageWrap key={books[key].id}>
-                  {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-                  <BookTitle>{books[key].title}</BookTitle>
-                  <FigCaption>
-                    {books[key].title}
-                  </FigCaption>
+                  <Link to={`${books[key].id}`} >
+                    {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
+                    <BookTitle>{books[key].title}</BookTitle>
+                    <FigCaption>
+                      {books[key].title}
+                    </FigCaption>
+                  </Link>
                 </ImageWrap>
-              </>
+              </React.Fragment>
             );
           })}
         </BookList>
         <MyPaginate
           onPageChange={handlePageChange}
-          pageCount={Math.ceil(books.length / perPage)} //総ページ数。今回は一覧表示したいデータ数 / 1ページあたりの表示数としてます。
-          marginPagesDisplayed={2} //先頭と末尾に表示するページの数。今回は2としたので1,2…今いるページの前後…後ろから2番目, 1番目 のように表示されます。
-          pageRangeDisplayed={5} //上記の「今いるページの前後」の番号をいくつ表示させるかを決めます。
-          containerClassName='pagination' //ページネーションリンクの親要素のクラス名
-          pageClassName='page-item' //各子要素(li要素)のクラス名
-          pageLinkClassName='page-link' //ページネーションのリンクのクラス名
-          activeClassName='active' //今いるページ番号のクラス名。今いるページの番号だけ太字にしたりできます
-          previousLabel='<' //前のページ番号に戻すリンクのテキスト
-          nextLabel='>' //次のページに進むボタンのテキスト
-          previousClassName='page-item' // '<'の親要素(li)のクラス名
-          nextClassName='page-item' //'>'の親要素(li)のクラス名
-          previousLinkClassName='page-link'  //'<'のリンクのクラス名
-          nextLinkClassName='page-link'　//'>'のリンクのクラス名
-          disabledClassName='disabled' //先頭 or 末尾に行ったときにそれ以上戻れ(進め)なくするためのクラス
-          breakLabel='...' // ページがたくさんあるときに表示しない番号に当たる部分をどう表示するか
-          breakClassName='page-item' // 上記の「…」のクラス名
-          breakLinkClassName='page-link' // 「…」の中のリンクにつけるクラス
+          pageCount={Math.ceil(books.length / perPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          containerClassName='pagination'
+          pageClassName='page-item'
+          pageLinkClassName='page-link'
+          activeClassName='active'
+          previousLabel='<'
+          nextLabel='>'
+          previousClassName='page-item'
+          nextClassName='page-item'
+          previousLinkClassName='page-link'
+          nextLinkClassName='page-link'
+          disabledClassName='disabled'
+          breakLabel='...'
+          breakClassName='page-item'
+          breakLinkClassName='page-link'
         />
       </Wrapper>
     </>

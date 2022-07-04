@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { Context } from '../../App';
+import Color from './Color';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 import { fetchBookInfo } from '../../lib/api/book';
@@ -9,7 +11,7 @@ const RegisterButton = styled.input`
   display: block;
   padding: 10px;
   font-size: 1rem;
-  background-color: #2e8b57;
+  background-color: ${Color.primary};
   border: 0;
   outline: 0;
   color: white;
@@ -31,7 +33,7 @@ const Form = styled.form`
   button {
     padding: 7px;
     font-size: 0.8rem;
-    background-color: #2e8b57;
+    background-color: ${Color.primary};
     border: 0;
     outline: 0;
     color: white;
@@ -69,7 +71,7 @@ const ImageDiv = styled.div`
   width: 80%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #bde6cf;
+  background-color: ${Color.text};
   border-radius: 10px;
   text-align :center;
   label {
@@ -155,13 +157,21 @@ const ClearFix = styled.div`
   display: block;
   clear: both;
 `
+const AfterCreated = styled.div`
+  background-color: ${Color.text};
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+`
 
 export const BookForm = () => {
   const { register, setValue, getValues, reset, resetField, handleSubmit,formState: { errors } } = useForm();
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
   const [ isbnError, setIsbnError ] = useState();
   const [ imageError, setImageError ] = useState();
   const [ afterCreatedGuide, setAfterCreatedGuide ] = useState();
+  const [ afterCreatedUrl, setAfterCreatedUrl ] = useState();
   const { categories, locations } = useContext(Context);
   const [ imageInputed, setImageInputed ] = useState("");
 
@@ -175,7 +185,6 @@ export const BookForm = () => {
         setIsLoading(true);
         setImageError("")
         const res = await fetchBookInfo({isbn:isbnInput});
-        console.log(res)
         if (res.data.data.totalItems > 0) {
           setValue("title",res.data.data.items[0].volumeInfo.title);
           setValue("author",res.data.data.items[0].volumeInfo.authors?.join(","));
@@ -209,15 +218,19 @@ export const BookForm = () => {
       <Form onSubmit={handleSubmit(async(data) => {
         try {
           const res = await createBook({book:data});
+          setIsSubmitting(true);
           if (res.data.status === 'SUCCESS') {
-            setAfterCreatedGuide("登録成功")
+            setAfterCreatedGuide("書籍を登録しました。");
+            setAfterCreatedUrl(`/books/${res.data.data.id}`);
             reset();
             resetField("image_url");
             setImageInputed("");
             setImageError("");
+            setIsSubmitting(false);
           }
         } catch (e) {
           console.log(e);
+          setIsSubmitting(false);
           setAfterCreatedGuide("登録に失敗しました。")
         }})}>
         <div className="isbnInput">
@@ -291,7 +304,10 @@ export const BookForm = () => {
           </LocationDiv>
           <RegisterButton value="登録" type="submit" />
         </Form>
-        { afterCreatedGuide && <div>{afterCreatedGuide}</div> }
+        { isSubmitting && <div>書籍を登録しています…</div>}
+        { afterCreatedGuide && !isSubmitting && <AfterCreated>
+          <span>{afterCreatedGuide}</span> { afterCreatedUrl && <Link to={afterCreatedUrl}>確認する</Link>}
+        </AfterCreated> }
       </>
     );
 };

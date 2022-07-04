@@ -8,6 +8,11 @@ class Api::V1::BooksController < ApplicationController
     }
   end
 
+  def show
+    book = Book.find_by(id: params[:id])
+    render json: { book: book, category: book.category, location: book.location }
+  end
+
   def fetch_book_info
     isbn = params[:isbn]
     res = JSON.parse(Net::HTTP.get(URI.parse(
