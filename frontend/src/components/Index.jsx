@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
@@ -88,6 +88,13 @@ const MyPaginate = styled(ReactPaginate).attrs({
     cursor: default;
   }
 `
+const NotFound = styled.div`
+  background-color: ${Color.text};
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+`
 
 export const Index = () => {
   const { register, setValue, getValues, reset } = useForm();
@@ -96,11 +103,11 @@ export const Index = () => {
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
 
-  const handleFetchBooks= async(searchParam) => {
-    const res = await fetchBooks(searchParam);
+  const handleFetchBooks= async() => {
+    const res = await fetchBooks();
     setBooks(res.data.books);
   }
-  useEffect(() => { handleFetchBooks() }, []);
+  useLayoutEffect(() => { handleFetchBooks() }, []);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -118,25 +125,27 @@ export const Index = () => {
       <Wrapper width={"800px"}>
         <div>
           <input type="text" name="search" {...register("search")}/>
-          <button onClick={() => {handleSearch()}}>検索</button>
+          <button onClick={() => {handleSearch()}}>検索</button><button onClick={() => {handleSearch("")}}>リセット</button>
         </div>
-        <BookList>
-          {Object.keys(books).slice(start, start + perPage).map((key) => {
-            return (
-              <React.Fragment key={books[key].id}>
-                <ImageWrap key={books[key].id}>
-                  <Link to={`${books[key].id}`} >
-                    {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-                    <BookTitle>{books[key].title}</BookTitle>
-                    <FigCaption>
-                      {books[key].title}
-                    </FigCaption>
-                  </Link>
-                </ImageWrap>
-              </React.Fragment>
-            );
-          })}
-        </BookList>
+        {books.length > 1 &&
+          <BookList>
+            {Object.keys(books).slice(start, start + perPage).map((key) => {
+              return (
+                <React.Fragment key={books[key].id}>
+                  <ImageWrap key={books[key].id}>
+                    <Link to={`${books[key].id}`} >
+                      {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
+                      <BookTitle>{books[key].title}</BookTitle>
+                      <FigCaption>
+                        {books[key].title}
+                      </FigCaption>
+                    </Link>
+                  </ImageWrap>
+                </React.Fragment>
+              );
+            })}
+          </BookList>}
+          {books.length === 0 && <NotFound><p>書籍が見つかりませんでした。</p></NotFound>}
         <MyPaginate
           onPageChange={handlePageChange}
           pageCount={Math.ceil(books.length / perPage)}
