@@ -6,6 +6,7 @@ import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
 import Color from './parts/Color';
 import { fetchBooks } from '../lib/api/book';
+import { search } from '../lib/api/book';
 
 const BookList = styled.ul`
   display: flex;
@@ -95,8 +96,8 @@ export const Index = () => {
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
 
-  const handleFetchBooks= async() => {
-    const res = await fetchBooks();
+  const handleFetchBooks= async(searchParam) => {
+    const res = await fetchBooks(searchParam);
     setBooks(res.data.books);
   }
   useEffect(() => { handleFetchBooks() }, []);
@@ -105,15 +106,18 @@ export const Index = () => {
     setStart(e.selected * perPage);
   }
 
-  const handleSearch = () => {
+  const handleSearch = async(params) => {
+    const searchParam = getValues("search");
+    const res = await search({searchParams:searchParam});
+    reset({search:""});
   };
 
   return(
     <>
       <Wrapper width={"800px"}>
         <div>
-          <input type="text" name="search" {...register("searchParam")}/>
-          <button onClick={handleSearch}>検索</button>
+          <input type="text" name="search" {...register("search")}/>
+          <button onClick={() => {handleSearch()}}>検索</button>
         </div>
         <BookList>
           {Object.keys(books).slice(start, start + perPage).map((key) => {

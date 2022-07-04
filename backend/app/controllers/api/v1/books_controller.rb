@@ -8,6 +8,10 @@ class Api::V1::BooksController < ApplicationController
     }
   end
 
+  def search
+    render json: { books: Book.where(deleted:false) }
+  end
+
   def show
     book = Book.find_by(id: params[:id])
     render json: { book: book, category: book.category, location: book.location }
@@ -31,7 +35,6 @@ class Api::V1::BooksController < ApplicationController
 
   def create
     book = Book.new(book_params)
-    # book.remote_image_url_url = params[:book][:image_url]
 
     if book.save!
       if !book.image_url.nil?
