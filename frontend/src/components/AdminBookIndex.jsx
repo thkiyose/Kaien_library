@@ -9,7 +9,7 @@ export const AdminBookIndex = () => {
 
   const handleFetchBooks= async() => {
     const res = await fetchBooks();
-    setBooks(res.data);
+    setBooks(res.data.books);
   }
   useEffect(() => { handleFetchBooks() }, []);
 
