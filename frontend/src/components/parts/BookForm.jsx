@@ -157,6 +157,12 @@ const ClearFix = styled.div`
   display: block;
   clear: both;
 `
+const AfterCreated = styled.div`
+  background-color: ${Color.text};
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+`
 
 export const BookForm = () => {
   const { register, setValue, getValues, reset, resetField, handleSubmit,formState: { errors } } = useForm();
@@ -299,7 +305,9 @@ export const BookForm = () => {
           <RegisterButton value="登録" type="submit" />
         </Form>
         { isSubmitting && <div>書籍を登録しています…</div>}
-        { afterCreatedGuide && !isSubmitting && <div>{afterCreatedGuide}</div> } { afterCreatedUrl && <Link to={afterCreatedUrl}>確認する</Link>}
+        { afterCreatedGuide && !isSubmitting && <AfterCreated>
+          <span>{afterCreatedGuide}</span> { afterCreatedUrl && <Link to={afterCreatedUrl}>確認する</Link>}
+        </AfterCreated> }
       </>
     );
 };

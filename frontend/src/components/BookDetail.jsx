@@ -10,6 +10,16 @@ import { showBook } from '../lib/api/book';
 const Top = styled.div`
 `
 
+const BackButton = styled.button`
+outline: 0;
+background: ${Color.primary};
+font-size: 1rem;
+border: 0;
+padding: 5px 15px;
+color: #FFFFFF;
+cursor: pointer;
+`
+
 const ImageDiv = styled.div`
   float: left;
   margin: 10px 60px;
@@ -77,7 +87,7 @@ export const BookDetail = () => {
   return(
     <>
       <Wrapper width={"800px"}>
-        <button onClick={() =>{navigate(-1)}}>戻る</button>
+        <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
         <p>カテゴリー>{category.category}</p>
         <Top>
           <ImageDiv>
