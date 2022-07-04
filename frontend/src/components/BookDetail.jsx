@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
@@ -56,6 +56,7 @@ export const BookDetail = () => {
   const [ category, setCategory ] = useState({});
   const [ location, setLocation ] = useState({});
   const { categories, locations } = useContext(Context);
+  const navigate = useNavigate();
   const bookId = useParams();
 
   const handleShowBook = async(bookId) => {
@@ -76,6 +77,7 @@ export const BookDetail = () => {
   return(
     <>
       <Wrapper width={"800px"}>
+        <button onClick={() =>{navigate(-1)}}>戻る</button>
         <p>カテゴリー>{category.category}</p>
         <Top>
           <ImageDiv>
