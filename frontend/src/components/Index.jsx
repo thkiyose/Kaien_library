@@ -1,4 +1,5 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, useContext } from 'react';
+import { Context } from '../App';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
@@ -102,6 +103,7 @@ export const Index = () => {
   const [ perPage ] = useState(18);
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
+  const { categories } = useContext(Context);
 
   const handleFetchBooks= async() => {
     const res = await fetchBooks();
@@ -124,6 +126,13 @@ export const Index = () => {
     <>
       <Wrapper width={"800px"}>
         <div>
+          <select name="category">
+            {Object.keys(categories).map((key) => {
+              return (
+                <option key={key} value={categories[key].id}>{categories[key].category}</option>
+              );
+            })}
+          </select>
           <input type="text" name="search" placeholder="フリーワード検索" {...register("search")}/>
           <button onClick={() => {handleSearch()}}>検索</button><button onClick={() => {handleSearch("")}}>リセット</button>
         </div>
