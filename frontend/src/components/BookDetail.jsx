@@ -11,13 +11,13 @@ const Top = styled.div`
 `
 
 const BackButton = styled.button`
-outline: 0;
-background: ${Color.primary};
-font-size: 1rem;
-border: 0;
-padding: 5px 15px;
-color: #FFFFFF;
-cursor: pointer;
+  outline: 0;
+  background: ${Color.primary};
+  font-size: 0.8rem;
+  border: 0;
+  padding: 5px 15px;
+  color: #FFFFFF;
+  cursor: pointer;
 `
 
 const ImageDiv = styled.div`
