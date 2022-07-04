@@ -108,7 +108,8 @@ export const Index = () => {
 
   const handleSearch = async(params) => {
     const searchParam = getValues("search");
-    const res = await search({searchParams:searchParam});
+    const res = await search({q:searchParam});
+    setBooks(res.data.books);
     reset({search:""});
   };
 
