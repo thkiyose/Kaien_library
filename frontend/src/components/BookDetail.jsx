@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
@@ -65,7 +64,6 @@ export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const [ category, setCategory ] = useState({});
   const [ location, setLocation ] = useState({});
-  const { categories, locations } = useContext(Context);
   const navigate = useNavigate();
   const bookId = useParams();
 
