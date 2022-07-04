@@ -9,7 +9,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def search
-    books = Book.where(deleted: false).where('title like ?',"%#{params[:q]}%")
+    books = Book.where(deleted: false).where(['title like ? or author like ? or description like ? or published_year like ?',"%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%"])
     render json: { books: books }
   end
 

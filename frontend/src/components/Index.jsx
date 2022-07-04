@@ -124,10 +124,10 @@ export const Index = () => {
     <>
       <Wrapper width={"800px"}>
         <div>
-          <input type="text" name="search" {...register("search")}/>
+          <input type="text" name="search" placeholder="フリーワード検索" {...register("search")}/>
           <button onClick={() => {handleSearch()}}>検索</button><button onClick={() => {handleSearch("")}}>リセット</button>
         </div>
-        {books.length > 1 &&
+        {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
               return (
