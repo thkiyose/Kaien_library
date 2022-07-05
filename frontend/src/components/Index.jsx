@@ -139,12 +139,12 @@ const NotFound = styled.div`
   border-radius: 10px;
   text-align: center;
 `
-
 export const Index = () => {
   const [ books, setBooks ] = useState({});
   const [ searchParam, setSearchParam ] = useState({});
   const [ searchCategory, setSearchCategory ] = useState({});
   const [ perPage ] = useState(18);
+  const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
   const { categories } = useContext(Context);
@@ -159,6 +159,7 @@ export const Index = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
+    setCurrentPage(e.selected)
   };
 
   const handleChangeSearchParam = (e) => {
@@ -172,6 +173,8 @@ export const Index = () => {
   const handleSearch = async(e) => {
     const res = await search({q:searchParam,category:searchCategory});
     setBooks(res.data.books);
+    setStart(0);
+    setCurrentPage(0);
   };
 
   const handleResetSearch = async() => {
@@ -181,6 +184,8 @@ export const Index = () => {
     setSearchCategory("");
     searchRef.current.value = "";
     categoryRef.current.value= "カテゴリを選択";
+    setStart(0);
+    setCurrentPage(0);
   };
 
   return(
@@ -218,6 +223,7 @@ export const Index = () => {
           </BookList>}
           {books.length === 0 && <NotFound><p>書籍が見つかりませんでした。</p></NotFound>}
         <MyPaginate
+          forcePage={currentPage}
           onPageChange={handlePageChange}
           pageCount={Math.ceil(books.length / perPage)}
           marginPagesDisplayed={2}
