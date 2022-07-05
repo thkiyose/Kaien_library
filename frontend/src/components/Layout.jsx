@@ -11,6 +11,7 @@ const Div = styled.div`
   height: auto;
   padding-top: 20px;
   position: relative;
+  min-height: calc(100vh - 50px);
 `
 
 export const Layout = () => {

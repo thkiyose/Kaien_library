@@ -11,10 +11,10 @@ const FooterDiv = styled.div`
   height : 50px;
   position: absolute;/*←絶対位置*/
   bottom: 0;
-  margin-bottom: -50px;
+  margin-bottom: -35px;
 `
 const Push = styled.div`
-  height: 50px;
+  height: 70px;
 `
 
 export const Footer = () => {
