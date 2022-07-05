@@ -8,6 +8,49 @@ import Color from './parts/Color';
 import { fetchBooks } from '../lib/api/book';
 import { search } from '../lib/api/book';
 
+const SearchBar = styled.div`
+  padding-bottom: 5px;
+  margin-left: 50px;
+`
+const SearchForm = styled.input`
+  outline: 0;
+  background: white;
+  border: 0;
+  margin: 0 0 10px;
+  padding: 10px;
+  font-size: 0.8rem;
+  width: 40%;
+`
+const SearchCategory = styled.select`
+  outline: 0;
+  font-size: 0.8rem;
+  background: white;
+  border: 0;
+  padding: 9px;
+  margin-right: 10px;
+}
+`
+const SearchButton = styled.button`
+  padding: 10px;
+  font-size: 0.8rem;
+  background-color: ${Color.primary};
+  border: 0;
+  outline: 0;
+  color: white;
+  margin: 0px 5px;
+  cursor: pointer;
+`
+const ResetButton = styled.button`
+  padding: 10px;
+  font-size: 0.8rem;
+  background-color: ${Color.dark};
+  border: 0;
+  outline: 0;
+  color: white;
+  margin-left: 50px;
+  cursor: pointer;
+`
+
 const BookList = styled.ul`
   display: flex;
   flex-direction: row;
@@ -15,6 +58,7 @@ const BookList = styled.ul`
   margin: 0 auto;
   justify-content: flex-start;
   align-items: flex-start;
+  min-height: 520px;
 `
 const ImageWrap = styled.li`
   width: 100px;
@@ -136,24 +180,24 @@ export const Index = () => {
     setSearchParam("");
     setSearchCategory("");
     searchRef.current.value = "";
-    categoryRef.current.value= "カテゴリを選択して表示";
+    categoryRef.current.value= "カテゴリを選択";
   };
 
   return(
     <>
       <Wrapper width={"800px"}>
-        <div>
-          <select name="category" ref={categoryRef} onChange={(e)=>{handleChangeCategory(e)}}>
-          <option hidden>カテゴリを選択して表示</option>
+        <SearchBar>
+          <SearchCategory name="category" ref={categoryRef} onChange={(e)=>{handleChangeCategory(e)}}>
+            <option hidden>カテゴリを選択</option>
             {Object.keys(categories).map((key) => {
               return (
                 <option key={key} value={categories[key].id}>{categories[key].category}</option>
               );
             })}
-          </select>
-          <input type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
-          <button onClick={(e) => {handleSearch(e)}}>検索</button><button onClick={() => {handleResetSearch()}}>リセット</button>
-        </div>
+          </SearchCategory>
+          <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
+          <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
+        </SearchBar>
         {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
