@@ -209,7 +209,7 @@ export const Index = () => {
               return (
                 <React.Fragment key={books[key].id}>
                   <ImageWrap key={books[key].id}>
-                    <Link to={`${books[key].id}`} >
+                    <Link to={`${books[key].id}`}>
                       {books[key].imageUrl ? <Image src={`http://localhost:3000/${books[key].id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
                       <BookTitle>{books[key].title}</BookTitle>
                       <FigCaption>
