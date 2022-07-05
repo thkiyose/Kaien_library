@@ -8,6 +8,19 @@ class Api::V1::BooksController < ApplicationController
     }
   end
 
+  def search
+    if params[:q].present? && params[:category].present?
+      books = Book.where(deleted: false).where(['title like ? or author like ? or description like ? or published_year like ?',"%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%"]).where(category_id: params[:category])
+    elsif params[:q].present? && !params[:category].present?
+      books = Book.where(deleted: false).where(['title like ? or author like ? or description like ? or published_year like ?',"%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%"])
+    elsif !params[:q].present? && params[:category].present?
+      books = Book.where(deleted: false).where(category_id: params[:category])
+    elsif !params[:q].present? && !params[:category].present?
+      books = Book.where(deleted:false)
+    end
+    render json: { books: books }
+  end
+
   def show
     book = Book.find_by(id: params[:id])
     render json: { book: book, category: book.category, location: book.location }
@@ -31,7 +44,6 @@ class Api::V1::BooksController < ApplicationController
 
   def create
     book = Book.new(book_params)
-    # book.remote_image_url_url = params[:book][:image_url]
 
     if book.save!
       if !book.image_url.nil?

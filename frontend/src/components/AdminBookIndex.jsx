@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
 import ReactPaginate from 'react-paginate';
-import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
 import { deleteBook } from '../lib/api/book';
 import { fetchBooks } from '../lib/api/book';
@@ -70,7 +69,7 @@ export const AdminBookIndex = () => {
   useEffect(() => { handleFetchBooks() }, []);
 
   const handleDeleteBook = async(book_id) => {
-    const res = await deleteBook(book_id);
+    await deleteBook(book_id);
     handleFetchBooks();
   };
 

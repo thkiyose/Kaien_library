@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, useLayoutEffect, createContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Login } from './components/Login';
@@ -50,8 +50,8 @@ export const App = () => {
     setLocations(res.data.location);
   }
 
-  useEffect(() => { handleFetchCategories() }, []);
-  useEffect(() => { handleFetchLocations() }, []);
+  useLayoutEffect(() => { handleFetchCategories() }, []);
+  useLayoutEffect(() => { handleFetchLocations() }, []);
 
   const LoggedInRoute = ( {children} ) => {
     if (!loading) {

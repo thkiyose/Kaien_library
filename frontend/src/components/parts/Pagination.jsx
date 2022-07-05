@@ -7,8 +7,8 @@ function Pagination({ booksPerPage, totalBooks, currentPage }) {
         for (let i = 1; i <= Math.ceil(totalBooks / booksPerPage); i++) {  // 記事総数÷5=ページの総数として取得
             totalPages.push(i)
         }
-
         const activePage = parseInt(currentPage)  // 現在のページ
+
         var startIndex, endIndex        // 目次の最初と最後
         let pages = totalPages.length   // ページの総数を数値で取得
         if (pages <= 10) {    // ページ総数が１０以下の場合
