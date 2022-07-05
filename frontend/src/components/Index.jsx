@@ -1,6 +1,5 @@
-import React, { useState, useLayoutEffect, useContext } from 'react';
+import React, { useState, useLayoutEffect, useContext, useRef } from 'react';
 import { Context } from '../App';
-import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
@@ -98,43 +97,62 @@ const NotFound = styled.div`
 `
 
 export const Index = () => {
-  const { register, setValue, getValues, reset } = useForm();
   const [ books, setBooks ] = useState({});
+  const [ searchParam, setSearchParam ] = useState({});
+  const [ searchCategory, setSearchCategory ] = useState({});
   const [ perPage ] = useState(18);
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
   const { categories } = useContext(Context);
+  const searchRef = useRef();
+  const categoryRef = useRef();
 
   const handleFetchBooks= async() => {
     const res = await fetchBooks();
     setBooks(res.data.books);
-  }
+  };
   useLayoutEffect(() => { handleFetchBooks() }, []);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
-  }
+  };
 
-  const handleSearch = async(params) => {
-    const searchParam = getValues("search");
-    const res = await search({q:searchParam});
+  const handleChangeSearchParam = (e) => {
+    setSearchParam(e.target.value);
+  };
+
+  const handleChangeCategory = async(e) => {
+    setSearchCategory(e.target.value);
+  };
+
+  const handleSearch = async(e) => {
+    const res = await search({q:searchParam,category:searchCategory});
     setBooks(res.data.books);
-    reset({search:""});
+  };
+
+  const handleResetSearch = async() => {
+    const res = await search();
+    setBooks(res.data.books);
+    setSearchParam("");
+    setSearchCategory("");
+    searchRef.current.value = "";
+    categoryRef.current.value= "カテゴリを選択して表示";
   };
 
   return(
     <>
       <Wrapper width={"800px"}>
         <div>
-          <select name="category">
+          <select name="category" ref={categoryRef} onChange={(e)=>{handleChangeCategory(e)}}>
+          <option hidden>カテゴリを選択して表示</option>
             {Object.keys(categories).map((key) => {
               return (
                 <option key={key} value={categories[key].id}>{categories[key].category}</option>
               );
             })}
           </select>
-          <input type="text" name="search" placeholder="フリーワード検索" {...register("search")}/>
-          <button onClick={() => {handleSearch()}}>検索</button><button onClick={() => {handleSearch("")}}>リセット</button>
+          <input type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
+          <button onClick={(e) => {handleSearch(e)}}>検索</button><button onClick={() => {handleResetSearch()}}>リセット</button>
         </div>
         {books.length >= 1 &&
           <BookList>
