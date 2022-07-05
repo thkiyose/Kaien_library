@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_05_061459) do
+ActiveRecord::Schema.define(version: 2022_07_05_061812) do
 
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "isbn"
@@ -36,10 +36,10 @@ ActiveRecord::Schema.define(version: 2022_07_05_061459) do
   end
 
   create_table "lendings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "book_id"
-    t.date "start_date"
-    t.date "expiry_date"
+    t.bigint "user_id", null: false
+    t.bigint "book_id", null: false
+    t.date "start_date", null: false
+    t.date "expiry_date", null: false
     t.date "finished_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
