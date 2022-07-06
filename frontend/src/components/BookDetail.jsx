@@ -108,7 +108,7 @@ export const BookDetail = () => {
               <h1>{book.title}</h1>
               <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
               <InfoDivBottom>
-                <Rent>この本を借りる</Rent>
+                <Rent onClick={() => {navigate("lending")}}>この本を借りる</Rent>
                 <p><span>ステータス: 貸出可</span></p>
                 <p><span>場所: {location.location}</span></p>
               </InfoDivBottom>
