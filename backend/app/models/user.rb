@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   before_validation :email_downcase
   before_destroy :ensure_admin
 
+  has_many :lendings
+
   validates :name, presence: true, length: { maximum: 15 }
 
   private
