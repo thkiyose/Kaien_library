@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   before_validation :email_downcase
   before_destroy :ensure_admin
 
-  has_many :lendings
+  has_many :lendings, dependent: :nullify
 
   validates :name, presence: true, length: { maximum: 15 }
 
