@@ -47,6 +47,21 @@ const Rent = styled.button`
   float: left;
   width: 30%;
   margin: 0px 20px ;
+  background-color: ${Color.primary};
+  color : white;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-bottom:4px solid rgba(0,0,0,0.2);
+  :hover {
+    background-color: #0c797a;
+  }
+  :active {
+	-webkit-transform: translate(0,2px);
+	-moz-transform: translate(0,4px);
+	transform: translate(0,4px);
+	border-bottom:none;
+	}
 `
 const Description = styled.div`
   margin: 20px auto;
@@ -108,7 +123,7 @@ export const BookDetail = () => {
               <h1>{book.title}</h1>
               <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
               <InfoDivBottom>
-                <Rent onClick={() => {navigate("lending")}}>この本を借りる</Rent>
+                <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
                 <p><span>ステータス: 貸出可</span></p>
                 <p><span>場所: {location.location}</span></p>
               </InfoDivBottom>
