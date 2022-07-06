@@ -59,9 +59,17 @@ const ClearFix = styled.div`
   display: block;
   clear: both;
 `
+const EmptyGuide = styled.div`
+  margin: 20px auto;
+  background-color:${Color.text};
+  padding: 20px;
+  text-align: center;
+`
 
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
   const [ location, setLocation ] = useState({});
   const navigate = useNavigate();
@@ -69,12 +77,15 @@ export const BookDetail = () => {
 
   const handleShowBook = async(bookId) => {
     try {
-     const res = await showBook(bookId);
-     setBook(res.data.book);
-     setCategory(res.data.category)
-     setLocation(res.data.location)
+      const res = await showBook(bookId);
+      setBook(res.data.book);
+      setCategory(res.data.category)
+      setLocation(res.data.location)
+      setIsEmpty(false);
+      setIsLoading(false);
     } catch(e) {
-     console.log(e);
+      console.log(e);
+      setIsLoading(false);
     }
     };
 
@@ -82,29 +93,38 @@ export const BookDetail = () => {
    handleShowBook(bookId.id);
   }, [bookId]);
 
-  return(
-    <>
+  if (!isLoading && !isEmpty) {
+    return(
+      <>
+        <Wrapper width={"800px"}>
+          <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
+          <p>カテゴリー>{category.category}</p>
+          <Top>
+            <ImageDiv>
+              {book.imageUrl ? <Image src={`http://localhost:3000/${book.id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
+              <Link to="">★</Link>
+            </ImageDiv>
+            <InfoDiv>
+              <h1>{book.title}</h1>
+              <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
+              <InfoDivBottom>
+                <Rent>この本を借りる</Rent>
+                <p><span>ステータス: 貸出可</span></p>
+                <p><span>場所: {location.location}</span></p>
+              </InfoDivBottom>
+            </InfoDiv>
+            <ClearFix />
+            <Description>{book.description}</Description>
+          </Top>
+        </Wrapper>
+      </>
+    );
+  } else if (!isLoading && isEmpty ) {
+    return(
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <p>カテゴリー>{category.category}</p>
-        <Top>
-          <ImageDiv>
-            {book.imageUrl ? <Image src={`http://localhost:3000/${book.id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-            <Link to="">★</Link>
-          </ImageDiv>
-          <InfoDiv>
-            <h1>{book.title}</h1>
-            <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
-            <InfoDivBottom>
-              <Rent>この本を借りる</Rent>
-              <p><span>ステータス: 貸出可</span></p>
-              <p><span>場所: {location.location}</span></p>
-            </InfoDivBottom>
-          </InfoDiv>
-          <ClearFix />
-          <Description>{book.description}</Description>
-        </Top>
-      </Wrapper>
-    </>
-  );
+        <EmptyGuide>書籍が見つかりませんでした。</EmptyGuide>
+      </Wrapper >
+    );
+  };
 };
