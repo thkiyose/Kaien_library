@@ -110,7 +110,7 @@ export const Lending = () => {
     const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate, expiryDate: state.selection.endDate};
     const res = await createLending(params);
     if (res.data.status === "SUCCESS") {
-      navigate(`/books/${bookId}`);
+      navigate(`/books/${bookId.bookId}`);
     } else if (res.data.message){
       setError(res.data.message);
     }
