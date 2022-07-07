@@ -1,5 +1,5 @@
 import { client } from './client';
 
-export const createBook = (params) => {
-  return client.post("/lending",params);
+export const createLending = (params) => {
+  return client.post("/lendings",params);
 };

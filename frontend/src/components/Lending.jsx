@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState ,useContext } from 'react';
+import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
@@ -9,6 +10,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { format, addMonths } from 'date-fns';
 import ja from 'date-fns/locale/ja';
+import { createLending } from '../lib/api/lending';
 
 const BackButton = styled.button`
   outline: 0;
@@ -78,6 +80,7 @@ const ClearFix = styled.div`
 `
 
 export const Lending = () => {
+  const { currentUser } = useContext(Context);
   const location = useLocation();
   const bookId = location.state;
   const navigate = useNavigate();
@@ -101,6 +104,13 @@ export const Lending = () => {
       });
     };
   };
+
+  const handleCreateLending = async() => {
+    const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate, expiryDate: state.selection.endDated};
+    const res = await createLending(params);
+    console.log(res);
+  };
+
   return (
     <>
       <Wrapper width={"800px"}>
@@ -136,7 +146,7 @@ export const Lending = () => {
                   </tr>
                 </tbody>
               </table>
-              <Rent>この期間で借りる</Rent>
+              <Rent onClick={() => {handleCreateLending()}}>この期間で借りる</Rent>
             </Detail>
             <ClearFix />
           </>

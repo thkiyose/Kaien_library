@@ -1,6 +1,7 @@
 class Api::V1::LendingsController < ApplicationController
   def create
     lending = Lending.new(lending_params)
+    binding.pry
     if lending.save!
       render json: { status:"SUCCESS"}
     else
@@ -11,6 +12,6 @@ class Api::V1::LendingsController < ApplicationController
   private
 
   def lending_params
-    params.require(:lending).permit(:book_id,:start_date,:expiry_date)
+    params.require(:lending).permit(:user_id,:book_id,:start_date,:expiry_date)
   end
 end
