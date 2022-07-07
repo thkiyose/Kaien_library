@@ -1,7 +1,6 @@
 class Api::V1::LendingsController < ApplicationController
   def create
     lending = Lending.new(lending_params)
-    binding.pry
     if lending.save!
       render json: { status:"SUCCESS"}
     else

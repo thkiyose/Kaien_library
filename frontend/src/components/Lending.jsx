@@ -106,7 +106,7 @@ export const Lending = () => {
   };
 
   const handleCreateLending = async() => {
-    const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate, expiryDate: state.selection.endDated};
+    const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate, expiryDate: state.selection.endDate};
     const res = await createLending(params);
     console.log(res);
   };
