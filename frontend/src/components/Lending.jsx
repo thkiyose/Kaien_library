@@ -84,6 +84,7 @@ export const Lending = () => {
   const location = useLocation();
   const bookId = location.state;
   const navigate = useNavigate();
+  const [ error, setError ] = useState();
   const [state, setState] = useState({
     selection: {
       startDate: new Date(),
@@ -108,7 +109,11 @@ export const Lending = () => {
   const handleCreateLending = async() => {
     const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate, expiryDate: state.selection.endDate};
     const res = await createLending(params);
-    console.log(res);
+    if (res.data.status === "SUCCESS") {
+      navigate(`/books/${bookId}`);
+    } else if (res.data.message){
+      setError(res.data.message);
+    }
   };
 
   return (
@@ -149,6 +154,7 @@ export const Lending = () => {
               <Rent onClick={() => {handleCreateLending()}}>この期間で借りる</Rent>
             </Detail>
             <ClearFix />
+            <span>{error}</span>
           </>
         :
           <EmptyGuide>書籍の情報を取得できません。書籍詳細画面からレンタル操作を行って下さい。</EmptyGuide>

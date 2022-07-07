@@ -1,8 +1,10 @@
 class Api::V1::LendingsController < ApplicationController
   def create
     lending = Lending.new(lending_params)
-    if Book.find_by(id: params[:book_id]).is_lent == false
+    book = Book.find_by(id: params[:book_id])
+    if book.is_lent == false
       if lending.save!
+        book.update(is_lent:true)
         render json: { status:"SUCCESS"}
       else
         render json:  lending.errors, status: 422
