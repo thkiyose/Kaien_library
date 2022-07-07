@@ -37,12 +37,13 @@ export const Lending = () => {
       key: 'selection'
     }
   });
-const reservedDates = eachDayOfInterval(
-  { start: new Date(2022, 6, 10), end: new Date(2022, 6, 20) }
-).concat(eachDayOfInterval(
-  { start: new Date(2022, 7, 10), end: new Date(2022, 7, 20) }
-))
 
+  const handleSelect = (item) => {
+    const interval = (item.selection.startDate - item.selection.endDate) / 86400000;
+    if (interval > -15) {
+      setState({ ...state, ...item })
+    };
+  };
   return (
     <>
       <Wrapper width={"800px"}>
@@ -56,11 +57,10 @@ const reservedDates = eachDayOfInterval(
               locale={ja}
               moveRangeOnFirstSelection={false}
               ranges={[state.selection]}
-              onChange={item => setState({ ...state, ...item })}
+              onChange={(item) => handleSelect(item)}
               minDate={new Date()}
               maxDate={addMonths(new Date(), 3)}
               rangeColors={[Color.primary]}
-              disabledDates={reservedDates}
               dateDisplayFormat={"yyyy/MM/dd"}
               monthDisplayFormat={"yyyy年MMM"}
               showDateDisplay={false}
