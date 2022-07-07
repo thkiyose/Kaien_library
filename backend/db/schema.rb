@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_06_022051) do
+ActiveRecord::Schema.define(version: 2022_07_07_054831) do
 
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "isbn"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2022_07_06_022051) do
     t.boolean "deleted", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_lent", default: false, null: false
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["location_id"], name: "index_books_on_location_id"
   end
