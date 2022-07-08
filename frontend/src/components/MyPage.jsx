@@ -29,7 +29,7 @@ export const MyPage = () => {
           <SideBar>
             <p>{currentUser.name}のマイページ</p>
             <ul>
-              <li><Link to="rental">レンタル/予約一覧</Link></li>
+              <li><Link to="lendings">レンタル/予約一覧</Link></li>
             </ul>
           </SideBar>
           <Main>
