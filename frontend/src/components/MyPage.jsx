@@ -7,9 +7,11 @@ import Color from './parts/Color';
 
 const SideBar = styled.div`
   float: left;
+  width: 30%;
 `
 const Main = styled.div`
   float: right;
+  width: 70%;
 `
 
 const ClearFix = styled.div`

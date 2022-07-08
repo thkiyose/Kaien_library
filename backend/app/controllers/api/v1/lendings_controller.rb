@@ -1,4 +1,8 @@
 class Api::V1::LendingsController < ApplicationController
+
+  def index
+  end
+  
   def create
     lending = Lending.new(lending_params)
     book = Book.find_by(id: params[:book_id])
