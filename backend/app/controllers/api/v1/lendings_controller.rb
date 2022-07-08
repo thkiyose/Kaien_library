@@ -1,8 +1,10 @@
 class Api::V1::LendingsController < ApplicationController
 
-  def index
+  def show
+    user = User.find_by(id: params[:id])
+    render json: { lendings: user.lendings }
   end
-  
+
   def create
     lending = Lending.new(lending_params)
     book = Book.find_by(id: params[:book_id])
