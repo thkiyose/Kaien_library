@@ -63,6 +63,23 @@ const Rent = styled.button`
 	border-bottom:none;
 	}
 `
+const Reservation = styled(Rent)`
+  .up {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  .bottom {
+    font-size: 1.5rem;
+    margin : 0;
+  }
+  background-color : ${Color.light};
+  opacity: 0.9;
+  :hover {
+    opacity: 1;
+    background-color: ${Color.primary};
+  }
+`
+
 const Description = styled.div`
   margin: 20px auto;
   background-color:${Color.text};
@@ -123,8 +140,11 @@ export const BookDetail = () => {
               <h1>{book.title}</h1>
               <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
               <InfoDivBottom>
-                <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
-                <p><span>ステータス: 貸出可</span></p>
+                { !book.isLent &&
+                  <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>}
+                { book.isLent &&
+                  <Reservation onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>}
+                <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
                 <p><span>場所: {location.location}</span></p>
               </InfoDivBottom>
             </InfoDiv>
