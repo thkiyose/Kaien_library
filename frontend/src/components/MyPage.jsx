@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Wrapper } from './parts/Wrapper';
 import { Context } from '../App';
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import styled from "styled-components";
 import Color from './parts/Color';
 
@@ -28,6 +28,9 @@ export const MyPage = () => {
         <>
           <SideBar>
             <p>{currentUser.name}のマイページ</p>
+            <ul>
+              <li><Link to="rental">レンタル/予約一覧</Link></li>
+            </ul>
           </SideBar>
           <Main>
             <Outlet />
