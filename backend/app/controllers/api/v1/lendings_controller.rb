@@ -27,6 +27,11 @@ class Api::V1::LendingsController < ApplicationController
     end
   end
 
+  def fetch_lending_user
+    lending_user = Lending.find_by(id: params[:id]).user
+    render json: { user_id: lending_user.id }
+  end
+
   private
 
   def lending_params

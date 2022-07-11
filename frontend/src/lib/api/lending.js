@@ -7,3 +7,7 @@ export const createLending = (params) => {
 export const fetchLendings = (params) => {
   return client.get(`/lendings/${params}`);
 };
+
+export const fetchLendingUser = (params) => {
+  return client.get(`/lendings/${params}/fetch_lending_user`);
+};

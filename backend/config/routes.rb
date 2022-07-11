@@ -21,7 +21,9 @@ Rails.application.routes.draw do
         get 'fetch_locations', on: :collection
         post 'search', on: :collection
       end
-      resources :lendings, only: [:show,:create]
+      resources :lendings, only: [:show,:create] do
+        get 'fetch_lending_user', on: :member
+      end
       namespace :auth do
         resources :sessions, only: %i[index]
       end
