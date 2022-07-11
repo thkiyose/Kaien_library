@@ -90,7 +90,7 @@ export const MyPageLendings = () => {
                       </Warning>
                     </> :
                     <LendingRow key={index}>
-                      <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton>返却</ReturnButton></td>
+                      <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                     </LendingRow> }
                 </React.Fragment>
               );
