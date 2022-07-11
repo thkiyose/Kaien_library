@@ -37,21 +37,35 @@ const Warning = styled.tr`
     font-size: 0.8rem;
   }
 `
+const ReturnButton = styled.button`
+  padding: 7px;
+  border: none;
+  background-color: ${Color.primary};
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.8;
+  :hover {
+    opacity: 1;
+  }
+`
 
 export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ lendings, setLendings ] = useState({});
-  const [ today, setToday ] = useState();
+  const today = new Date();
 
   const handleFetchLendings = async() => {
     const res = await fetchLendings(currentUser.id);
-    setToday(new Date());
     setLendings(res.data.lendings);
     setIsLoading(false);
   };
 
-  useEffect(() => {handleFetchLendings()},[]);
+  useEffect(() => {handleFetchLendings();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+
   if (isLoading === false) {
     return (
       <>
@@ -59,7 +73,7 @@ export const MyPageLendings = () => {
         <Lendings>
           <tbody>
             <LendingRow>
-              <th></th><th>貸出開始日</th><th>返却期限日</th>
+              <th></th><th>貸出開始日</th><th>返却期限日</th><th></th>
             </LendingRow>
             {lendings.map((lending,index) => {
               return (
@@ -67,14 +81,14 @@ export const MyPageLendings = () => {
                   {Date.parse(lending.expiryDate) < today ?
                     <>
                       <OveredRow className="overExpiry">
-                        <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td>
+                        <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton>返却</ReturnButton></td>
                       </OveredRow>
                       <Warning>
-                        <td colspan="3">返却期限を過ぎています。返却手続きを行って下さい。</td>
+                        <td colspan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
                       </Warning>
                     </> :
                     <LendingRow key={index}>
-                      <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td>
+                      <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton>返却</ReturnButton></td>
                     </LendingRow> }
                 </React.Fragment>
               );
