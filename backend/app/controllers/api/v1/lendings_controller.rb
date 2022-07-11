@@ -2,7 +2,11 @@ class Api::V1::LendingsController < ApplicationController
 
   def show
     user = User.find_by(id: params[:id])
-    render json: { lendings: user.lendings }
+    lendings = user.lendings.where(finished_at: nil).order(expiry_date: :asc).map{|lending| {start_date: lending.start_date,
+                                            expiry_date: lending.expiry_date,
+                                            finished_at: lending.finished_at,
+                                            title: lending.book.title}}
+    render json: { lendings: lendings }
   end
 
   def create
