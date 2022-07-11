@@ -27,22 +27,31 @@ const LendingRow = styled.tr`
   }
 `
 const OveredRow = styled(LendingRow)`
-  background-color: ${Color.warning};
+  background-color: ${Color.warning} !important;
+`
+const Warning = styled.tr`
+  background-color: rgb(255, 181, 181) !important;
+  text-align: center;
+  td {
+    padding: 0;
+    font-size: 0.8rem;
+  }
 `
 
 export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ lendings, setLendings ] = useState({});
-  const today = new Date();
+  const [ today, setToday ] = useState();
 
   const handleFetchLendings = async() => {
     const res = await fetchLendings(currentUser.id);
+    setToday(new Date());
     setLendings(res.data.lendings);
     setIsLoading(false);
   };
-  useEffect(() => {handleFetchLendings()},[]);
 
+  useEffect(() => {handleFetchLendings()},[]);
   if (isLoading === false) {
     return (
       <>
@@ -55,10 +64,15 @@ export const MyPageLendings = () => {
             {lendings.map((lending,index) => {
               return (
                 <React.Fragment key={index}>
-                  {new Date(lending.expiryDate).getDate() < today.getDate() ?
-                    <OveredRow className="overExpiry">
-                      <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td>
-                    </OveredRow> :
+                  {Date.parse(lending.expiryDate) < today ?
+                    <>
+                      <OveredRow className="overExpiry">
+                        <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td>
+                      </OveredRow>
+                      <Warning>
+                        <td colspan="3">返却期限を過ぎています。返却手続きを行って下さい。</td>
+                      </Warning>
+                    </> :
                     <LendingRow key={index}>
                       <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td>
                     </LendingRow> }
