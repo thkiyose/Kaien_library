@@ -117,7 +117,7 @@ export const App = () => {
             <Route path={"/books"} element={<LoggedInRoute currentUser={currentUser}><Index /></LoggedInRoute>} />
             <Route path={"/books/:id"} element={<LoggedInRoute currentUser={currentUser}><BookDetail /></LoggedInRoute>} />
             <Route path={"/books/:id/lending"} element={<LoggedInRoute currentUser={currentUser}><Lending /></LoggedInRoute>} />
-            <Route path={"/books/:id/return"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
+            <Route path={"/return/:id"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
             <Route path={"/admin/books/index"} element={<AdminProtectedRoute><AdminBookIndex /></AdminProtectedRoute>} />
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />

@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
 import { Context } from '../App';
@@ -55,6 +56,7 @@ export const MyPageLendings = () => {
   const [ isLoading, setIsLoading ] = useState(true);
   const [ lendings, setLendings ] = useState({});
   const today = new Date();
+  const navigate = useNavigate();
 
   const handleFetchLendings = async() => {
     const res = await fetchLendings(currentUser.id);
@@ -81,10 +83,10 @@ export const MyPageLendings = () => {
                   {Date.parse(lending.expiryDate) < today ?
                     <>
                       <OveredRow className="overExpiry">
-                        <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton>返却</ReturnButton></td>
+                        <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                       </OveredRow>
                       <Warning>
-                        <td colspan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
+                        <td colSpan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
                       </Warning>
                     </> :
                     <LendingRow key={index}>
