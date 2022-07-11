@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
 import { Context } from '../App';
@@ -83,14 +83,14 @@ export const MyPageLendings = () => {
                   {Date.parse(lending.expiryDate) < today ?
                     <>
                       <OveredRow className="overExpiry">
-                        <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                        <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                       </OveredRow>
                       <Warning>
                         <td colSpan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
                       </Warning>
                     </> :
                     <LendingRow key={index}>
-                      <td>{lending.title}</td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                      <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                     </LendingRow> }
                 </React.Fragment>
               );
