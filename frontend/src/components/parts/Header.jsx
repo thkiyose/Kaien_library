@@ -11,7 +11,7 @@ const HeaderDiv = styled.div`
   top: 0;
   left: 0;
   width:100%;
-  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
   a {
     text-decoration: none;
   }

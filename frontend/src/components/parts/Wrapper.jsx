@@ -8,7 +8,7 @@ const WrapperDiv = styled.div`
   margin:100px auto 0px auto;
   width: ${props => props.width};
   padding: 40px;
-  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
   a {
     text-decoration: none;
   }
