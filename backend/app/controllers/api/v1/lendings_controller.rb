@@ -19,7 +19,7 @@ class Api::V1::LendingsController < ApplicationController
     if book.is_lent == false
       if lending.save!
         book.update(is_lent:true)
-        render json: { status:"SUCCESS"}
+        render json: { status:"SUCCESS", location: book.location.location}
       else
         render json:  lending.errors, status: 422
       end

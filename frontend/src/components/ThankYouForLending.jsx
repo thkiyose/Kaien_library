@@ -13,11 +13,10 @@ const ThankYou = styled.div`
   p {
     margin: 0;
   }
+  margin-bottom: 30px;
 `
 const Message = styled.p`
   text-align: center;
-  padding: 20px;
-  font-weight: lighter;
 `
 const Button = styled.button`
    width: 100%;
@@ -27,11 +26,19 @@ const Button = styled.button`
    border: none;
    font-size: 1rem;
    cursor: pointer;
+   margin-top: 20px;
+`
+
+const MarkLocation = styled.span`
+  background-color: ${Color.light};
+  padding: 10px;
+  border-radius: 20px;
+  color:white;
 `
 
 export const ThankYouForLending = () => {
   const location = useLocation();
-  const bookLent = location.state;
+  const {bookLent, bookLocation} = location.state;
   const navigate = useNavigate();
 
   const AvoidInvalidAccess = () => {
@@ -49,6 +56,7 @@ export const ThankYouForLending = () => {
           <p>THANK</p>
           <p>YOU!</p>
         </ThankYou>
+        <Message>書籍の所在地:<MarkLocation>{bookLocation}</MarkLocation>で本を受け取って下さい。</Message>
         <Message>他の利用者に迷惑がかからないよう返却期限を守りましょう！</Message>
         <Button onClick={() => {navigate("/books")}}>書籍一覧へ</Button>
       </Wrapper>

@@ -110,7 +110,7 @@ export const Lending = () => {
     const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }), expiryDate: state.selection.endDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })};
     const res = await createLending(params);
     if (res.data.status === "SUCCESS") {
-      navigate("/thankyouforlending", {state: { bookLent: true }});
+      navigate("/thankyouforlending", {state: { bookLent: true, bookLocation: res.data.location }})
     } else if (res.data.message){
       setError(res.data.message);
     }
