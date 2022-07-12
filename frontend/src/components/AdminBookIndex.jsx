@@ -8,13 +8,43 @@ import { deleteBook } from '../lib/api/book';
 import { fetchBooks } from '../lib/api/book';
 
 const BackButton = styled.button`
-outline: 0;
-background: ${Color.primary};
-font-size: 0.8rem;
-border: 0;
-padding: 5px 15px;
-color: #FFFFFF;
-cursor: pointer;
+  outline: 0;
+  background: ${Color.primary};
+  font-size: 0.8rem;
+  border: 0;
+  padding: 5px 15px;
+  color: #FFFFFF;
+  cursor: pointer;
+`
+const DeleteButton = styled.button`
+  outline: 0;
+  background: ${Color.primary};
+  font-size: 0.8rem;
+  border: 0;
+  padding: 5px 15px;
+  color: #FFFFFF;
+  cursor: pointer;
+  margin-left: 10px;
+`
+const Table = styled.table`
+  margin-top: 10px;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+`
+const Row = styled.tr`
+  td, th {
+    padding: 5px;
+    border: none;
+  }
+  :nth-child(odd) {
+    background-color: #c2dbcf;
+  }
+  p {
+    margin: 0;
+    padding-left: 12px;
+    color: rgb(85, 85, 85);
+  }
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({
@@ -78,17 +108,17 @@ export const AdminBookIndex = () => {
     <>
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <table>
+        <Table>
           <tbody>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
               return (
-                <tr key={key}>
-                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td><button onClick={() => handleDeleteBook(books[key].id)}>削除</button></td>
-                </tr>
+                <Row key={key}>
+                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{books[key].isLent == false ? <><DeleteButton onClick={() => handleDeleteBook(books[key].id)}>削除</DeleteButton></> :<p>貸出中</p>}</td>
+                </Row>
               );
             })}
           </tbody>
-        </table>
+        </Table>
         <MyPaginate
           onPageChange={handlePageChange}
           pageCount={Math.ceil(books.length / perPage)}
