@@ -7,11 +7,14 @@ import Color from './parts/Color';
 
 const SideBar = styled.div`
   float: left;
-  width: 30%;
+  width: 20%;
+  p {
+    padding: 0;
+  }
 `
 const Main = styled.div`
   float: right;
-  width: 70%;
+  width: 80%;
 `
 
 const ClearFix = styled.div`
@@ -25,7 +28,7 @@ export const MyPage = () => {
 
   return (
     <>
-    <Wrapper width={"800px"}>
+    <Wrapper width={"900px"}>
       { currentUser ?
         <>
           <SideBar>

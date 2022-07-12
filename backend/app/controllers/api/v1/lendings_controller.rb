@@ -9,7 +9,8 @@ class Api::V1::LendingsController < ApplicationController
                                             expiry_date: lending.expiry_date,
                                             finished_at: lending.finished_at,
                                             title: lending.book.title,
-                                            book_id: lending.book.id }}
+                                            book_id: lending.book.id,
+                                            location: lending.book.location.location }}
     render json: { lendings: lendings }
   end
 
