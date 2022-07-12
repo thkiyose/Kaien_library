@@ -80,7 +80,7 @@ export const MyPageLendings = () => {
             {lendings.map((lending,index) => {
               return (
                 <React.Fragment key={index}>
-                  {Date.parse(lending.expiryDate) < today ?
+                  {Date.parse(lending.expiryDate) < today.setHours(0, 0, 0, 0) ?
                     <>
                       <OveredRow className="overExpiry">
                         <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
