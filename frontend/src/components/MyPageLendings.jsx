@@ -50,6 +50,12 @@ const ReturnButton = styled.button`
     opacity: 1;
   }
 `
+const NoBooks = styled.p`
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+  background-color: ${Color.text};
+`
 
 export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
@@ -68,7 +74,7 @@ export const MyPageLendings = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
-  if (isLoading === false) {
+  if (isLoading === false && lendings.length >= 1) {
     return (
       <>
         <Title>レンタル/予約一覧</Title>
@@ -98,6 +104,9 @@ export const MyPageLendings = () => {
           </tbody>
         </Lendings>
       </>
-    );
-  }
-};
+    ); } else if ( isLoading === false && lendings.length === 0) {
+      return (
+        <NoBooks>現在借りている本、予約している本はありません。</NoBooks>
+      );
+    }
+}
