@@ -24,7 +24,7 @@ const LendingRow = styled.tr`
     padding: 10px;
   }
   :nth-child(odd) {
-    background-color: ${Color.text};
+    background-color: rgb(241, 241, 241);
   }
 `
 const OveredRow = styled(LendingRow)`
