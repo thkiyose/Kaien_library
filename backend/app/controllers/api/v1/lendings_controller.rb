@@ -37,6 +37,10 @@ class Api::V1::LendingsController < ApplicationController
     render json: { is_lending: user.lendings.where(book_id:params[:book_id], finished_at: nil).exists? }
   end
 
+  def return
+    binding.pry
+  end
+
   private
 
   def lending_params
