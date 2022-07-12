@@ -59,7 +59,7 @@ export const Header = () => {
         {isSignedIn && currentUser.admin ? <li><HeaderLink href="/admin">管理画面</HeaderLink></li> : "" }
       </HeaderNavLeft>
       <HeaderNavRight>
-        {isSignedIn && <li><HeaderLink href="/mypage">ログイン中:{currentUser.email}</HeaderLink></li>}
+        {isSignedIn && <li><HeaderLink href="/mypage/lendings">ログイン中:{currentUser.email}</HeaderLink></li>}
         {isSignedIn && <li><LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} /></li>}
       </HeaderNavRight>
     </HeaderDiv>
