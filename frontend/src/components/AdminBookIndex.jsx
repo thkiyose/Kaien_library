@@ -113,7 +113,7 @@ export const AdminBookIndex = () => {
             {Object.keys(books).slice(start, start + perPage).map((key) => {
               return (
                 <Row key={key}>
-                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{books[key].isLent == false ? <><DeleteButton onClick={() => handleDeleteBook(books[key].id)}>削除</DeleteButton></> :<p>貸出中</p>}</td>
+                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{books[key].isLent === false ? <><DeleteButton onClick={() => handleDeleteBook(books[key].id)}>削除</DeleteButton></> :<p>貸出中</p>}</td>
                 </Row>
               );
             })}

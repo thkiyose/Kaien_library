@@ -117,7 +117,6 @@ export const BookDetail = () => {
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
   const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
-  const [ location, setLocation ] = useState({});
   const navigate = useNavigate();
   const bookId = useParams();
 
@@ -126,7 +125,6 @@ export const BookDetail = () => {
       const res = await showBook(bookId);
       setBook(res.data.book);
       setCategory(res.data.category)
-      setLocation(res.data.location)
       setIsEmpty(false);
       setIsLoading(false);
     } catch(e) {
@@ -176,7 +174,6 @@ export const BookDetail = () => {
                   { book.isLent && currentUserLending === true &&
                     <YouLent>この本をレンタル中です!</YouLent>}
                 <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
-                <p><span>場所: {location.location}</span></p>
               </InfoDivBottom>
             </InfoDiv>
             <ClearFix />

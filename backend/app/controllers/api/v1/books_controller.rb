@@ -23,7 +23,7 @@ class Api::V1::BooksController < ApplicationController
 
   def show
     book = Book.find_by(id: params[:id])
-    render json: { book: book, category: book.category, location: book.location }
+    render json: { book: book, category: book.category }
   end
 
   def fetch_book_info
