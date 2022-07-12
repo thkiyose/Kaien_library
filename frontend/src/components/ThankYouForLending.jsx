@@ -31,12 +31,12 @@ const Button = styled.button`
 
 export const ThankYouForLending = () => {
   const location = useLocation();
-  const bookReturned = location.state;
+  const bookLent = location.state;
   const navigate = useNavigate();
 
   const AvoidInvalidAccess = () => {
-    if (!bookReturned) {
-      navigate("/mypage/lendings");
+    if (!bookLent) {
+      navigate("/books");
     }
   }
 
@@ -49,8 +49,8 @@ export const ThankYouForLending = () => {
           <p>THANK</p>
           <p>YOU!</p>
         </ThankYou>
-        <Message>ご利用ありがとうございました。</Message>
-        <Button onClick={() => {navigate("/mypage/lendings")}}>マイページに戻る</Button>
+        <Message>他の利用者に迷惑がかからないよう返却期限を守りましょう！</Message>
+        <Button onClick={() => {navigate("/books")}}>書籍一覧へ</Button>
       </Wrapper>
     </>
   );

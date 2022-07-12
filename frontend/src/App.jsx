@@ -13,6 +13,7 @@ import { RegisterBook } from './components/RegisterBook';
 import { Lending } from './components/Lending';
 import { Return } from './components/Return';
 import { ThankYouForReturn } from './components/ThankYouForReturn';
+import { ThankYouForLending } from './components/ThankYouForLending';
 import { getCurrentUser } from './lib/api/session';
 import { fetchCategories } from './lib/api/book';
 import { fetchLocations } from './lib/api/book';
@@ -118,6 +119,7 @@ export const App = () => {
             <Route path={"/books"} element={<LoggedInRoute currentUser={currentUser}><Index /></LoggedInRoute>} />
             <Route path={"/books/:id"} element={<LoggedInRoute currentUser={currentUser}><BookDetail /></LoggedInRoute>} />
             <Route path={"/books/:id/lending"} element={<LoggedInRoute currentUser={currentUser}><Lending /></LoggedInRoute>} />
+            <Route path={"/thankyouforlending"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForLending /></LoggedInRoute>} />
             <Route path={"/return/:id"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
             <Route path={"/thankyouforreturn"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForReturn /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
