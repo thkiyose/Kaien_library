@@ -15,3 +15,7 @@ export const fetchLending = (params) => {
 export const isCurrentUserLending = (params) => {
   return client.post("/lendings/is_current_user_lending",params);
 };
+
+export const returnBook = (params) => {
+  return client.patch(`/lendings/${params}/return`);
+};
