@@ -15,7 +15,7 @@ export const ThankYouForLending = () => {
     }
   }
 
-  useEffect(() => {AvoidInvalidAccess()}, bookReturned);
+  useEffect(() => {AvoidInvalidAccess()});
 
   return (
     <>

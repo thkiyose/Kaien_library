@@ -101,7 +101,7 @@ const EmptyGuide = styled.div`
 `
 const YouLent = styled.p`
   background-color:${Color.light};
-  padding: 20px;
+  padding: 30px 10px;
   color: white;
   text-align: center;
   float: left;
@@ -153,7 +153,7 @@ export const BookDetail = () => {
 
   useEffect(() => {
    handleGetCurrentUserLending(bookId.id, currentUser.id);
- }, [currentUser]);
+ }, [bookId,currentUser.id]);
 
   if (!isLoading && !isEmpty) {
     return(
