@@ -6,6 +6,7 @@ import { Context } from '../App';
 import Color from './parts/Color';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchLending } from '../lib/api/lending';
+import { returnBook } from '../lib/api/lending';
 
 const Info = styled.table`
   margin: 0 auto;
@@ -77,6 +78,11 @@ export const Return = () => {
   }
   useEffect(() => { handleFetchLending(lendingId.id)},[]);
 
+  const handleReturnBook = async(lendingId,currentUserId) => {
+    const res = await returnBook(lendingId,currentUserId)
+    console.log(res);
+  };
+
   if (isLoading === false){
     return (
       <>
@@ -99,7 +105,7 @@ export const Return = () => {
                 <p>書籍を返却場所に戻したことを必ず確認し、</p>
                 <p>返却ボタンを押して下さい。</p>
               </Guide>
-              <ReturnButton>返却する</ReturnButton>
+              <ReturnButton onClick={()=>{handleReturnBook(lendingId.id,currentUser.id)}}>返却する</ReturnButton>
             </> : <NotFoundExplanation>書籍の情報が見つかりません。マイページから返却操作を行って下さい。</NotFoundExplanation>}
         </Wrapper>
       </>

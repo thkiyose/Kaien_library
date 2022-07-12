@@ -1,4 +1,5 @@
 class Api::V1::LendingsController < ApplicationController
+  require 'date'
 
   def show
     user = User.find_by(id: params[:id])
@@ -38,7 +39,17 @@ class Api::V1::LendingsController < ApplicationController
   end
 
   def return
-    binding.pry
+    user = User.find_by(id: params[:user_id])
+    lending = Lending.find_by(id: params[:id])
+    book = lending.book
+
+    if user.id != lending.user.id
+      render json: { message: "レンタルをしたユーザー以外は返却出来ません。"}
+    else
+      lending.update(finished_at: Date.today)
+      book.update(is_lent: false)
+      render json: { status: "SUCCESS"}
+    end
   end
 
   private
