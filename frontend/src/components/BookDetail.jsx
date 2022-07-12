@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Context } from '../App';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
+import { isCurrentUserLending } from '../lib/api/lending';
 
 const Top = styled.div`
 `
@@ -97,10 +99,21 @@ const EmptyGuide = styled.div`
   padding: 20px;
   text-align: center;
 `
+const YouLent = styled.p`
+  background-color:${Color.light};
+  padding: 20px;
+  color: white;
+  text-align: center;
+  float: left;
+  width: 30%;
+  margin: 0px 20px ;
+`
 
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
+  const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
+  const [ currentUserLending, setCurrentUserLending ] = useState(false);
   const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
   const [ location, setLocation ] = useState({});
@@ -108,6 +121,7 @@ export const BookDetail = () => {
   const bookId = useParams();
 
   const handleShowBook = async(bookId) => {
+    setIsLoading(true);
     try {
       const res = await showBook(bookId);
       setBook(res.data.book);
@@ -119,11 +133,27 @@ export const BookDetail = () => {
       console.log(e);
       setIsLoading(false);
     }
-    };
+  };
+
+  const handleGetCurrentUserLending = async(bookId,currentUserId) => {
+    setIsLoading(true);
+    try {
+      const res = await isCurrentUserLending({bookId:bookId, userId:currentUserId});
+      setCurrentUserLending(res.data.isLending);
+      setIsLoading(false);
+    } catch(e) {
+      console.log(e);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
    handleShowBook(bookId.id);
   }, [bookId]);
+
+  useEffect(() => {
+   handleGetCurrentUserLending(bookId.id, currentUser.id);
+ }, [currentUser]);
 
   if (!isLoading && !isEmpty) {
     return(
@@ -142,8 +172,10 @@ export const BookDetail = () => {
               <InfoDivBottom>
                 { !book.isLent &&
                   <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>}
-                { book.isLent &&
+                { book.isLent &&　currentUserLending === false &&
                   <Reservation onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>}
+                  { book.isLent && currentUserLending === true &&
+                    <YouLent>この本をレンタル中です!</YouLent>}
                 <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
                 <p><span>場所: {location.location}</span></p>
               </InfoDivBottom>

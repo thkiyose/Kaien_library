@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
       resources :lendings, only: [:show,:create] do
         get 'fetch_lending', on: :member
+        post 'is_current_user_lending', on: :collection
       end
       namespace :auth do
         resources :sessions, only: %i[index]

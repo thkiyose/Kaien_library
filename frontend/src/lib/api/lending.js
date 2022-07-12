@@ -11,3 +11,7 @@ export const fetchLendings = (params) => {
 export const fetchLending = (params) => {
   return client.get(`/lendings/${params}/fetch_lending`);
 };
+
+export const isCurrentUserLending = (params) => {
+  return client.post("/lendings/is_current_user_lending",params);
+};
