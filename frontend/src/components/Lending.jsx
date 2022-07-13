@@ -8,7 +8,7 @@ import Color from './parts/Color';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { format, addMonths } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import ja from 'date-fns/locale/ja';
 import { createLending } from '../lib/api/lending';
 
@@ -131,7 +131,7 @@ export const Lending = () => {
               ranges={[state.selection]}
               onChange={(item) => handleSelect(item)}
               minDate={new Date()}
-              maxDate={addMonths(new Date(), 3)}
+              maxDate={addDays(new Date(), 14)}
               rangeColors={[Color.primary]}
               dateDisplayFormat={"yyyy/MM/dd"}
               monthDisplayFormat={"yyyy年MMM"}
