@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      get 'lendings/create'
+    end
+  end
+  get 'lendings/create'
+  namespace :api do
+    namespace :v1 do
 
       mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks], controllers: {
         registrations: 'api/v1/auth/registrations'
@@ -14,6 +20,11 @@ Rails.application.routes.draw do
         get 'fetch_categories', on: :collection
         get 'fetch_locations', on: :collection
         post 'search', on: :collection
+      end
+      resources :lendings, only: [:show,:create] do
+        get 'fetch_lending', on: :member
+        post 'is_current_user_lending', on: :collection
+        patch 'return', on: :member
       end
       namespace :auth do
         resources :sessions, only: %i[index]

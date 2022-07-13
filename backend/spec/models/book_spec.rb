@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Book, type: :model do
   before do
-    Category.create(id:1,category:"文芸")
+    Category.create(id:1, category:"文芸")
     Location.create(id:1, location:"1F本棚")
   end
 

@@ -23,7 +23,7 @@ class Api::V1::BooksController < ApplicationController
 
   def show
     book = Book.find_by(id: params[:id])
-    render json: { book: book, category: book.category, location: book.location }
+    render json: { book: book, category: book.category }
   end
 
   def fetch_book_info
@@ -64,7 +64,11 @@ class Api::V1::BooksController < ApplicationController
 
   def delete_book
     book = Book.find_by(id: params[:id])
-    book.update(deleted:true)
+    if book.is_lent == false
+      book.update(deleted:true)
+    else
+      render json: {message:"貸出中につき削除出来ません。"}
+    end
   end
 
   private
