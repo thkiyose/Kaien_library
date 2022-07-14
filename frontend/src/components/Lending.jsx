@@ -43,6 +43,7 @@ const Detail = styled.div`
   th {
     background-color: ${Color.text};
     padding: 10px;
+    width: 100px;
     font-weight: lighter;
   }
 `

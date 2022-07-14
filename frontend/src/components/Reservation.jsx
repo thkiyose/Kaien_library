@@ -44,6 +44,7 @@ const Detail = styled.div`
   th {
     background-color: ${Color.text};
     padding: 10px;
+    width: 100px;
     font-weight: lighter;
   }
 `
@@ -89,7 +90,7 @@ export const Reservation = () => {
   const [state, setState] = useState({
     selection: {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate : new Date(),
       key: 'selection'
     }
   });
@@ -160,10 +161,10 @@ export const Reservation = () => {
               <table>
                 <tbody>
                   <tr>
-                    <th>貸出開始日</th><td>{format(state.selection.startDate, 'yyyy-MM-dd')}</td>
+                    <th>貸出開始日</th><td>{state.selection.startDate.getDate() === new Date().getDate() ? "" :format(state.selection.startDate, 'yyyy-MM-dd')}</td>
                   </tr>
                   <tr>
-                    <th>返却期限日</th><td>{format(state.selection.endDate, 'yyyy-MM-dd')}</td>
+                    <th>返却期限日</th><td>{state.selection.endDate.getDate() === new Date().getDate() ? "" :format(state.selection.endDate, 'yyyy-MM-dd')}</td>
                   </tr>
                 </tbody>
               </table>
