@@ -14,7 +14,7 @@ const SideBar = styled.div`
 `
 const Main = styled.div`
   float: right;
-  width: 80%;
+  width: 70%;
 `
 
 const ClearFix = styled.div`

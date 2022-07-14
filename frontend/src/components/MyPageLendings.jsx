@@ -56,6 +56,8 @@ const NoBooks = styled.p`
   text-align: center;
   background-color: ${Color.text};
 `
+const BookTitle = styled.td`
+`
 
 export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
@@ -77,7 +79,7 @@ export const MyPageLendings = () => {
   if (isLoading === false && lendings.length >= 1) {
     return (
       <>
-        <Title>レンタル/予約一覧</Title>
+        <Title>レンタル中の本</Title>
         <Lendings>
           <tbody>
             <LendingRow>
@@ -89,14 +91,14 @@ export const MyPageLendings = () => {
                   {Date.parse(lending.expiryDate) < today.setHours(0, 0, 0, 0) ?
                     <>
                       <OveredRow className="overExpiry">
-                        <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                        <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                       </OveredRow>
                       <Warning>
                         <td colSpan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
                       </Warning>
                     </> :
                     <LendingRow key={index}>
-                      <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                      <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                     </LendingRow> }
                 </React.Fragment>
               );
