@@ -100,6 +100,7 @@ export const Reservation = () => {
     const res = await fetchLendingsAndReservations(bookId)
     const toDisable = []
     res.data.lendings.map(lending => {toDisable.push(...eachDayOfInterval({start: new Date(lending.startDate), end: new Date(lending.expiryDate)}))})
+    res.data.reservations.map(reservation => {toDisable.push(...eachDayOfInterval({start: new Date(reservation.startDate), end: new Date(reservation.expiryDate)}))})
     setDisabled(toDisable);
   };
   useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);

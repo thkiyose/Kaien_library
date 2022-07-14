@@ -15,8 +15,9 @@ class Api::V1::ReservationsController < ApplicationController
     book = Book.find_by(id: params[:id])
     # 本に紐付いている貸出データから返却されていないもののみを取得
     lendings = book.lendings.where(finished_at: nil)
-    reservations = book.reservation
-    render json: { lendings: lendings }
+    # 本に紐付いている予約データを取得
+    reservations = book.reservations
+    render json: { lendings: lendings, reservations: reservations }
   end
 
   def reservation_params
