@@ -26,6 +26,9 @@ Rails.application.routes.draw do
         post 'is_current_user_lending', on: :collection
         patch 'return', on: :member
       end
+      resources :reservations, only: [:create] do
+          get 'fetch_lendings_and_reservations', on: :member
+      end
       namespace :auth do
         resources :sessions, only: %i[index]
       end

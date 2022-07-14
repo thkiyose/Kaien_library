@@ -10,6 +10,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { format, addDays, addMonths, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
+import { fetchLendings } from '../lib/api/lending';
 
 const BackButton = styled.button`
   outline: 0;

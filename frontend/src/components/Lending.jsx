@@ -110,7 +110,7 @@ export const Lending = () => {
           endDate: addDays(item.selection.startDate, 14),
           key: 'selection'
         }
-    });
+      });
     };
   };
 
