@@ -8,7 +8,7 @@ import Color from './parts/Color';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { format, addDays } from 'date-fns';
+import { format, addDays, addMonths, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
 
 const BackButton = styled.button`
@@ -46,7 +46,7 @@ const Detail = styled.div`
   }
 `
 const Reserve = styled.button`
-  padding: 30px;
+  padding: 20px;
   float: left;
   margin: 70px 85px;
   background-color: ${Color.primary};
@@ -93,17 +93,29 @@ export const Reservation = () => {
   });
 
   const handleSelect = (item) => {
-    const interval = (new Date() - item.selection.endDate) / 86400000;
-    if (interval > -14) {
+    const interval = (item.selection.startDate - item.selection.endDate) / 86400000;
+    if (interval > -15) {
       setState({
         selection: {
-          startDate: new Date(),
+          startDate: item.selection.startDate,
           endDate: item.selection.endDate,
           key: 'selection'
         }
+      })
+      } else {
+        setState({
+          selection: {
+            startDate: item.selection.startDate,
+            endDate: addDays(item.selection.startDate, 14),
+            key: 'selection'
+          }
       });
     };
   };
+
+  const reserved = []
+  reserved.push(...eachDayOfInterval({start:addDays(new Date(),5),end:addDays(new Date(),7)}))
+    reserved.push(...eachDayOfInterval({start:addDays(new Date(),9),end:addDays(new Date(),10)}))
 
   return (
     <>
@@ -120,12 +132,13 @@ export const Reservation = () => {
               ranges={[state.selection]}
               onChange={(item) => handleSelect(item)}
               minDate={new Date()}
-              maxDate={addDays(new Date(), 14)}
+              maxDate={addMonths(new Date(), 3)}
               rangeColors={[Color.primary]}
               dateDisplayFormat={"yyyy/MM/dd"}
               monthDisplayFormat={"yyyy年MMM"}
               showDateDisplay={false}
-
+              preventSnapRefocus={false}
+              disabledDates={reserved}
             />
             </Calendar>
             <Detail>
@@ -133,14 +146,14 @@ export const Reservation = () => {
               <table>
                 <tbody>
                   <tr>
-                    <th>レンタル開始日</th><td>{format(state.selection.startDate, 'yyyy-MM-dd')}</td>
+                    <th>貸出開始日</th><td>{format(state.selection.startDate, 'yyyy-MM-dd')}</td>
                   </tr>
                   <tr>
-                    <th>レンタル終了日</th><td>{format(state.selection.endDate, 'yyyy-MM-dd')}</td>
+                    <th>返却期限日</th><td>{format(state.selection.endDate, 'yyyy-MM-dd')}</td>
                   </tr>
                 </tbody>
               </table>
-              <Reserve>この期間で予約する</Reserve>>
+              <Reserve>この期間で予約する</Reserve>
             </Detail>
             <ClearFix />
             <span>{error}</span>

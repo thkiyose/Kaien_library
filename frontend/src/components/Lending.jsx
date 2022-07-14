@@ -103,6 +103,14 @@ export const Lending = () => {
           key: 'selection'
         }
       });
+    } else {
+      setState({
+        selection: {
+          startDate: item.selection.startDate,
+          endDate: addDays(item.selection.startDate, 14),
+          key: 'selection'
+        }
+    });
     };
   };
 
@@ -136,7 +144,7 @@ export const Lending = () => {
               dateDisplayFormat={"yyyy/MM/dd"}
               monthDisplayFormat={"yyyy年MMM"}
               showDateDisplay={false}
-
+              preventSnapRefocus={false}
             />
             </Calendar>
             <Detail>
@@ -144,7 +152,7 @@ export const Lending = () => {
               <table>
                 <tbody>
                   <tr>
-                    <th>開始日</th><td>{format(state.selection.startDate, 'yyyy-MM-dd')}</td>
+                    <th>貸出開始日</th><td>{format(state.selection.startDate, 'yyyy-MM-dd')}</td>
                   </tr>
                   <tr>
                     <th>返却期限日</th><td>{format(state.selection.endDate, 'yyyy-MM-dd')}</td>
