@@ -66,6 +66,8 @@ const Rent = styled.button`
 	}
 `
 const Reservation = styled(Rent)`
+  padding: 5px;
+  margin-top: 5px;
   .up {
     font-size: 0.9rem;
     margin: 0;
@@ -170,7 +172,7 @@ export const BookDetail = () => {
                 { !book.isLent &&
                   <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>}
                 { book.isLent &&　currentUserLending === false &&
-                  <Reservation onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>}
+                  <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>}
                   { book.isLent && currentUserLending === true &&
                     <YouLent>この本をレンタル中です!</YouLent>}
                 <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
