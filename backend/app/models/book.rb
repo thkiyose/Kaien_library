@@ -2,7 +2,8 @@ class Book < ApplicationRecord
   belongs_to :category
   belongs_to :location
   has_many :lendings
-  
+  has_many :reservations
+
   self.per_page = 18
 
   validates :isbn, length: { minimum:10, maximum:13 }, allow_blank: true
