@@ -87,6 +87,7 @@ export const Reservation = () => {
   const location = useLocation();
   const bookId = location.state;
   const navigate = useNavigate();
+  const [ error, setError ] = useState();
   const [state, setState] = useState({
     selection: {
       startDate: new Date(),
@@ -125,6 +126,9 @@ export const Reservation = () => {
   };
 
   const handleCreateReservation = async() => {
+    if (state.selection.startDate < new Date() || state.selection.startDate === new Date()) {
+      setError("正しい日付を選択して下さい。");
+      return }
     const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }), expiryDate: state.selection.endDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })};
     const res = await createReservation(params);
     if (res.data.status === "SUCCESS") {
@@ -171,6 +175,7 @@ export const Reservation = () => {
               <Reserve onClick={() => {handleCreateReservation()}}>この期間で予約する</Reserve>
             </Detail>
             <ClearFix />
+            <span>{error}</span>
           </>
         :
           <EmptyGuide>書籍の情報を取得できません。書籍詳細画面から予約操作を行って下さい。</EmptyGuide>
