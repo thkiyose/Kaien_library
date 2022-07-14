@@ -1,4 +1,4 @@
-import React, { useState ,useContext } from 'react';
+import React, { useState ,useContext, useLayoutEffect } from 'react';
 import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
 import { useLocation } from 'react-router-dom';
@@ -10,7 +10,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { format, addDays, addMonths, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
-import { fetchLendings } from '../lib/api/lending';
+import { fetchLendingsAndReservations } from '../lib/api/reservation';
 
 const BackButton = styled.button`
   outline: 0;
@@ -81,6 +81,7 @@ const ClearFix = styled.div`
 
 export const Reservation = () => {
   const { currentUser } = useContext(Context);
+  const [ disabled, setDisabled ] = useState([]);
   const location = useLocation();
   const bookId = location.state;
   const navigate = useNavigate();
@@ -92,6 +93,14 @@ export const Reservation = () => {
       key: 'selection'
     }
   });
+
+  const disableDates = async(bookId) => {
+    const res = await fetchLendingsAndReservations(bookId)
+    const toDisable = []
+    res.data.lendings.map(lending => {toDisable.push(...eachDayOfInterval({start: new Date(lending.startDate), end: new Date(lending.expiryDate)}))})
+    setDisabled(toDisable);
+  };
+  useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);
 
   const handleSelect = (item) => {
     const interval = (item.selection.startDate - item.selection.endDate) / 86400000;
@@ -114,10 +123,6 @@ export const Reservation = () => {
     };
   };
 
-  const reserved = []
-  reserved.push(...eachDayOfInterval({start:addDays(new Date(),5),end:addDays(new Date(),7)}))
-    reserved.push(...eachDayOfInterval({start:addDays(new Date(),9),end:addDays(new Date(),10)}))
-
   return (
     <>
       <Wrapper width={"800px"}>
@@ -139,7 +144,8 @@ export const Reservation = () => {
               monthDisplayFormat={"yyyy年MMM"}
               showDateDisplay={false}
               preventSnapRefocus={false}
-              disabledDates={reserved}
+              disabledDates={disabled}
+              initialFocusedRange={[0,0]}
             />
             </Calendar>
             <Detail>
