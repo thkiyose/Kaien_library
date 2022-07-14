@@ -19,6 +19,7 @@ const LendingRow = styled.tr`
   th {
     color: white;
     background-color: ${Color.primary};
+    font-size: 0.8rem;
   }
   td, th {
     padding: 5px;
@@ -39,7 +40,7 @@ const Warning = styled.tr`
   }
 `
 const ReturnButton = styled.button`
-  padding: 7px;
+  padding: 3px;
   border: none;
   background-color: ${Color.primary};
   color: white;
