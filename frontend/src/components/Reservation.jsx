@@ -145,7 +145,6 @@ export const Reservation = () => {
               showDateDisplay={false}
               preventSnapRefocus={false}
               disabledDates={disabled}
-              initialFocusedRange={[0,0]}
             />
             </Calendar>
             <Detail>
