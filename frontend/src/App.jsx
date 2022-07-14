@@ -11,6 +11,7 @@ import { AdminMenu } from './components/AdminMenu';
 import { AdminBookIndex } from './components/AdminBookIndex';
 import { RegisterBook } from './components/RegisterBook';
 import { Lending } from './components/Lending';
+import { Reservation } from './components/Reservation';
 import { Return } from './components/Return';
 import { ThankYouForReturn } from './components/ThankYouForReturn';
 import { ThankYouForLending } from './components/ThankYouForLending';
@@ -119,6 +120,7 @@ export const App = () => {
             <Route path={"/books"} element={<LoggedInRoute currentUser={currentUser}><Index /></LoggedInRoute>} />
             <Route path={"/books/:id"} element={<LoggedInRoute currentUser={currentUser}><BookDetail /></LoggedInRoute>} />
             <Route path={"/books/:id/lending"} element={<LoggedInRoute currentUser={currentUser}><Lending /></LoggedInRoute>} />
+            <Route path={"/books/:id/reservation"} element={<LoggedInRoute currentUser={currentUser}><Reservation /></LoggedInRoute>} />
             <Route path={"/thankyouforlending"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForLending /></LoggedInRoute>} />
             <Route path={"/return/:id"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
             <Route path={"/thankyouforreturn"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForReturn /></LoggedInRoute>} />
