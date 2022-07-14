@@ -11,6 +11,7 @@ import 'react-date-range/dist/theme/default.css';
 import { format, addDays, addMonths, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
 import { fetchLendingsAndReservations } from '../lib/api/reservation';
+import { createReservation } from '../lib/api/reservation';
 
 const BackButton = styled.button`
   outline: 0;
@@ -85,7 +86,6 @@ export const Reservation = () => {
   const location = useLocation();
   const bookId = location.state;
   const navigate = useNavigate();
-  const [ error, setError ] = useState();
   const [state, setState] = useState({
     selection: {
       startDate: new Date(),
@@ -121,6 +121,14 @@ export const Reservation = () => {
           }
       });
     };
+  };
+
+  const handleCreateReservation = async() => {
+    const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }), expiryDate: state.selection.endDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })};
+    const res = await createReservation(params);
+    if (res.data.status === "SUCCESS") {
+      console.log(res);
+    }
   };
 
   return (
@@ -159,10 +167,9 @@ export const Reservation = () => {
                   </tr>
                 </tbody>
               </table>
-              <Reserve>この期間で予約する</Reserve>
+              <Reserve onClick={() => {handleCreateReservation()}}>この期間で予約する</Reserve>
             </Detail>
             <ClearFix />
-            <span>{error}</span>
           </>
         :
           <EmptyGuide>書籍の情報を取得できません。書籍詳細画面から予約操作を行って下さい。</EmptyGuide>

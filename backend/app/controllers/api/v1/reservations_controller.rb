@@ -17,4 +17,9 @@ class Api::V1::ReservationsController < ApplicationController
     lendings = book.lendings.where(finished_at: nil)
     render json: { lendings: lendings }
   end
+
+  def reservation_params
+    params.require(:reservation).permit(:user_id,:book_id,:start_date,:expiry_date)
+  end
+
 end
