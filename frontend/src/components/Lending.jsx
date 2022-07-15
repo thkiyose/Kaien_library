@@ -1,4 +1,4 @@
-import React, { useState ,useContext } from 'react';
+import React, { useState ,useContext, useLayoutEffect } from 'react';
 import { Context } from '../App';
 import { Wrapper } from './parts/Wrapper';
 import { useLocation } from 'react-router-dom';
@@ -8,8 +8,9 @@ import Color from './parts/Color';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { format, addDays } from 'date-fns';
+import { format, addDays, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
+import { fetchLendingsAndReservations } from '../lib/api/reservation';
 import { createLending } from '../lib/api/lending';
 
 const BackButton = styled.button`
@@ -84,6 +85,7 @@ export const Lending = () => {
   const { currentUser } = useContext(Context);
   const location = useLocation();
   const bookId = location.state;
+  const [ disabled, setDisabled ] = useState([]);
   const navigate = useNavigate();
   const [ error, setError ] = useState();
   const [state, setState] = useState({
@@ -93,6 +95,15 @@ export const Lending = () => {
       key: 'selection'
     }
   });
+
+  const disableDates = async(bookId) => {
+    const res = await fetchLendingsAndReservations(bookId)
+    const toDisable = []
+    res.data.lendings.map(lending => {toDisable.push(...eachDayOfInterval({start: new Date(lending.startDate), end: new Date(lending.expiryDate)}))})
+    res.data.reservations.map(reservation => {toDisable.push(...eachDayOfInterval({start: new Date(reservation.startDate), end: new Date(reservation.expiryDate)}))})
+    setDisabled(toDisable);
+  };
+  useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);
 
   const handleSelect = (item) => {
     const interval = (new Date() - item.selection.endDate) / 86400000;
@@ -146,6 +157,7 @@ export const Lending = () => {
               monthDisplayFormat={"yyyy年MMM"}
               showDateDisplay={false}
               preventSnapRefocus={false}
+              disabledDates={disabled}
             />
             </Calendar>
             <Detail>
