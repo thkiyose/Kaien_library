@@ -1,5 +1,6 @@
 class Api::V1::BooksController < ApplicationController
   require "open-uri"
+  require "date"
 
   def index
     books = Book.where(deleted:false)
@@ -24,7 +25,9 @@ class Api::V1::BooksController < ApplicationController
   def show
     book = Book.find_by(id: params[:id])
     user = User.find_by(id: params[:user_id])
-    render json: { book: book, category: book.category, is_lending: user.lendings.where(book_id:params[:id], finished_at: nil).exists?, is_reserved: user.reservations.where(book_id: params[:id]).exists? }
+    render json: { book: book, category: book.category, is_lending: user.lendings.where(book_id:params[:id], finished_at: nil).exists?,
+                  is_reserved: { is_reserved: book.reservations.exists?, on_going: book.reservations.where('start_date <= ?', Date.today).where('expiry_date >= ?', Date.today).exists? },
+                  current_user_reserved: { is_reserved: user.reservations.where(book_id: params[:id]).exists?, on_going: user.reservations.where(book_id: params[:id]).where('start_date <= ?', Date.today).where('expiry_date >= ?', Date.today).exists? }  }
   end
 
   def fetch_book_info

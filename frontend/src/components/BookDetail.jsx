@@ -130,7 +130,10 @@ export const BookDetail = () => {
   const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
+  const [ isReserved, setIsReserved ] = useState(false);
   const [ currentUserReserved, setCurrentUserReserved ] = useState(false);
+  const [ onGoingReservation, setOnGoingReservation ] = useState(false);
+  const [ onGoingCurrentUserReservation, setOnGoingCurrentUserReservation ] = useState(false);
   const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
   const navigate = useNavigate();
@@ -142,8 +145,11 @@ export const BookDetail = () => {
       setBook(res.data.book);
       setCategory(res.data.category)
       setIsEmpty(false);
+      setIsReserved(res.data.isReserved.isReserved);
       setCurrentUserLending(res.data.isLending);
-      setCurrentUserReserved(res.data.isReserved);
+      setCurrentUserReserved(res.data.currentUserReserved.isReserved);
+      setOnGoingReservation(res.data.isReserved.onGoing);
+      setOnGoingCurrentUserReservation(res.data.currentUserReserved.onGoing);
       setIsLoading(false);
     } catch(e) {
       console.log(e);
@@ -170,7 +176,7 @@ export const BookDetail = () => {
               <h1>{book.title}</h1>
               <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
               <InfoDivBottom>
-              <Button book={book} currentUserLending={currentUserLending} currentUserReserved={currentUserReserved} />
+              <Button book={book} currentUserLending={currentUserLending} currentUserReserved={currentUserReserved} isReserved={isReserved} onGoingReservation={onGoingReservation} onGoingCurrentUserReservation={onGoingCurrentUserReservation} />
                 <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
               </InfoDivBottom>
             </InfoDiv>
@@ -192,30 +198,44 @@ export const BookDetail = () => {
 
 const Button = (props) => {
   const navigate = useNavigate();
-  const {book, currentUserLending, currentUserReserved} = props;
+  const {book, currentUserLending, isReserved, currentUserReserved, onGoingReservation,onGoingCurrentUserReservation} = props;
 
   // 貸出無し・予約無し=レンタル可能
-  if (!book.isLent) {
+  if (!book.isLent && isReserved === false) {
     return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
   // ログインユーザーに貸出中・予約無し=返却可能
+  } else if (currentUserLending === true && isReserved === false ) {
+    return <YouLent>この本をレンタル中です。</YouLent>
   // 他ユーザーに貸出中・予約無し=予約可能
-  // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
-  // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
-  } else if (!book.isLent && currentUserReserved === true) {
-      return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
-  // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
-  } else if (!book.isLent ) 　{
-    return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
-  // 貸出無し・他ユーザーが予約中・予約期間外である=レンタル可能
-  } else if (book.isLent &&　currentUserLending === false) {
+  } else if (book.isLent && isReserved === false) {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
+  // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
+  } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === true) {
+      return <div><p>予約中・レンタルが可能です</p><p>この本を借りる</p></div>
+    // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
+  } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
+        return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+    // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
+  } else if (!book.isLent && isReserved === true && onGoingReservation === true ) 　{
+      return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">本日、他ユーザーに予約されています。</p><p className="bottom">別の期間で予約する</p></Reservation>
+  // 貸出無し・他ユーザーが予約中・予約期間外である=レンタル可能
+  } else if (!book.isLent &&　isReserved === true && onGoingReservation === false) {
+    return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
   // 貸出有り・予約有り・両方ログインユーザーによるケースは発生しない
   // ログインユーザーへ貸出有り・他ユーザーの予約有り=返却可能
+  } else if (book.isLent && currentUserLending === true && isReserved === true) {
+      return <YouLent>この本をレンタル中です。</YouLent>
   //  他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間内=返却されるまで待機
+  } else if (book.isLent && currentUserReserved == true && onGoingCurrentUserReservation === true) {
+      return <YouReserved><p className="up">予約中:他のユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
   // 他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間外=期間になるまで待機
+  } else if (book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
+    return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
   // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間内=予約可能
+  } else if (book.isLent && isReserved === true && onGoingReservation === true) {
+    return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間外=予約可能
-  } else if (book.isLent && currentUserLending === true) {
-    return <YouLent>この本をレンタル中です!</YouLent>
+  } else if (book.isLent && isReserved === true && onGoingReservation === false) {
+    return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   }
 }
