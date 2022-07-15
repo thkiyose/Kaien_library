@@ -23,7 +23,8 @@ class Api::V1::BooksController < ApplicationController
 
   def show
     book = Book.find_by(id: params[:id])
-    render json: { book: book, category: book.category }
+    user = User.find_by(id: params[:user_id])
+    render json: { book: book, category: book.category, is_lending: user.lendings.where(book_id:params[:id], finished_at: nil).exists? }
   end
 
   def fetch_book_info

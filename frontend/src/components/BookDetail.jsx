@@ -115,46 +115,31 @@ export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
-  const [ isLoading2, setIsLoading2 ] = useState(true);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
   const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
   const navigate = useNavigate();
   const bookId = useParams();
 
-  const handleShowBook = async(bookId) => {
+  const handleShowBook = async(bookId,currentUserId) => {
     try {
-      const res = await showBook(bookId);
+      const res = await showBook(bookId,currentUserId);
       setBook(res.data.book);
       setCategory(res.data.category)
       setIsEmpty(false);
-      setIsLoading(false);
-    } catch(e) {
-      console.log(e);
-      setIsLoading(false);
-    }
-  };
-
-  const handleGetCurrentUserLending = async(bookId,currentUserId) => {
-    try {
-      const res = await isCurrentUserLending({bookId:bookId, userId:currentUserId});
       setCurrentUserLending(res.data.isLending);
-      setIsLoading2(false);
+      setIsLoading(false);
     } catch(e) {
       console.log(e);
-      setIsLoading2(false);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-   handleShowBook(bookId.id);
+   handleShowBook(bookId.id, currentUser.id);
   }, [bookId]);
 
-  useEffect(() => {
-   handleGetCurrentUserLending(bookId.id, currentUser.id);
- }, [bookId,currentUser.id]);
-
-  if (!isLoading && !isLoading2 && !isEmpty) {
+  if (!isLoading && !isEmpty) {
     return(
       <>
         <Wrapper width={"800px"}>
@@ -184,7 +169,7 @@ export const BookDetail = () => {
         </Wrapper>
       </>
     );
-  } else if (!isLoading && !isLoading2 && isEmpty ) {
+  } else if (!isLoading && isEmpty ) {
     return(
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
