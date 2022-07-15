@@ -34,11 +34,6 @@ class Api::V1::LendingsController < ApplicationController
     render json: { book: lending.book, location: lending.book.location.location, user_id: lending.user.id }
   end
 
-  def is_current_user_lending
-    user = User.find_by(id: params[:user_id])
-    render json: { is_lending: user.lendings.where(book_id:params[:book_id], finished_at: nil).exists? }
-  end
-
   def return
     user = User.find_by(id: params[:user_id])
     lending = Lending.find_by(id: params[:id])
