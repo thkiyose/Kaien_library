@@ -194,16 +194,27 @@ const Button = (props) => {
   const navigate = useNavigate();
   const {book, currentUserLending, currentUserReserved} = props;
 
-  // 貸出無し・現在進行中の予約無し=レンタル可能
+  // 貸出無し・予約無し=レンタル可能
   if (!book.isLent) {
     return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
-  // ログインユーザーが予約中
-  } else if (currentUserReserved === true) {
-    return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
-  // ログインユーザー以外のユーザーがレンタル中
+  // ログインユーザーに貸出中・予約無し=返却可能
+  // 他ユーザーに貸出中・予約無し=予約可能
+  // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
+  // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
+  } else if (!book.isLent && currentUserReserved === true) {
+      return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+  // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
+  } else if (!book.isLent ) 　{
+    return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
+  // 貸出無し・他ユーザーが予約中・予約期間外である=レンタル可能
   } else if (book.isLent &&　currentUserLending === false) {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
-  // ログインユーザーがレンタル中
+  // 貸出有り・予約有り・両方ログインユーザーによるケースは発生しない
+  // ログインユーザーへ貸出有り・他ユーザーの予約有り=返却可能
+  //  他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間内=返却されるまで待機
+  // 他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間外=期間になるまで待機
+  // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間内=予約可能
+  // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間外=予約可能
   } else if (book.isLent && currentUserLending === true) {
     return <YouLent>この本をレンタル中です!</YouLent>
   }
