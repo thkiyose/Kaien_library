@@ -116,6 +116,7 @@ export const BookDetail = () => {
   const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
+  const [ currentUserReserved, setCurrentUserReserved ] = useState(false);
   const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
   const navigate = useNavigate();
@@ -128,6 +129,7 @@ export const BookDetail = () => {
       setCategory(res.data.category)
       setIsEmpty(false);
       setCurrentUserLending(res.data.isLending);
+      setCurrentUserReserved(res.data.isReserved);
       setIsLoading(false);
     } catch(e) {
       console.log(e);
