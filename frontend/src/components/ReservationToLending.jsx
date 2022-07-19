@@ -1,13 +1,11 @@
-import React, { useState ,useContext, useLayoutEffect } from 'react';
-import { Context } from '../App';
+import React, { useState , useLayoutEffect } from 'react';
 import { Wrapper } from './parts/Wrapper';
 import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import Color from './parts/Color';
-import { format, addDays, eachDayOfInterval } from 'date-fns';
-import ja from 'date-fns/locale/ja';
-import { fetchLendingsAndReservations } from '../lib/api/reservation';
+import { format } from 'date-fns';
+import { fetchCurrentUserReservation } from '../lib/api/reservation';
 
 const BackButton = styled.button`
   outline: 0;
@@ -20,15 +18,9 @@ const BackButton = styled.button`
   cursor: pointer;
   margin-bottom:10px;
 `
-const Calendar = styled.div`
-  float:left;
-  padding-bottom: 10px;
-`
 
 const Detail = styled.div`
-  float:right;
-  width: 50%;
-  height: 300px;
+  text-align:center;
   table {
     width: 100%;
     border-collapse:  collapse;
@@ -46,8 +38,7 @@ const Detail = styled.div`
 `
 const Rent = styled.button`
   padding: 30px;
-  float: left;
-  margin: 70px 85px;
+  width: 100%;
   background-color: ${Color.primary};
   color : white;
   border: none;
@@ -62,7 +53,12 @@ const Rent = styled.button`
   	-moz-transform: translate(0,4px);
   	transform: translate(0,4px);
   	border-bottom:none;
+    margin-bottom: 4px;
 	}
+`
+const Title = styled.td`
+  background-color: ${Color.light} !important;
+  padding: 10px;
 `
 
 const EmptyGuide = styled.div`
@@ -71,44 +67,58 @@ const EmptyGuide = styled.div`
   padding: 20px;
   text-align: center;
 `
-const ClearFix = styled.div`
-  content: "";
-  display: block;
-  clear: both;
+const Cancel = styled.button`
+  border: none;
+  background-color: rgb(0,0,0,0);
+  font-weight: lighter;
+  cursor: pointer;
+  text-decoration: underline;
+  padding-top: 10px;
 `
 
 export const ReservationToLending = () => {
-  const { currentUser } = useContext(Context);
   const location = useLocation();
-  const bookId = location.state;
+  const bookId = location.state?.bookId;
+  const userId = location.state?.userId;
   const navigate = useNavigate();
-  const [ error, setError ] = useState();
+  const [ reservation ,setReservation ] = useState();
+  const [ book, setBook ] = useState();
+
+  const fetchReservation = async(bookId,currentUserId) => {
+    const res = await fetchCurrentUserReservation(bookId,currentUserId);
+    setReservation(res.data.reservation);
+    setBook(res.data.book);
+  };
+
+  useLayoutEffect(()=>{fetchReservation(bookId,userId)},[bookId,userId])
 
   return (
     <>
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        {bookId ?
+        {bookId && reservation && book ?
           <>
             <Detail>
               <p>予約している書籍をレンタルします。</p>
               <table>
                 <tbody>
                   <tr>
-                    <th>貸出開始日</th><td></td>
+                    <Title colSpan="3">{book.title}</Title>
                   </tr>
                   <tr>
-                    <th>返却期限日</th><td></td>
+                    <th>貸出開始日</th><td>{format(new Date(), 'yyyy-MM-dd')}(今日)</td>
+                  </tr>
+                  <tr>
+                    <th>返却期限日</th><td>{reservation.expiryDate}</td>
                   </tr>
                 </tbody>
               </table>
               <Rent>この期間で借りる</Rent>
+              <Cancel>予約をキャンセルする</Cancel>
             </Detail>
-            <ClearFix />
-            <span>{error}</span>
           </>
         :
-          <EmptyGuide>書籍の情報を取得できません。書籍詳細画面からレンタル操作を行って下さい。</EmptyGuide>
+          <EmptyGuide>予約の情報を取得できません。書籍詳細画面から操作を行って下さい。</EmptyGuide>
         }
       </Wrapper>
     </>

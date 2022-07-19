@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       end
       resources :reservations, only: [:create] do
           get 'fetch_lendings_and_reservations', on: :member
+          get 'fetch_current_user_reservation', on: :member
       end
       namespace :auth do
         resources :sessions, only: %i[index]

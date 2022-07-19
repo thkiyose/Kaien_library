@@ -188,7 +188,7 @@ export const BookDetail = () => {
               <h1>{book.title}</h1>
               <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
               <InfoDivBottom>
-              <Button book={book} currentUserLending={currentUserLending} currentUserReserved={currentUserReserved} otherUserReserved={otherUserReserved} onGoingOtherUserReservation={onGoingOtherUserReservation} onGoingCurrentUserReservation={onGoingCurrentUserReservation} />
+              <Button book={book} currentUser={currentUser} currentUserLending={currentUserLending} currentUserReserved={currentUserReserved} otherUserReserved={otherUserReserved} onGoingOtherUserReservation={onGoingOtherUserReservation} onGoingCurrentUserReservation={onGoingCurrentUserReservation} />
                 <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
               </InfoDivBottom>
             </InfoDiv>
@@ -210,7 +210,7 @@ export const BookDetail = () => {
 
 const Button = (props) => {
   const navigate = useNavigate();
-  const {book, currentUserLending, otherUserReserved, currentUserReserved, onGoingOtherUserReservation,onGoingCurrentUserReservation} = props;
+  const {book, currentUser, currentUserLending, otherUserReserved, currentUserReserved, onGoingOtherUserReservation,onGoingCurrentUserReservation} = props;
 
   // 貸出無し・予約無し=レンタル可能
   if (!book.isLent && otherUserReserved === false && currentUserReserved === false) {
@@ -223,7 +223,7 @@ const Button = (props) => {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === true) {
-      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id } })}}><p className="up">予約中です。レンタルが可能になりました。</p><p className="bottom">この本を借りる</p></ReservationToLending>
+      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中です。レンタルが可能になりました。</p><p className="bottom">この本を借りる</p></ReservationToLending>
     // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
       return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
