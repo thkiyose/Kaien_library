@@ -63,8 +63,20 @@ const Rent = styled.button`
 	-moz-transform: translate(0,4px);
 	transform: translate(0,4px);
 	border-bottom:none;
+  margin-bottom:4px;
 	}
 `
+
+const ReservationToLending = styled(Rent)`
+  padding: 5px;
+  .up {
+    font-size: 0.8rem;
+  }
+  .bottom {
+    font-size: 1.2rem;
+  }
+`
+
 const Reservation = styled(Rent)`
   padding: 5px;
   margin-top: 5px;
@@ -211,7 +223,7 @@ const Button = (props) => {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === true) {
-      return <div><p>予約中・レンタルが可能になりました。</p><p>この本を借りる</p></div>
+      return <ReservationToLending><p className="up">予約中です。レンタルが可能になりました。</p><p className="bottom">この本を借りる</p></ReservationToLending>
     // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
         return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
@@ -227,7 +239,7 @@ const Button = (props) => {
       return <YouLent>この本をレンタル中です。</YouLent>
   //  他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間内=返却されるまで待機
   } else if (book.isLent && currentUserLending === false && currentUserReserved == true && onGoingCurrentUserReservation === true) {
-      return <YouReserved><p className="up">予約中:他のユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+      return <YouReserved><p className="up">予約中です。他ユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
   // 他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間外=期間になるまで待機
   } else if (book.isLent && currentUserLending === false && currentUserReserved === true && onGoingCurrentUserReservation === false) {
     return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
