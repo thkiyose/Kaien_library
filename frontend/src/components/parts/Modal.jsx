@@ -44,7 +44,6 @@ export const Modal = (props) => {
   const handleCloseModal = () => {
     setShowModal(false);
     };
-
   return (
     <>
       { props.showFlag && <>

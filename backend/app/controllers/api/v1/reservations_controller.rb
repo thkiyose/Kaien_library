@@ -31,7 +31,9 @@ class Api::V1::ReservationsController < ApplicationController
   end
 
   def destroy
-    Reservation.find_by(id:params[:id]).destroy
+    if Reservation.find_by(id:params[:id]).destroy
+      render json: { status: "SUCCESS"}
+    end
   end
 
   def reservation_params

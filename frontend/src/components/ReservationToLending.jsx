@@ -96,8 +96,15 @@ export const ReservationToLending = () => {
   const handleShowModal = () => {
     setShowModal(true);
   }
+
   useLayoutEffect(()=>{fetchReservation(bookId,userId)},[bookId,userId])
 
+  const handleDestroyReservation = async(id) => {
+    const res = await destroyReservation(id);
+    if (res.data.status === "SUCCESS") {
+      navigate(`/books/${bookId}`);
+    }
+  }
   return (
     <>
       <Wrapper width={"800px"}>
@@ -122,11 +129,11 @@ export const ReservationToLending = () => {
               <Rent>この期間で借りる</Rent>
               <Cancel onClick={() =>{handleShowModal()}}>予約をキャンセルする</Cancel>
             </Detail>
+                   <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(reservation.id)}} />
           </>
         :
           <EmptyGuide>予約の情報を取得できません。書籍詳細画面から操作を行って下さい。</EmptyGuide>
         }
-       <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} />
       </Wrapper>
     </>
   );

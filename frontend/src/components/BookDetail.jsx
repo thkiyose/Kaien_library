@@ -123,7 +123,7 @@ const YouLent = styled.p`
   margin: 0px 20px ;
 `
 const YouReserved = styled.div`
-  background-color:${Color.light};
+  ${(props) => `background-color: ${props.backgroundColor}`};
   color: white;
   text-align: center;
   float: left;
@@ -223,10 +223,10 @@ const Button = (props) => {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === true) {
-      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中です。レンタルが可能になりました。</p><p className="bottom">この本を借りる</p></ReservationToLending>
+      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中です。</p><p className="bottom">この本を借りる</p></ReservationToLending>
     // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
-      return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+      return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
     // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
   } else if (!book.isLent && currentUserReserved === false && otherUserReserved === true && onGoingOtherUserReservation === true ) 　{
       return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">本日、他ユーザーに予約されています。</p><p className="bottom">別の期間で予約する</p></Reservation>
@@ -239,10 +239,10 @@ const Button = (props) => {
       return <YouLent>この本をレンタル中です。</YouLent>
   //  他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間内=返却されるまで待機
   } else if (book.isLent && currentUserLending === false && currentUserReserved == true && onGoingCurrentUserReservation === true) {
-      return <YouReserved><p className="up">予約中です。他ユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+      return <YouReserved backgroundColor={Color.dark}><p>予約中です。他ユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
   // 他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間外=期間になるまで待機
   } else if (book.isLent && currentUserLending === false && currentUserReserved === true && onGoingCurrentUserReservation === false) {
-    return <YouReserved><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+    return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
   // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間内=予約可能
   } else if (book.isLent && currentUserLending === false && otherUserReserved === true && onGoingOtherUserReservation === true) {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
