@@ -4,8 +4,10 @@ import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import Color from './parts/Color';
+import { Modal } from './parts/Modal';
 import { format } from 'date-fns';
 import { fetchCurrentUserReservation } from '../lib/api/reservation';
+import { destroyReservation } from '../lib/api/reservation';
 
 const BackButton = styled.button`
   outline: 0;
@@ -83,6 +85,7 @@ export const ReservationToLending = () => {
   const navigate = useNavigate();
   const [ reservation ,setReservation ] = useState();
   const [ book, setBook ] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const fetchReservation = async(bookId,currentUserId) => {
     const res = await fetchCurrentUserReservation(bookId,currentUserId);
@@ -90,6 +93,9 @@ export const ReservationToLending = () => {
     setBook(res.data.book);
   };
 
+  const handleShowModal = () => {
+    setShowModal(true);
+  }
   useLayoutEffect(()=>{fetchReservation(bookId,userId)},[bookId,userId])
 
   return (
@@ -114,12 +120,13 @@ export const ReservationToLending = () => {
                 </tbody>
               </table>
               <Rent>この期間で借りる</Rent>
-              <Cancel>予約をキャンセルする</Cancel>
+              <Cancel onClick={() =>{handleShowModal()}}>予約をキャンセルする</Cancel>
             </Detail>
           </>
         :
           <EmptyGuide>予約の情報を取得できません。書籍詳細画面から操作を行って下さい。</EmptyGuide>
         }
+       <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} />
       </Wrapper>
     </>
   );
