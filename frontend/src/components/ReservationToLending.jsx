@@ -77,60 +77,12 @@ const ClearFix = styled.div`
   clear: both;
 `
 
-export const Lending = () => {
+export const ReservationToLending = () => {
   const { currentUser } = useContext(Context);
   const location = useLocation();
   const bookId = location.state;
-  const [ disabled, setDisabled ] = useState([]);
   const navigate = useNavigate();
   const [ error, setError ] = useState();
-  const [state, setState] = useState({
-    selection: {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection'
-    }
-  });
-
-  const disableDates = async(bookId) => {
-    const res = await fetchLendingsAndReservations(bookId)
-    const toDisable = []
-    res.data.lendings.map(lending => {toDisable.push(...eachDayOfInterval({start: new Date(lending.startDate), end: new Date(lending.expiryDate)}))})
-    res.data.reservations.map(reservation => {toDisable.push(...eachDayOfInterval({start: new Date(reservation.startDate), end: new Date(reservation.expiryDate)}))})
-    setDisabled(toDisable);
-  };
-  useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);
-
-  const handleSelect = (item) => {
-    const interval = (new Date() - item.selection.endDate) / 86400000;
-    if (interval > -14) {
-      setState({
-        selection: {
-          startDate: new Date(),
-          endDate: item.selection.endDate,
-          key: 'selection'
-        }
-      });
-    } else {
-      setState({
-        selection: {
-          startDate: item.selection.startDate,
-          endDate: addDays(item.selection.startDate, 14),
-          key: 'selection'
-        }
-      });
-    };
-  };
-
-  const handleCreateLending = async() => {
-    const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }), expiryDate: state.selection.endDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })};
-    const res = await createLending(params);
-    if (res.data.status === "SUCCESS") {
-      navigate("/thankyouforlending", {state: { bookLent: true, bookLocation: res.data.location }})
-    } else if (res.data.message){
-      setError(res.data.message);
-    }
-  };
 
   return (
     <>
@@ -150,7 +102,7 @@ export const Lending = () => {
                   </tr>
                 </tbody>
               </table>
-              <Rent}>この期間で借りる</Rent>
+              <Rent>この期間で借りる</Rent>
             </Detail>
             <ClearFix />
             <span>{error}</span>
