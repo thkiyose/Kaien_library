@@ -11,3 +11,7 @@ export const fetchLendingsAndReservations = (params) => {
 export const fetchCurrentUserReservation = (book_id,current_user_id) => {
   return client.get(`/reservations/${book_id}/fetch_current_user_reservation`, { params: {user_id: current_user_id} });
 };
+
+export const destroyReservation = (id) => {
+  return client.delete(`/reservations/${id}`);
+};
