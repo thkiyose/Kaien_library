@@ -16,7 +16,8 @@ class Api::V1::LendingsController < ApplicationController
                                             start_date: reservation.start_date,
                                             expiry_date: reservation.expiry_date,
                                             book_id: reservation.book.id,
-                                            title: reservation.book.title}}
+                                            title: reservation.book.title,
+                                            can_lend: reservation.book.is_lent == false && reservation.start_date <= Date.today}}
     render json: { lendings: lendings, reservations: reservations }
   end
 

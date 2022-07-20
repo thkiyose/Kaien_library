@@ -82,6 +82,9 @@ const NoBooks = styled.p`
 `
 const BookTitle = styled.td`
 `
+const Status = styled.td`
+  text-align: center;
+`
 
 export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
@@ -112,7 +115,6 @@ export const MyPageLendings = () => {
     setShowModal(true);
     setCancelTarget(reservationId);
   }
-
   if (isLoading === false) {
     return (
       <>
@@ -156,7 +158,7 @@ export const MyPageLendings = () => {
                 {reservations.map((reservation,index) => {
                   return (
                       <LendingRow key={index}>
-                        <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><td></td><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
+                        <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><Status>{reservation.canLend ? "貸出可" : "予約中"}</Status><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
                       </LendingRow>
                   );
                 })}
