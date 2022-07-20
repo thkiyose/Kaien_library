@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Color from './parts/Color';
 import { Context } from '../App';
 import { fetchLendings } from '../lib/api/lending';
+import { Modal } from './parts/Modal';
+import { destroyReservation } from '../lib/api/reservation';
 
 const Title = styled.h1`
   font-weight: lighter;
@@ -70,6 +72,8 @@ export const MyPageLendings = () => {
   const [ isLoading, setIsLoading ] = useState(true);
   const [ lendings, setLendings ] = useState({});
   const [ reservations, setReservations ] = useState({});
+  const [ showModal, setShowModal] = useState(false);
+  const [ cancelTarget, setCancelTarget ] = useState(0);
   const today = new Date();
   const navigate = useNavigate();
 
@@ -81,8 +85,17 @@ export const MyPageLendings = () => {
   };
 
   useEffect(() => {handleFetchLendings();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  },[currentUser]);
+
+  const handleDestroyReservation = async(id) => {
+    await destroyReservation(id);
+    handleFetchLendings();
+  }
+
+  const handleShowModal = (reservationId) => {
+    setShowModal(true);
+    setCancelTarget(reservationId);
+  }
 
   if (isLoading === false && lendings.length >= 1) {
     return (
@@ -122,12 +135,13 @@ export const MyPageLendings = () => {
     {reservations.map((reservation,index) => {
       return (
           <LendingRow key={index}>
-            <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><td></td><td><CancelButton>キャンセル</CancelButton></td>
+            <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><td></td><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
           </LendingRow>
       );
     })}
   </tbody>
 </Lendings>
+<Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
       </>
     );
   } else if ( isLoading === false && lendings.length === 0) {
