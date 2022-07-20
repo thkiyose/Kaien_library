@@ -11,10 +11,13 @@ const SideBar = styled.div`
   p {
     padding: 0;
   }
+  ul {
+    padding: 0;
+  }
 `
 const Main = styled.div`
   float: right;
-  width: 70%;
+  width: 80%;
 `
 
 const ClearFix = styled.div`

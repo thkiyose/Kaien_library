@@ -11,7 +11,13 @@ class Api::V1::LendingsController < ApplicationController
                                             title: lending.book.title,
                                             book_id: lending.book.id,
                                             location: lending.book.location.location }}
-    render json: { lendings: lendings }
+    reservations = user.reservations.where('expiry_date >= ?', Date.today).order(start_date: :desc).map{|reservation|{
+                                            id: reservation.id,
+                                            start_date: reservation.start_date,
+                                            expiry_date: reservation.expiry_date,
+                                            book_id: reservation.book.id,
+                                            title: reservation.book.title}}
+    render json: { lendings: lendings, reservations: reservations }
   end
 
   def create

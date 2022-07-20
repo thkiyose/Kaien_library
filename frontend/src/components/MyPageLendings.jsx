@@ -7,7 +7,7 @@ import { fetchLendings } from '../lib/api/lending';
 
 const Title = styled.h1`
   font-weight: lighter;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 `
 const Lendings = styled.table`
   border-collapse: collapse;
@@ -51,6 +51,11 @@ const ReturnButton = styled.button`
     opacity: 1;
   }
 `
+const CancelButton = styled(ReturnButton)`
+  padding: 3px;
+  font-size: 0.7rem;
+`
+
 const NoBooks = styled.p`
   padding: 20px;
   margin-top: 20px;
@@ -64,12 +69,14 @@ export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ lendings, setLendings ] = useState({});
+  const [ reservations, setReservations ] = useState({});
   const today = new Date();
   const navigate = useNavigate();
 
   const handleFetchLendings = async() => {
     const res = await fetchLendings(currentUser.id);
     setLendings(res.data.lendings);
+    setReservations(res.data.reservations);
     setIsLoading(false);
   };
 
@@ -106,10 +113,26 @@ export const MyPageLendings = () => {
             })}
           </tbody>
         </Lendings>
-      </>
-    ); } else if ( isLoading === false && lendings.length === 0) {
+        <Title>予約中の本</Title>
+<Lendings>
+  <tbody>
+    <LendingRow>
+      <th></th><th colSpan="2">予約期間</th><th colSpan="2"></th>
+    </LendingRow>
+    {reservations.map((reservation,index) => {
       return (
-        <NoBooks>現在借りている本、予約している本はありません。</NoBooks>
+          <LendingRow key={index}>
+            <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><td></td><td><CancelButton>キャンセル</CancelButton></td>
+          </LendingRow>
       );
-    }
+    })}
+  </tbody>
+</Lendings>
+      </>
+    );
+  } else if ( isLoading === false && lendings.length === 0) {
+    return (
+      <NoBooks>現在借りている本、予約している本はありません。</NoBooks>
+    );
+  }
 }
