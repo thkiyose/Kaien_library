@@ -16,6 +16,7 @@ import { ReservationToLending } from './components/ReservationToLending';
 import { Return } from './components/Return';
 import { ThankYouForReturn } from './components/ThankYouForReturn';
 import { ThankYouForLending } from './components/ThankYouForLending';
+import { ReservationCreated } from './components/ReservationCreated';
 import { getCurrentUser } from './lib/api/session';
 import { fetchCategories } from './lib/api/book';
 import { fetchLocations } from './lib/api/book';
@@ -124,6 +125,7 @@ export const App = () => {
             <Route path={"/books/:id/reservation"} element={<LoggedInRoute currentUser={currentUser}><Reservation /></LoggedInRoute>} />
             <Route path={"/reservationlending/:id"} element={<LoggedInRoute currentUser={currentUser}><ReservationToLending /></LoggedInRoute>} />
             <Route path={"/thankyouforlending"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForLending /></LoggedInRoute>} />
+            <Route path={"/reservationcomplete"} element={<LoggedInRoute currentUser={currentUser}><ReservationCreated /></LoggedInRoute>} />
             <Route path={"/return/:id"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
             <Route path={"/thankyouforreturn"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForReturn /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />

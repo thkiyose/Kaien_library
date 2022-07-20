@@ -133,7 +133,9 @@ export const Reservation = () => {
     const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }), expiryDate: state.selection.endDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })};
     const res = await createReservation(params);
     if (res.data.status === "SUCCESS") {
-      console.log(res);
+      navigate("/reservationcomplete", {state: { isReserved: true}})
+    } else if (res.data.message){
+      setError(res.data.message);
     }
   };
 
