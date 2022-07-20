@@ -6,7 +6,6 @@ import { Wrapper } from './parts/Wrapper';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
-import { isCurrentUserLending } from '../lib/api/lending';
 
 const Top = styled.div`
 `
@@ -172,7 +171,7 @@ export const BookDetail = () => {
 
   useEffect(() => {
    handleShowBook(bookId.id, currentUser.id);
-  }, [bookId]);
+ }, [bookId, currentUser]);
 
   if (!isLoading && !isEmpty) {
     return(
@@ -239,7 +238,7 @@ const Button = (props) => {
   } else if (book.isLent && currentUserLending === true && otherUserReserved === true) {
       return <YouLent>この本をレンタル中です。</YouLent>
   //  他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間内=返却されるまで待機
-  } else if (book.isLent && currentUserLending === false && currentUserReserved == true && onGoingCurrentUserReservation === true) {
+} else if (book.isLent && currentUserLending === false && currentUserReserved === true && onGoingCurrentUserReservation === true) {
       return <YouReserved backgroundColor={Color.dark}><p>予約中です。他ユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
   // 他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間外=期間になるまで待機
   } else if (book.isLent && currentUserLending === false && currentUserReserved === true && onGoingCurrentUserReservation === false) {
