@@ -85,7 +85,7 @@ const Reservation = styled(Rent)`
     margin: 0;
   }
   .bottom {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin : 0;
   }
   background-color : ${Color.light};

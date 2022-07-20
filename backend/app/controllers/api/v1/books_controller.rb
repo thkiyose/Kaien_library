@@ -4,9 +4,12 @@ class Api::V1::BooksController < ApplicationController
 
   def index
     books = Book.where(deleted:false)
-    render json: {
-      books: books
-    }
+    render json: { books: books }
+  end
+
+  def index_for_admin
+    books = Book.includes(:reservations).where(deleted:false).map{|book|{ id: book.id, title: book.title, is_lent: book.is_lent, is_reserved: book.reservations.any? }}
+    render json: { books: books }
   end
 
   def search
@@ -68,7 +71,7 @@ class Api::V1::BooksController < ApplicationController
 
   def delete_book
     book = Book.find_by(id: params[:id])
-    if book.is_lent == false
+    if book.is_lent == false && !Reservation.where(book_id: book.id).exists?
       book.update(deleted:true)
     else
       render json: {message:"貸出中につき削除出来ません。"}

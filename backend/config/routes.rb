@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         post 'check_email_unique', on: :collection
       end
       resources :books, only: [:index, :create, :show] do
+        get 'index_for_admin', on: :collection
         patch 'delete_book', on: :member
         post 'fetch_book_info', on: :collection
         get 'fetch_categories', on: :collection

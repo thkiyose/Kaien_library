@@ -5,7 +5,7 @@ import Color from './parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
 import { deleteBook } from '../lib/api/book';
-import { fetchBooks } from '../lib/api/book';
+import { fetchBooksForAdmin } from '../lib/api/book';
 
 const BackButton = styled.button`
   outline: 0;
@@ -93,7 +93,7 @@ export const AdminBookIndex = () => {
   }
 
   const handleFetchBooks= async() => {
-    const res = await fetchBooks();
+    const res = await fetchBooksForAdmin();
     setBooks(res.data.books);
   }
   useEffect(() => { handleFetchBooks() }, []);
@@ -101,6 +101,16 @@ export const AdminBookIndex = () => {
   const handleDeleteBook = async(book_id) => {
     await deleteBook(book_id);
     handleFetchBooks();
+  };
+
+  const canDelete = (isLent,isReserved,id) => {
+    if (isLent === true) {
+      return <p>貸出中</p>
+    } else if (isReserved === true) {
+      return <p>予約済み</p>
+    } else {
+      return <DeleteButton onClick={() => handleDeleteBook(id)}>削除</DeleteButton>
+    }
   };
 
 
@@ -113,7 +123,7 @@ export const AdminBookIndex = () => {
             {Object.keys(books).slice(start, start + perPage).map((key) => {
               return (
                 <Row key={key}>
-                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{books[key].isLent === false ? <><DeleteButton onClick={() => handleDeleteBook(books[key].id)}>削除</DeleteButton></> :<p>貸出中</p>}</td>
+                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{canDelete(books[key].isLent,books[key].isReserved,books[key].id)}</td>
                 </Row>
               );
             })}
