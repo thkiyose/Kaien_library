@@ -9,11 +9,16 @@ import { destroyReservation } from '../lib/api/reservation';
 
 const Title = styled.h1`
   font-weight: lighter;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 5px;
+  background-color: ${Color.dark};
+  color: white;
+  margin: 0;
 `
 const Lendings = styled.table`
   border-collapse: collapse;
   font-size: 0.9rem;
+  width: 100%;
 `
 
 const LendingRow = styled.tr`
@@ -41,6 +46,17 @@ const Warning = styled.tr`
     font-size: 0.8rem;
   }
 `
+
+const TitleColumn = styled.th`
+  width: 50%;
+`
+const DateColumn = styled.th`
+  width: 13%;
+`
+const ButtonColumn = styled.th`
+  width: 7%;
+`
+
 const ReturnButton = styled.button`
   padding: 3px;
   border: none;
@@ -60,7 +76,7 @@ const CancelButton = styled(ReturnButton)`
 
 const NoBooks = styled.p`
   padding: 20px;
-  margin-top: 20px;
+  margin: 0;
   text-align: center;
   background-color: ${Color.text};
 `
@@ -97,56 +113,58 @@ export const MyPageLendings = () => {
     setCancelTarget(reservationId);
   }
 
-  if (isLoading === false && lendings.length >= 1) {
+  if (isLoading === false) {
     return (
       <>
-        <Title>レンタル中の本</Title>
-        <Lendings>
-          <tbody>
-            <LendingRow>
-              <th></th><th>貸出開始日</th><th>返却期限日</th><th>返却場所</th><th></th>
-            </LendingRow>
-            {lendings.map((lending,index) => {
-              return (
-                <React.Fragment key={index}>
-                  {Date.parse(lending.expiryDate) < today.setHours(0, 0, 0, 0) ?
-                    <>
-                      <OveredRow className="overExpiry">
+      <Title>レンタル中の本</Title>
+      {lendings.length > 0 ?
+        <>
+          <Lendings>
+            <tbody>
+              <LendingRow>
+                <TitleColumn></TitleColumn><DateColumn>貸出開始日</DateColumn><DateColumn>返却期限日</DateColumn><th>返却場所</th><ButtonColumn></ButtonColumn>
+              </LendingRow>
+              {lendings.map((lending,index) => {
+                return (
+                  <React.Fragment key={index}>
+                    {Date.parse(lending.expiryDate) < today.setHours(0, 0, 0, 0) ?
+                      <>
+                        <OveredRow className="overExpiry">
+                          <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                        </OveredRow>
+                        <Warning>
+                          <td colSpan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
+                        </Warning>
+                      </> :
+                      <LendingRow key={index}>
                         <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
-                      </OveredRow>
-                      <Warning>
-                        <td colSpan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
-                      </Warning>
-                    </> :
-                    <LendingRow key={index}>
-                      <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
-                    </LendingRow> }
-                </React.Fragment>
-              );
-            })}
-          </tbody>
-        </Lendings>
+                      </LendingRow> }
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </Lendings>
+        </> : <NoBooks>現在レンタル中の本はありません。</NoBooks>}
         <Title>予約中の本</Title>
-<Lendings>
-  <tbody>
-    <LendingRow>
-      <th></th><th colSpan="2">予約期間</th><th colSpan="2"></th>
-    </LendingRow>
-    {reservations.map((reservation,index) => {
-      return (
-          <LendingRow key={index}>
-            <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><td></td><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
-          </LendingRow>
-      );
-    })}
-  </tbody>
-</Lendings>
-<Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
-      </>
-    );
-  } else if ( isLoading === false && lendings.length === 0) {
-    return (
-      <NoBooks>現在借りている本、予約している本はありません。</NoBooks>
-    );
+        {reservations.length > 0 ?
+          <>
+            <Lendings>
+              <tbody>
+                <LendingRow>
+                  <TitleColumn></TitleColumn><DateColumn>貸出開始日</DateColumn><DateColumn>返却期限日</DateColumn><th>ステータス</th><ButtonColumn></ButtonColumn>
+                </LendingRow>
+                {reservations.map((reservation,index) => {
+                  return (
+                      <LendingRow key={index}>
+                        <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><td></td><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
+                      </LendingRow>
+                  );
+                })}
+              </tbody>
+            </Lendings>
+          </> : <NoBooks>現在予約中の本はありません。</NoBooks>}
+        <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
+              </>
+            );
   }
 }
