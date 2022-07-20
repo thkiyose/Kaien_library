@@ -8,6 +8,7 @@ import { Modal } from './parts/Modal';
 import { format } from 'date-fns';
 import { fetchCurrentUserReservation } from '../lib/api/reservation';
 import { destroyReservation } from '../lib/api/reservation';
+import { createLendingFromReservation } from '../lib/api/lending'
 
 const BackButton = styled.button`
   outline: 0;
@@ -85,6 +86,7 @@ export const ReservationToLending = () => {
   const navigate = useNavigate();
   const [ reservation ,setReservation ] = useState();
   const [ book, setBook ] = useState();
+  const [ error, setError ] = useState();
   const [showModal, setShowModal] = useState(false);
 
   const fetchReservation = async(bookId,currentUserId) => {
@@ -105,6 +107,16 @@ export const ReservationToLending = () => {
       navigate(`/books/${bookId}`);
     }
   }
+
+  const handleCreateLendingFromReservation = async(id,userId) => {
+    const res = await createLendingFromReservation({id: id, userId: userId});
+    if (res.data.status === "SUCCESS") {
+      navigate("/thankyouforlending", {state: { bookLent: true, bookLocation: res.data.location }})
+    } else if (res.data.message){
+      setError(res.data.message);
+    }
+  }
+
   return (
     <>
       <Wrapper width={"800px"}>
@@ -126,10 +138,11 @@ export const ReservationToLending = () => {
                   </tr>
                 </tbody>
               </table>
-              <Rent>この期間で借りる</Rent>
+              <Rent onClick={()=>{handleCreateLendingFromReservation(reservation.id, userId)}}>この期間で借りる</Rent>
               <Cancel onClick={() =>{handleShowModal()}}>予約をキャンセルする</Cancel>
             </Detail>
-                   <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(reservation.id)}} />
+            <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(reservation.id)}} />
+            <span>{error}</span>
           </>
         :
           <EmptyGuide>予約の情報を取得できません。書籍詳細画面から操作を行って下さい。</EmptyGuide>

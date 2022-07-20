@@ -29,6 +29,20 @@ class Api::V1::LendingsController < ApplicationController
     end
   end
 
+  def create_from_reservation
+    reservation = Reservation.find_by(id:params[:id])
+    user = User.find_by(id:params[:user_id])
+    book = Book.find_by(id: reservation.book_id)
+    if reservation.user_id == user.id
+      user.lendings.create(book_id:reservation.book_id, start_date:reservation.start_date, expiry_date: reservation.expiry_date)
+      book.update(is_lent: true)
+      reservation.destroy
+      render json: { status: "SUCCESS", location: book.location.location}
+    else
+      render json: { message: "レンタルに失敗しました。"}
+    end
+  end
+
   def fetch_lending
     lending = Lending.find_by(id: params[:id])
     render json: { book: lending.book, location: lending.book.location.location, user_id: lending.user.id }

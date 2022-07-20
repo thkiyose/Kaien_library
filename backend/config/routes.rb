@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
       resources :lendings, only: [:show,:create] do
         get 'fetch_lending', on: :member
+        post 'create_from_reservation', on: :collection
         post 'is_current_user_lending', on: :collection
         patch 'return', on: :member
       end

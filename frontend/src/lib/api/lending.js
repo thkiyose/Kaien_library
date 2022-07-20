@@ -4,6 +4,10 @@ export const createLending = (params) => {
   return client.post("/lendings",params);
 };
 
+export const createLendingFromReservation = (params) => {
+  return client.post(`/lendings/create_from_reservation`,params);
+};
+
 export const fetchLendings = (params) => {
   return client.get(`/lendings/${params}`);
 };

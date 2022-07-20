@@ -68,12 +68,13 @@ const Rent = styled.button`
 `
 
 const ReservationToLending = styled(Rent)`
-  padding: 5px;
+  padding: 4px;
   .up {
     font-size: 0.8rem;
   }
   .bottom {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    padding: 0;
   }
 `
 
@@ -223,13 +224,13 @@ const Button = (props) => {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === true) {
-      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中です。</p><p className="bottom">この本を借りる</p></ReservationToLending>
+      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中:レンタルが可能になりました。</p><p className="bottom">レンタルに進む</p></ReservationToLending>
     // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
       return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
     // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
   } else if (!book.isLent && currentUserReserved === false && otherUserReserved === true && onGoingOtherUserReservation === true ) 　{
-      return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">本日、他ユーザーに予約されています。</p><p className="bottom">別の期間で予約する</p></Reservation>
+      return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">本日、他ユーザーに予約されています。</p><p className="bottom">別の日で予約する</p></Reservation>
   // 貸出無し・他ユーザーが予約中・予約期間外である=レンタル可能
   } else if (!book.isLent && currentUserReserved === false && otherUserReserved === true && onGoingOtherUserReservation === false) {
     return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
