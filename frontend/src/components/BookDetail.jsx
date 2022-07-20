@@ -6,6 +6,8 @@ import { Wrapper } from './parts/Wrapper';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import '../lib/styles/tab.css';
 
 const Top = styled.div`
 `
@@ -195,6 +197,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
+          <InfoTab />
         </Wrapper>
       </>
     );
@@ -250,4 +253,23 @@ const Button = (props) => {
   } else if (book.isLent && currentUserLending === false && otherUserReserved === true && onGoingOtherUserReservation === false) {
     return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
   }
+}
+
+const InfoTab = () => {
+  return (
+    <>
+      <Tabs>
+        <TabList>
+          <Tab>HOME</Tab>
+          <Tab>About</Tab>
+        </TabList>
+        <TabPanel>
+          <h1>HOMEです</h1>
+        </TabPanel>
+        <TabPanel>
+          <h1>Aboutです</h1>
+        </TabPanel>
+      </Tabs>
+    </>
+  );
 }
