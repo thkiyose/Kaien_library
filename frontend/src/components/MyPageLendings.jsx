@@ -41,10 +41,14 @@ const OveredRow = styled(LendingRow)`
 const Warning = styled.tr`
   background-color: rgb(255, 181, 181) !important;
   text-align: center;
+  width: 100%;
   td {
     padding: 0;
     font-size: 0.8rem;
   }
+`
+const CanLend = styled(Warning)`
+  background-color: rgb(207, 255, 203) !important;
 `
 
 const TitleColumn = styled.th`
@@ -60,6 +64,7 @@ const ButtonColumn = styled.th`
 const ReturnButton = styled.button`
   padding: 3px;
   border: none;
+  width: 100%;
   background-color: ${Color.primary};
   color: white;
   font-weight: bold;
@@ -84,6 +89,12 @@ const BookTitle = styled.td`
 `
 const Status = styled.td`
   text-align: center;
+`
+const ToReserve = styled.button`
+  background-color: rgb(0,0,0,0);
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
 `
 
 export const MyPageLendings = () => {
@@ -135,7 +146,7 @@ export const MyPageLendings = () => {
                           <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                         </OveredRow>
                         <Warning>
-                          <td colSpan="4">返却期限を過ぎています。返却手続きを行って下さい。</td>
+                          <td colSpan="5">返却期限を過ぎています。返却手続きを行って下さい。</td>
                         </Warning>
                       </> :
                       <LendingRow key={index}>
@@ -157,9 +168,20 @@ export const MyPageLendings = () => {
                 </LendingRow>
                 {reservations.map((reservation,index) => {
                   return (
-                      <LendingRow key={index}>
-                        <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><Status>{reservation.canLend ? "貸出可" : "予約中"}</Status><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
-                      </LendingRow>
+                    <React.Fragment key={index}>
+                      {reservation.canLend ?
+                        <>
+                          <LendingRow>
+                            <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><Status>{reservation.canLend ? "貸出可" : "予約中"}</Status><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
+                          </LendingRow>
+                          <CanLend>
+                            <td colSpan="5">レンタルが可能になりました。<ToReserve onClick={()=>{navigate(`/reservationlending/${reservation.bookId}`, { state:{ bookId: reservation.bookId, userId: currentUser.id } })}}>レンタルに進む</ToReserve></td>
+                          </CanLend>
+                        </> :
+                        <LendingRow>
+                          <BookTitle><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></BookTitle><td>{reservation.startDate}</td><td>{reservation.expiryDate}</td><Status>{reservation.canLend ? "貸出可" : "予約中"}</Status><td><CancelButton　onClick={() =>{handleShowModal(reservation.id)}}>キャンセル</CancelButton></td>
+                        </LendingRow> }
+                      </React.Fragment>
                   );
                 })}
               </tbody>

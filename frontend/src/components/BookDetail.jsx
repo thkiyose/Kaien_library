@@ -51,7 +51,7 @@ const Rent = styled.button`
   background-color: ${Color.primary};
   color : white;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   cursor: pointer;
   border-bottom:4px solid rgba(0,0,0,0.2);
   :hover {
