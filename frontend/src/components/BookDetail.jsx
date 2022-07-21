@@ -264,7 +264,7 @@ const InfoTab = () => {
           <Tab>About</Tab>
         </TabList>
         <TabPanel>
-          <h1>HOMEです</h1>
+          <p>HOMEです</p>
         </TabPanel>
         <TabPanel>
           <h1>Aboutです</h1>
