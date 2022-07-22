@@ -140,15 +140,31 @@ const YouReserved = styled.div`
 `
 
 const InsideTabPanel = styled.div`
-  p {
-    margin: 0;
-  }
   padding: 10px 30px;
+      justify-content: right;
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+  td {
+    padding: 0px 10px;
+  }
+  .start_date {
+    padding-left: 150px;
+  }
+  .on_going {
+    background-color: rgb(4, 215, 6);
+    color: white;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    text-align:center;
+  }
 `
 
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const { currentUser } = useContext(Context);
+  const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
   const [ otherUserReserved, setOtherUserReserved ] = useState(false);
@@ -164,7 +180,8 @@ export const BookDetail = () => {
     try {
       const res = await showBook(bookId,currentUserId);
       setBook(res.data.book);
-      setCategory(res.data.category)
+      setLendings(res.data.lendings);
+      setCategory(res.data.category);
       setIsEmpty(false);
       setOtherUserReserved(res.data.otherUserReserved.isReserved);
       setCurrentUserLending(res.data.currentUserLending);
@@ -204,7 +221,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab />
+          <InfoTab lendings={lendings} />
         </Wrapper>
       </>
     );
@@ -262,7 +279,8 @@ const Button = (props) => {
   }
 }
 
-const InfoTab = () => {
+const InfoTab = (props) => {
+  const lendings = props.lendings;
   return (
     <>
       <Tabs>
@@ -277,7 +295,22 @@ const InfoTab = () => {
         </TabPanel>
         <TabPanel>
           <InsideTabPanel>
-            <p>貸出履歴</p>
+            <table>
+              <tbody>
+                {lendings.map((lending,key)=>{ return(
+                  <React.Fragment key={key}>
+                  {lending.finishedAt === null ?
+                    <tr>
+                      <td>{lending.name}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td className="on_going">{lending.finishedAt || "レンタル中"}</td>
+                    </tr> :
+                    <tr>
+                      <td>{lending.name}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td>{lending.finishedAt || "レンタル中"}</td>
+                    </tr>}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
           </InsideTabPanel>
         </TabPanel>
       </Tabs>
