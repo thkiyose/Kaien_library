@@ -21,6 +21,19 @@ class Api::V1::LendingsController < ApplicationController
     render json: { lendings: lendings, reservations: reservations }
   end
 
+  def show_all
+    user = User.find_by(id: params[:id])
+    lendings = user.lendings.order(start_date: :desc).map{|lending| {
+                                            id: lending.id,
+                                            start_date: lending.start_date,
+                                            expiry_date: lending.expiry_date,
+                                            finished_at: lending.finished_at,
+                                            title: lending.book.title,
+                                            book_id: lending.book.id,
+                                            location: lending.book.location.location }}
+    render json: { lendings: lendings }
+  end
+
   def create
     lending = Lending.new(lending_params)
     book = Book.find_by(id: params[:book_id])

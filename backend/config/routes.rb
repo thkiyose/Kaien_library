@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         post 'search', on: :collection
       end
       resources :lendings, only: [:show,:create] do
+        get 'show_all', on: :member
         get 'fetch_lending', on: :member
         post 'create_from_reservation', on: :collection
         post 'is_current_user_lending', on: :collection

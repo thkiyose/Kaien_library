@@ -12,6 +12,10 @@ export const fetchLendings = (params) => {
   return client.get(`/lendings/${params}`);
 };
 
+export const fetchAllLendings = (params) => {
+  return client.get(`/lendings/${params}/show_all`);
+};
+
 export const fetchLending = (params) => {
   return client.get(`/lendings/${params}/fetch_lending`);
 };
