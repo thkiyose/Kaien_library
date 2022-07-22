@@ -91,6 +91,8 @@ const FigCaption = styled.figcaption`
   border: solid 2px black;
   width: 100px;
   height: 140px;
+  font-size: 0.9rem;
+  overflow: hidden;
   :hover {
     opacity: 1;
   }
