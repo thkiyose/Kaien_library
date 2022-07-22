@@ -139,6 +139,13 @@ const YouReserved = styled.div`
   }
 `
 
+const InsideTabPanel = styled.div`
+  p {
+    margin: 0;
+  }
+  padding: 10px 30px;
+`
+
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const { currentUser } = useContext(Context);
@@ -260,14 +267,18 @@ const InfoTab = () => {
     <>
       <Tabs>
         <TabList>
-          <Tab>HOME</Tab>
-          <Tab>About</Tab>
+          <Tab>レビュー</Tab>
+          <Tab>貸出履歴</Tab>
         </TabList>
         <TabPanel>
-          <p>HOMEです</p>
+          <InsideTabPanel>
+            <p>レビュー</p>
+          </InsideTabPanel>
         </TabPanel>
         <TabPanel>
-          <h1>Aboutです</h1>
+          <InsideTabPanel>
+            <p>貸出履歴</p>
+          </InsideTabPanel>
         </TabPanel>
       </Tabs>
     </>

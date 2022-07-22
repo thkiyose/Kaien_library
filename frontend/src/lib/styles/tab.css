@@ -16,11 +16,11 @@
   list-style: none;
   padding: 10px 12px;
   cursor: pointer;
+  background-color: #B4BEC9;
 }
 
 .react-tabs__tab--selected {
-  background-color: #159A9C;
-  color: white;
+  background-color: #abdddd;
 }
 
 .react-tabs__tab--disabled {
@@ -43,7 +43,7 @@
 
 .react-tabs__tab-panel {
   display: none;
-  background-color: #B4BEC9;
+  background-color: #abdddd;
   margin-top: 0;
 }
 

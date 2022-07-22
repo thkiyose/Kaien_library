@@ -76,7 +76,7 @@ export const Return = () => {
     };
     setIsLoading(false);
   }
-  useEffect(() => { handleFetchLending(lendingId.id)});
+  useEffect(() => { handleFetchLending(lendingId.id)},[]);
 
   const handleReturnBook = async(lendingId,currentUserId) => {
     const res = await returnBook(lendingId,currentUserId)
