@@ -187,8 +187,9 @@ export const MyPageLendings = () => {
               </tbody>
             </Lendings>
           </> : <NoBooks>現在予約中の本はありません。</NoBooks>}
-        <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
-              </>
-            );
+          <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
+          <Link to="/mypage/history">過去の貸出</Link>
+        </>
+    );
   }
 }
