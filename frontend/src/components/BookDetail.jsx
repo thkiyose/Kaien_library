@@ -124,6 +124,17 @@ const YouLent = styled.p`
   width: 30%;
   margin: 0px 20px ;
 `
+
+const Deleted = styled.p`
+  background-color:${Color.dark};
+  padding: 30px 10px;
+  color: white;
+  text-align: center;
+  float: left;
+  width: 30%;
+  margin: 0px 20px ;
+`
+
 const YouReserved = styled.div`
   ${(props) => `background-color: ${props.backgroundColor}`};
   color: white;
@@ -240,6 +251,9 @@ const Button = (props) => {
   const {book, currentUser, currentUserLending, otherUserReserved, currentUserReserved, onGoingOtherUserReservation,onGoingCurrentUserReservation} = props;
 
   // 貸出無し・予約無し=レンタル可能
+  if (book.deleted === true ){
+    return <Deleted>貸出を終了しました。</Deleted>
+  }
   if (!book.isLent && otherUserReserved === false && currentUserReserved === false) {
     return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
   // ログインユーザーに貸出中・予約無し=返却可能
