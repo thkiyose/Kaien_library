@@ -153,7 +153,7 @@ const InsideTabPanel = styled.div`
     padding-left: 150px;
   }
   .on_going {
-    background-color: rgb(4, 215, 6);
+    background-color: rgb(0, 193, 2);
     color: white;
     font-size: 0.8rem;
     border-radius: 10px;
