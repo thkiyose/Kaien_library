@@ -96,6 +96,10 @@ const ToReserve = styled.button`
   text-decoration: underline;
   cursor: pointer;
 `
+const PreviousLending = styled(Link)`
+  display: block;
+  text-align:right;
+`
 
 export const MyPageLendings = () => {
   const { currentUser } = useContext(Context);
@@ -188,7 +192,7 @@ export const MyPageLendings = () => {
             </Lendings>
           </> : <NoBooks>現在予約中の本はありません。</NoBooks>}
           <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
-          <Link to="/mypage/history">過去の貸出</Link>
+          <PreviousLending to="/mypage/history">過去のレンタル一覧</PreviousLending>
         </>
     );
   }
