@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
 import { Context } from '../App';
-import { fetchAllLendings } from '../lib/api/lending';
+import { fetchPreviousLendings } from '../lib/api/lending';
 
 const BackButton = styled.button`
   outline: 0;
@@ -23,7 +23,7 @@ export const MyPageLendingHistory = () => {
 
   useEffect(() => {
     const fetchLendings = async () => {
-      const res = await fetchAllLendings(currentUser.id)
+      const res = await fetchPreviousLendings(currentUser.id)
       setLendings(res.data.lendings);
       setIsLoading(false);
     };
@@ -43,6 +43,7 @@ export const MyPageLendingHistory = () => {
                     <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td>
                   </tr>
                   <tr>
+
                   </tr>
                 </React.Fragment>
               );

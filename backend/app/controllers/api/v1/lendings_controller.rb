@@ -21,9 +21,9 @@ class Api::V1::LendingsController < ApplicationController
     render json: { lendings: lendings, reservations: reservations }
   end
 
-  def show_all
+  def show_previous
     user = User.find_by(id: params[:id])
-    lendings = user.lendings.order(start_date: :desc).map{|lending| {
+    lendings = user.lendings.where.not(finished_at: nil).order(start_date: :desc).map{|lending| {
                                             id: lending.id,
                                             start_date: lending.start_date,
                                             expiry_date: lending.expiry_date,
