@@ -4,10 +4,14 @@ class Api::V1::ReservationsController < ApplicationController
   def create
     reservation = Reservation.new(reservation_params)
     book = Book.find_by(id: params[:book_id])
-    if reservation.save!
-      render json: { status:"SUCCESS" }
+    if book.deleted == false
+      if reservation.save!
+        render json: { status:"SUCCESS" }
+      else
+        render json:  lending.errors, status: 422
+      end
     else
-      render json:  lending.errors, status: 422
+      render json: { message: "この書籍は予約出来ません。"}
     end
   end
 

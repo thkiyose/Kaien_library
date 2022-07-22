@@ -37,7 +37,7 @@ class Api::V1::LendingsController < ApplicationController
   def create
     lending = Lending.new(lending_params)
     book = Book.find_by(id: params[:book_id])
-    if book.is_lent == false
+    if book.is_lent == false && book.deleted == false
       if lending.save!
         book.update(is_lent:true)
         render json: { status:"SUCCESS", location: book.location.location}
@@ -45,15 +45,15 @@ class Api::V1::LendingsController < ApplicationController
         render json:  lending.errors, status: 422
       end
     else
-      render json: { message: "この書籍は貸出中です。"}
+      render json: { message: "この書籍は貸出出来ません。"}
     end
   end
 
   def create_from_reservation
     reservation = Reservation.find_by(id:params[:id])
     user = User.find_by(id:params[:user_id])
-    book = Book.find_by(id: reservation.book_id)
-    if reservation.user_id == user.id
+    book = Book.find_by(id:reservation.book_id)
+    if reservation.user_id == user.id && book.deleted == false
       user.lendings.create(book_id:reservation.book_id, start_date:reservation.start_date, expiry_date: reservation.expiry_date)
       book.update(is_lent: true)
       reservation.destroy
