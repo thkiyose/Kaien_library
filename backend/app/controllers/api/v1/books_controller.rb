@@ -28,7 +28,8 @@ class Api::V1::BooksController < ApplicationController
   def show
     book = Book.find_by(id: params[:id])
     user = User.find_by(id: params[:user_id])
-    render json: { book: book, category: book.category, current_user_lending: user.lendings.where(book_id:params[:id], finished_at: nil).exists?,
+    lendings = book.lendings.joins(:user).order(start_date: :desc).select(:id,:start_date,:expiry_date,:finished_at,:name)
+    render json: { book: book, category: book.category, lendings: lendings, current_user_lending: user.lendings.where(book_id:params[:id], finished_at: nil).exists?,
                   other_user_reserved: { is_reserved: book.reservations.where.not(user_id: user.id).exists?, on_going: book.reservations.where.not(user_id: user.id).where('start_date <= ?', Date.today).where('expiry_date >= ?', Date.today).exists? },
                   current_user_reserved: { is_reserved: user.reservations.where(book_id: params[:id]).exists?, on_going: user.reservations.where(book_id: params[:id]).where('start_date <= ?', Date.today).where('expiry_date >= ?', Date.today).exists? }  }
   end
