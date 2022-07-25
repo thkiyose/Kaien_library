@@ -10,5 +10,7 @@ class Api::V1::WatchListsController < ApplicationController
   end
 
   def is_watching
+    user = User.find_by(id: params[:id])
+    render json: { is_watching: user.watch_lists.where(book_id: params[:book_id]).exists? }
   end
 end
