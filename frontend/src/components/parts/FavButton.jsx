@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Context } from '../../App';
 
 export const FavButton = () => {
-  return <p>★</p>
+  const { currentUser } = useContext(Context);
+  return (
+    <p>★</p>
+  );
 }
