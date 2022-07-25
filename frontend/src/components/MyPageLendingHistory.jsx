@@ -13,12 +13,34 @@ const BackButton = styled.button`
   padding: 5px 15px;
   color: #FFFFFF;
   cursor: pointer;
+  margin-bottom: 10px;
+`
+
+const Lendings = styled.table`
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  width: 100%;
+`
+
+const LendingRow = styled.tr`
+  background-color: white;
+  th {
+    color: white;
+    background-color: ${Color.primary};
+    font-size: 0.8rem;
+  }
+  td, th {
+    padding: 5px;
+  }
+  :nth-child(odd) {
+    background-color: rgb(241, 241, 241);
+  }
 `
 
 export const MyPageLendingHistory = () => {
   const navigate = useNavigate();
   const [lendings, setLendings] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { currentUser } = useContext(Context);
 
   useEffect(() => {
@@ -34,22 +56,22 @@ export const MyPageLendingHistory = () => {
     return(
       <>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <table>
+        <Lendings>
           <tbody>
+            <LendingRow>
+              <th>タイトル</th><th>レンタル開始日</th><th>返却日</th>
+            </LendingRow>
             {lendings.map((lending,key)=> {
               return (
                 <React.Fragment key={key}>
-                  <tr>
-                    <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td>
-                  </tr>
-                  <tr>
-
-                  </tr>
+                  <LendingRow>
+                    <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.finishedAt}</td>
+                  </LendingRow>
                 </React.Fragment>
               );
             })}
           </tbody>
-        </table>
+        </Lendings>
       </>
     );
   }
