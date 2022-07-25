@@ -41,13 +41,12 @@ const LendingRow = styled.tr`
 const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
 })`
-  margin: 0;
+  margin-top: 10;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   list-style-type: none;
   padding: 0 5rem;
-
   li a {
     border-radius: 7px;
     padding: 0.1rem 1rem;
