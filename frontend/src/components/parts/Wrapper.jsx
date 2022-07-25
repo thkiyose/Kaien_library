@@ -7,6 +7,7 @@ const WrapperDiv = styled.div`
   background-color: ${Color.secondary};
   margin:100px auto 0px auto;
   width: ${props => props.width};
+  min-height: ${props => props.minHeight};
   padding: 40px;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
   a {
@@ -20,7 +21,7 @@ const WrapperDiv = styled.div`
 export const Wrapper = (props) => {
 
   return (
-    <WrapperDiv width={props.width}>
+    <WrapperDiv width={props.width} minHeight={props.minHeight}>
       {props.children}
     </WrapperDiv>
   )

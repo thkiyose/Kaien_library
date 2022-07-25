@@ -189,7 +189,7 @@ export const Index = () => {
 
   return(
     <>
-      <Wrapper width={"800px"}>
+      <Wrapper width={"800px"} minHeight={"580px"}>
         <SearchBar>
           <SearchCategory name="category" ref={categoryRef} onChange={(e)=>{handleChangeCategory(e)}}>
             <option hidden>カテゴリを選択</option>
