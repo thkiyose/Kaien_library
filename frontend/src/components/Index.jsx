@@ -56,6 +56,7 @@ const BookList = styled.ul`
   flex-direction: row;
   flex-wrap: wrap;
   margin: 0 auto;
+  min-height: 510px;
 `
 const ImageWrap = styled.li`
   width: 100px;
