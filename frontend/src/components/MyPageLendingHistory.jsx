@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Color from './parts/Color';
 import { Context } from '../App';
 import { fetchPreviousLendings } from '../lib/api/lending';
+import ReactPaginate from 'react-paginate';
 
 const BackButton = styled.button`
   outline: 0;
@@ -37,11 +38,52 @@ const LendingRow = styled.tr`
   }
 `
 
+const MyPaginate = styled(ReactPaginate).attrs({
+  activeClassName: 'active',
+})`
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0 5rem;
+
+  li a {
+    border-radius: 7px;
+    padding: 0.1rem 1rem;
+    cursor: pointer;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: ${Color.primary};
+    color: white;
+    border-color: transparent;
+    min-width: 32px;
+  }
+  li.disabled a {
+    color: grey;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
+`
+
 export const MyPageLendingHistory = () => {
   const navigate = useNavigate();
   const [lendings, setLendings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { currentUser } = useContext(Context);
+  const [ perPage ] = useState(15);
+  const [ start, setStart ] = useState(0);
+
+  const handlePageChange = (e) => {
+    setStart(e.selected * perPage);
+  }
 
   useEffect(() => {
     const fetchLendings = async () => {
@@ -61,7 +103,7 @@ export const MyPageLendingHistory = () => {
             <LendingRow>
               <th>タイトル</th><th>レンタル開始日</th><th>返却日</th>
             </LendingRow>
-            {lendings.map((lending,key)=> {
+            {lendings.slice(start, start + perPage).map((lending,key)=> {
               return (
                 <React.Fragment key={key}>
                   <LendingRow>
@@ -72,6 +114,26 @@ export const MyPageLendingHistory = () => {
             })}
           </tbody>
         </Lendings>
+        <MyPaginate
+          onPageChange={handlePageChange}
+          pageCount={Math.ceil(lendings.length / perPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          containerClassName='pagination'
+          pageClassName='page-item'
+          pageLinkClassName='page-link'
+          activeClassName='active'
+          previousLabel='<'
+          nextLabel='>'
+          previousClassName='page-item'
+          nextClassName='page-item'
+          previousLinkClassName='page-link'
+          nextLinkClassName='page-link'
+          disabledClassName='disabled'
+          breakLabel='...'
+          breakClassName='page-item'
+          breakLinkClassName='page-link'
+        />
       </>
     );
   }
