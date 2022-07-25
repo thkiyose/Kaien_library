@@ -220,7 +220,7 @@ export const BookDetail = () => {
           <Top>
             <ImageDiv>
               {book.imageUrl ? <Image src={`http://localhost:3000/${book.id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-              <WatchButton/>
+              <WatchButton bookId={book.id}/>
             </ImageDiv>
             <InfoDiv>
               <h1>{book.title}</h1>

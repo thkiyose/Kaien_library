@@ -1,7 +1,7 @@
 class Api::V1::WatchListsController < ApplicationController
   def create
     user = User.find_by(id: params[:id])
-    watch_list = ser.watch_lists.build(book_id: params[:book_id])
+    watch_list = user.watch_lists.build(book_id: params[:book_id])
     if watch_list.save
       render json: { status: "SUCCESS" }
     else
