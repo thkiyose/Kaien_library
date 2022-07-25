@@ -7,13 +7,17 @@ import { Index } from './components/Index';
 import { BookDetail } from './components/BookDetail';
 import { MyPage } from './components/MyPage';
 import { MyPageLendings } from './components/MyPageLendings';
+import { MyPageLendingHistory } from './components/MyPageLendingHistory';
 import { AdminMenu } from './components/AdminMenu';
 import { AdminBookIndex } from './components/AdminBookIndex';
 import { RegisterBook } from './components/RegisterBook';
 import { Lending } from './components/Lending';
+import { Reservation } from './components/Reservation';
+import { ReservationToLending } from './components/ReservationToLending';
 import { Return } from './components/Return';
 import { ThankYouForReturn } from './components/ThankYouForReturn';
 import { ThankYouForLending } from './components/ThankYouForLending';
+import { ReservationCreated } from './components/ReservationCreated';
 import { getCurrentUser } from './lib/api/session';
 import { fetchCategories } from './lib/api/book';
 import { fetchLocations } from './lib/api/book';
@@ -25,7 +29,6 @@ export const App = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
-  const secondary = "#DEEFE7";
 
   const handleGetCurrentUser = async () => {
   try {
@@ -104,8 +107,7 @@ export const App = () => {
            currentUser,
            setCurrentUser,
            categories,
-           locations,
-           secondary
+           locations
          }}
        >
       <BrowserRouter>
@@ -115,11 +117,15 @@ export const App = () => {
             <Route path={"/signup"} element={<NotLoggedInRoute><SignUp /></NotLoggedInRoute>} />
             <Route path={"/mypage"} element={<LoggedInRoute currentUser={currentUser}><MyPage /></LoggedInRoute>} >
               <Route path={"lendings"} element={<MyPageLendings />} />
+              <Route path={"history"} element={<MyPageLendingHistory />} />
             </Route>
             <Route path={"/books"} element={<LoggedInRoute currentUser={currentUser}><Index /></LoggedInRoute>} />
             <Route path={"/books/:id"} element={<LoggedInRoute currentUser={currentUser}><BookDetail /></LoggedInRoute>} />
             <Route path={"/books/:id/lending"} element={<LoggedInRoute currentUser={currentUser}><Lending /></LoggedInRoute>} />
+            <Route path={"/books/:id/reservation"} element={<LoggedInRoute currentUser={currentUser}><Reservation /></LoggedInRoute>} />
+            <Route path={"/reservationlending/:id"} element={<LoggedInRoute currentUser={currentUser}><ReservationToLending /></LoggedInRoute>} />
             <Route path={"/thankyouforlending"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForLending /></LoggedInRoute>} />
+            <Route path={"/reservationcomplete"} element={<LoggedInRoute currentUser={currentUser}><ReservationCreated /></LoggedInRoute>} />
             <Route path={"/return/:id"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
             <Route path={"/thankyouforreturn"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForReturn /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />

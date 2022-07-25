@@ -56,9 +56,6 @@ const BookList = styled.ul`
   flex-direction: row;
   flex-wrap: wrap;
   margin: 0 auto;
-  justify-content: flex-start;
-  align-items: flex-start;
-  min-height: 520px;
 `
 const ImageWrap = styled.li`
   width: 100px;
@@ -94,6 +91,8 @@ const FigCaption = styled.figcaption`
   border: solid 2px black;
   width: 100px;
   height: 140px;
+  font-size: 0.9rem;
+  overflow: hidden;
   :hover {
     opacity: 1;
   }

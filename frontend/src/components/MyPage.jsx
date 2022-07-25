@@ -11,6 +11,9 @@ const SideBar = styled.div`
   p {
     padding: 0;
   }
+  ul {
+    padding: 0;
+  }
 `
 const Main = styled.div`
   float: right;

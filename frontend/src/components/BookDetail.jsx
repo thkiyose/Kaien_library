@@ -6,7 +6,8 @@ import { Wrapper } from './parts/Wrapper';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
-import { isCurrentUserLending } from '../lib/api/lending';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import '../lib/styles/tab.css';
 
 const Top = styled.div`
 `
@@ -52,7 +53,7 @@ const Rent = styled.button`
   background-color: ${Color.primary};
   color : white;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   cursor: pointer;
   border-bottom:4px solid rgba(0,0,0,0.2);
   :hover {
@@ -63,15 +64,30 @@ const Rent = styled.button`
 	-moz-transform: translate(0,4px);
 	transform: translate(0,4px);
 	border-bottom:none;
+  margin-bottom:4px;
 	}
 `
+
+const ReservationToLending = styled(Rent)`
+  padding: 4px;
+  .up {
+    font-size: 0.8rem;
+  }
+  .bottom {
+    font-size: 1.1rem;
+    padding: 0;
+  }
+`
+
 const Reservation = styled(Rent)`
+  padding: 5px;
+  margin-top: 5px;
   .up {
     font-size: 0.9rem;
     margin: 0;
   }
   .bottom {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin : 0;
   }
   background-color : ${Color.light};
@@ -109,23 +125,80 @@ const YouLent = styled.p`
   margin: 0px 20px ;
 `
 
+const Deleted = styled.p`
+  background-color:${Color.dark};
+  padding: 30px 10px;
+  color: white;
+  text-align: center;
+  float: left;
+  width: 30%;
+  margin: 0px 20px ;
+`
+
+const YouReserved = styled.div`
+  ${(props) => `background-color: ${props.backgroundColor}`};
+  color: white;
+  text-align: center;
+  float: left;
+  width: 30%;
+  margin: 0px 20px ;
+  .up {
+    font-size: 1.2rem;
+  }
+  .down {
+    font-size: 0.7rem;
+  }
+`
+
+const InsideTabPanel = styled.div`
+  padding: 10px 30px;
+      justify-content: right;
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+  td {
+    padding: 0px 10px;
+  }
+  .start_date {
+    padding-left: 150px;
+  }
+  .on_going {
+    background-color: rgb(0, 193, 2);
+    color: white;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    text-align:center;
+  }
+`
+
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const { currentUser } = useContext(Context);
+  const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
-  const [ isLoading2, setIsLoading2 ] = useState(true);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
+  const [ otherUserReserved, setOtherUserReserved ] = useState(false);
+  const [ currentUserReserved, setCurrentUserReserved ] = useState(false);
+  const [ onGoingOtherUserReservation, setOnGoingOtherUserReservation ] = useState(false);
+  const [ onGoingCurrentUserReservation, setOnGoingCurrentUserReservation ] = useState(false);
   const [ isEmpty, setIsEmpty ] = useState(true);
   const [ category, setCategory ] = useState({});
   const navigate = useNavigate();
   const bookId = useParams();
 
-  const handleShowBook = async(bookId) => {
+  const handleShowBook = async(bookId,currentUserId) => {
     try {
-      const res = await showBook(bookId);
+      const res = await showBook(bookId,currentUserId);
       setBook(res.data.book);
-      setCategory(res.data.category)
+      setLendings(res.data.lendings);
+      setCategory(res.data.category);
       setIsEmpty(false);
+      setOtherUserReserved(res.data.otherUserReserved.isReserved);
+      setCurrentUserLending(res.data.currentUserLending);
+      setCurrentUserReserved(res.data.currentUserReserved.isReserved);
+      setOnGoingOtherUserReservation(res.data.otherUserReserved.onGoing);
+      setOnGoingCurrentUserReservation(res.data.currentUserReserved.onGoing);
       setIsLoading(false);
     } catch(e) {
       console.log(e);
@@ -133,26 +206,11 @@ export const BookDetail = () => {
     }
   };
 
-  const handleGetCurrentUserLending = async(bookId,currentUserId) => {
-    try {
-      const res = await isCurrentUserLending({bookId:bookId, userId:currentUserId});
-      setCurrentUserLending(res.data.isLending);
-      setIsLoading2(false);
-    } catch(e) {
-      console.log(e);
-      setIsLoading2(false);
-    }
-  };
-
   useEffect(() => {
-   handleShowBook(bookId.id);
-  }, [bookId]);
+   handleShowBook(bookId.id, currentUser.id);
+ }, [bookId, currentUser]);
 
-  useEffect(() => {
-   handleGetCurrentUserLending(bookId.id, currentUser.id);
- }, [bookId,currentUser.id]);
-
-  if (!isLoading && !isLoading2 && !isEmpty) {
+  if (!isLoading && !isEmpty) {
     return(
       <>
         <Wrapper width={"800px"}>
@@ -167,22 +225,18 @@ export const BookDetail = () => {
               <h1>{book.title}</h1>
               <p><span>著者名: {book.author}</span><span>出版年: {book.publishedYear}</span></p>
               <InfoDivBottom>
-                { !book.isLent &&
-                  <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>}
-                { book.isLent &&　currentUserLending === false &&
-                  <Reservation onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>}
-                  { book.isLent && currentUserLending === true &&
-                    <YouLent>この本をレンタル中です!</YouLent>}
+              <Button book={book} currentUser={currentUser} currentUserLending={currentUserLending} currentUserReserved={currentUserReserved} otherUserReserved={otherUserReserved} onGoingOtherUserReservation={onGoingOtherUserReservation} onGoingCurrentUserReservation={onGoingCurrentUserReservation} />
                 <p><span>ステータス:{book.isLent === true ?  "貸出中" : "貸出可能"　}</span></p>
               </InfoDivBottom>
             </InfoDiv>
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
+          <InfoTab lendings={lendings} />
         </Wrapper>
       </>
     );
-  } else if (!isLoading && !isLoading2 && isEmpty ) {
+  } else if (!isLoading && isEmpty ) {
     return(
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
@@ -191,3 +245,89 @@ export const BookDetail = () => {
     );
   };
 };
+
+const Button = (props) => {
+  const navigate = useNavigate();
+  const {book, currentUser, currentUserLending, otherUserReserved, currentUserReserved, onGoingOtherUserReservation,onGoingCurrentUserReservation} = props;
+
+  // 貸出無し・予約無し=レンタル可能
+  if (book.deleted === true ){
+    return <Deleted>貸出を終了しました。</Deleted>
+  }
+  if (!book.isLent && otherUserReserved === false && currentUserReserved === false) {
+    return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
+  // ログインユーザーに貸出中・予約無し=返却可能
+  } else if (book.isLent && currentUserLending === true && otherUserReserved === false ) {
+    return <YouLent>この本をレンタル中です。</YouLent>
+  // 他ユーザーに貸出中・予約無し=予約可能
+  } else if (book.isLent && currentUserLending === false && otherUserReserved === false && currentUserReserved === false) {
+    return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
+  // 貸出無し・ログインユーザーが予約中・予約期間内である=レンタル可能
+  } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === true) {
+      return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中:レンタルが可能になりました。</p><p className="bottom">レンタルに進む</p></ReservationToLending>
+    // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
+  } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
+      return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+    // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
+  } else if (!book.isLent && currentUserReserved === false && otherUserReserved === true && onGoingOtherUserReservation === true ) 　{
+      return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">本日、他ユーザーに予約されています。</p><p className="bottom">別の日で予約する</p></Reservation>
+  // 貸出無し・他ユーザーが予約中・予約期間外である=レンタル可能
+  } else if (!book.isLent && currentUserReserved === false && otherUserReserved === true && onGoingOtherUserReservation === false) {
+    return <Rent onClick={() => {navigate("lending", { state:{ bookId: book.id } })}}>この本を借りる</Rent>
+  // 貸出有り・予約有り・両方ログインユーザーによるケースは発生しない
+  // ログインユーザーへ貸出有り・他ユーザーの予約有り=返却可能
+  } else if (book.isLent && currentUserLending === true && otherUserReserved === true) {
+      return <YouLent>この本をレンタル中です。</YouLent>
+  //  他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間内=返却されるまで待機
+} else if (book.isLent && currentUserLending === false && currentUserReserved === true && onGoingCurrentUserReservation === true) {
+      return <YouReserved backgroundColor={Color.dark}><p>予約中です。他ユーザーによる貸出が未返却です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+  // 他ユーザーへ貸出有り・ログインユーザーの予約有り・予約期間外=期間になるまで待機
+  } else if (book.isLent && currentUserLending === false && currentUserReserved === true && onGoingCurrentUserReservation === false) {
+    return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+  // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間内=予約可能
+  } else if (book.isLent && currentUserLending === false && otherUserReserved === true && onGoingOtherUserReservation === true) {
+    return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
+  // 他ユーザーへ貸出有り・他ユーザーの予約有り・予約期間外=予約可能
+  } else if (book.isLent && currentUserLending === false && otherUserReserved === true && onGoingOtherUserReservation === false) {
+    return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">この本は貸出中です。</p><p className="bottom">予約する</p></Reservation>
+  }
+}
+
+const InfoTab = (props) => {
+  const lendings = props.lendings;
+  return (
+    <>
+      <Tabs>
+        <TabList>
+          <Tab>レビュー</Tab>
+          <Tab>貸出履歴</Tab>
+        </TabList>
+        <TabPanel>
+          <InsideTabPanel>
+            <p>レビュー</p>
+          </InsideTabPanel>
+        </TabPanel>
+        <TabPanel>
+          <InsideTabPanel>
+            <table>
+              <tbody>
+                {lendings.map((lending,key)=>{ return(
+                  <React.Fragment key={key}>
+                  {lending.finishedAt === null ?
+                    <tr>
+                      <td>{lending.name}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td className="on_going">{lending.finishedAt || "レンタル中"}</td>
+                    </tr> :
+                    <tr>
+                      <td>{lending.name}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td>{lending.finishedAt || "レンタル中"}</td>
+                    </tr>}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+          </InsideTabPanel>
+        </TabPanel>
+      </Tabs>
+    </>
+  );
+}

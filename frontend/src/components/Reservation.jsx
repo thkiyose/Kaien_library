@@ -8,10 +8,10 @@ import Color from './parts/Color';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { format, addDays, eachDayOfInterval } from 'date-fns';
+import { format, addDays, addMonths, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
 import { fetchLendingsAndReservations } from '../lib/api/reservation';
-import { createLending } from '../lib/api/lending';
+import { createReservation } from '../lib/api/reservation';
 
 const BackButton = styled.button`
   outline: 0;
@@ -48,8 +48,8 @@ const Detail = styled.div`
     font-weight: lighter;
   }
 `
-const Rent = styled.button`
-  padding: 30px;
+const Reserve = styled.button`
+  padding: 20px;
   float: left;
   margin: 70px 85px;
   background-color: ${Color.primary};
@@ -81,17 +81,17 @@ const ClearFix = styled.div`
   clear: both;
 `
 
-export const Lending = () => {
+export const Reservation = () => {
   const { currentUser } = useContext(Context);
+  const [ disabled, setDisabled ] = useState([]);
   const location = useLocation();
   const bookId = location.state;
-  const [ disabled, setDisabled ] = useState([]);
   const navigate = useNavigate();
   const [ error, setError ] = useState();
   const [state, setState] = useState({
     selection: {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate : new Date(),
       key: 'selection'
     }
   });
@@ -106,31 +106,34 @@ export const Lending = () => {
   useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);
 
   const handleSelect = (item) => {
-    const interval = (new Date() - item.selection.endDate) / 86400000;
-    if (interval > -14) {
-      setState({
-        selection: {
-          startDate: new Date(),
-          endDate: item.selection.endDate,
-          key: 'selection'
-        }
-      });
-    } else {
+    const interval = (item.selection.startDate - item.selection.endDate) / 86400000;
+    if (interval > -15) {
       setState({
         selection: {
           startDate: item.selection.startDate,
-          endDate: addDays(item.selection.startDate, 14),
+          endDate: item.selection.endDate,
           key: 'selection'
         }
+      })
+      } else {
+        setState({
+          selection: {
+            startDate: item.selection.startDate,
+            endDate: addDays(item.selection.startDate, 14),
+            key: 'selection'
+          }
       });
     };
   };
 
-  const handleCreateLending = async() => {
+  const handleCreateReservation = async() => {
+    if (state.selection.startDate < new Date() || state.selection.startDate === new Date()) {
+      setError("正しい日付を選択して下さい。");
+      return }
     const params = {userId: currentUser.id,bookId: bookId.bookId, startDate: state.selection.startDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }), expiryDate: state.selection.endDate.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })};
-    const res = await createLending(params);
+    const res = await createReservation(params);
     if (res.data.status === "SUCCESS") {
-      navigate("/thankyouforlending", {state: { bookLent: true, bookLocation: res.data.location }})
+      navigate("/reservationcomplete", {state: { isReserved: true}})
     } else if (res.data.message){
       setError(res.data.message);
     }
@@ -151,7 +154,7 @@ export const Lending = () => {
               ranges={[state.selection]}
               onChange={(item) => handleSelect(item)}
               minDate={new Date()}
-              maxDate={addDays(new Date(), 14)}
+              maxDate={addMonths(new Date(), 3)}
               rangeColors={[Color.primary]}
               dateDisplayFormat={"yyyy/MM/dd"}
               monthDisplayFormat={"yyyy年MMM"}
@@ -161,24 +164,24 @@ export const Lending = () => {
             />
             </Calendar>
             <Detail>
-              <p>本を借りる期間を選択して下さい。（最大2週間)</p>
+              <p>予約する期間を選択して下さい。（最大2週間)</p>
               <table>
                 <tbody>
                   <tr>
-                    <th>貸出開始日</th><td>{format(state.selection.startDate, 'yyyy-MM-dd')}</td>
+                    <th>貸出開始日</th><td>{state.selection.startDate.getDate() === new Date().getDate() ? "" :format(state.selection.startDate, 'yyyy-MM-dd')}</td>
                   </tr>
                   <tr>
-                    <th>返却期限日</th><td>{format(state.selection.endDate, 'yyyy-MM-dd')}</td>
+                    <th>返却期限日</th><td>{state.selection.endDate.getDate() === new Date().getDate() ? "" :format(state.selection.endDate, 'yyyy-MM-dd')}</td>
                   </tr>
                 </tbody>
               </table>
-              <Rent onClick={() => {handleCreateLending()}}>この期間で借りる</Rent>
+              <Reserve onClick={() => {handleCreateReservation()}}>この期間で予約する</Reserve>
             </Detail>
             <ClearFix />
             <span>{error}</span>
           </>
         :
-          <EmptyGuide>書籍の情報を取得できません。書籍詳細画面からレンタル操作を行って下さい。</EmptyGuide>
+          <EmptyGuide>書籍の情報を取得できません。書籍詳細画面から予約操作を行って下さい。</EmptyGuide>
         }
       </Wrapper>
     </>

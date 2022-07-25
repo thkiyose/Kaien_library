@@ -4,12 +4,16 @@ export const fetchBooks = () => {
   return client.get("/books");
 };
 
+export const fetchBooksForAdmin = () => {
+  return client.get("/books/index_for_admin");
+};
+
 export const search = (params) => {
   return client.post(`/books/search`,params);
 };
 
-export const showBook = (book_id) => {
-  return client.get(`/books/${book_id}`);
+export const showBook = (book_id, current_user_id) => {
+  return client.get(`/books/${book_id}`, { params:{user_id: current_user_id}});
 };
 
 export const fetchBookInfo = (params) => {

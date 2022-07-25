@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   before_destroy :ensure_admin
 
   has_many :lendings, dependent: :nullify
+  has_many :reservations, dependent: :destroy
   has_many :books, through: :lendings
 
   validates :name, presence: true, length: { maximum: 15 }

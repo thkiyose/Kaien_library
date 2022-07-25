@@ -4,16 +4,20 @@ export const createLending = (params) => {
   return client.post("/lendings",params);
 };
 
+export const createLendingFromReservation = (params) => {
+  return client.post(`/lendings/create_from_reservation`,params);
+};
+
 export const fetchLendings = (params) => {
   return client.get(`/lendings/${params}`);
 };
 
-export const fetchLending = (params) => {
-  return client.get(`/lendings/${params}/fetch_lending`);
+export const fetchPreviousLendings = (params) => {
+  return client.get(`/lendings/${params}/show_previous`);
 };
 
-export const isCurrentUserLending = (params) => {
-  return client.post("/lendings/is_current_user_lending",params);
+export const fetchLending = (params) => {
+  return client.get(`/lendings/${params}/fetch_lending`);
 };
 
 export const returnBook = (lendingId,currentUserId) => {

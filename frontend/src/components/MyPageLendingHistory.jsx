@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
+import { Context } from '../App';
+import { fetchPreviousLendings } from '../lib/api/lending';
 import ReactPaginate from 'react-paginate';
-import { Wrapper } from './parts/Wrapper';
-import { deleteBook } from '../lib/api/book';
-import { fetchBooksForAdmin } from '../lib/api/book';
 
 const BackButton = styled.button`
   outline: 0;
@@ -15,35 +14,27 @@ const BackButton = styled.button`
   padding: 5px 15px;
   color: #FFFFFF;
   cursor: pointer;
+  margin-bottom: 10px;
 `
-const DeleteButton = styled.button`
-  outline: 0;
-  background: ${Color.primary};
-  font-size: 0.8rem;
-  border: 0;
-  padding: 5px 15px;
-  color: #FFFFFF;
-  cursor: pointer;
-  margin-left: 10px;
-`
-const Table = styled.table`
-  margin-top: 10px;
-  border: none;
+
+const Lendings = styled.table`
   border-collapse: collapse;
+  font-size: 0.9rem;
   width: 100%;
 `
-const Row = styled.tr`
+
+const LendingRow = styled.tr`
+  background-color: white;
+  th {
+    color: white;
+    background-color: ${Color.primary};
+    font-size: 0.8rem;
+  }
   td, th {
     padding: 5px;
-    border: none;
   }
   :nth-child(odd) {
-    background-color: #c2dbcf;
-  }
-  p {
-    margin: 0;
-    padding-left: 12px;
-    color: rgb(85, 85, 85);
+    background-color: rgb(241, 241, 241);
   }
 `
 
@@ -82,56 +73,50 @@ const MyPaginate = styled(ReactPaginate).attrs({
   }
 `
 
-export const AdminBookIndex = () => {
-  const [ books, setBooks ] = useState({});
-  const [ perPage ] = useState(18);
-  const [ start, setStart ] = useState(0);
+export const MyPageLendingHistory = () => {
   const navigate = useNavigate();
+  const [lendings, setLendings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { currentUser } = useContext(Context);
+  const [ perPage ] = useState(15);
+  const [ start, setStart ] = useState(0);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
 
-  const handleFetchBooks= async() => {
-    const res = await fetchBooksForAdmin();
-    setBooks(res.data.books);
-  }
-  useEffect(() => { handleFetchBooks() }, []);
+  useEffect(() => {
+    const fetchLendings = async () => {
+      const res = await fetchPreviousLendings(currentUser.id)
+      setLendings(res.data.lendings);
+      setIsLoading(false);
+    };
+    fetchLendings();
+  }, []);
 
-  const handleDeleteBook = async(book_id) => {
-    await deleteBook(book_id);
-    handleFetchBooks();
-  };
-
-  const canDelete = (isLent,isReserved,id) => {
-    if (isLent === true) {
-      return <p>貸出中</p>
-    } else if (isReserved === true) {
-      return <p>予約済み</p>
-    } else {
-      return <DeleteButton onClick={() => handleDeleteBook(id)}>削除</DeleteButton>
-    }
-  };
-
-
-  return(
-    <>
-      <Wrapper width={"800px"}>
+  if (isLoading === false) {
+    return(
+      <>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <Table>
+        <Lendings>
           <tbody>
-            {Object.keys(books).slice(start, start + perPage).map((key) => {
+            <LendingRow>
+              <th>タイトル</th><th>レンタル開始日</th><th>返却日</th>
+            </LendingRow>
+            {lendings.slice(start, start + perPage).map((lending,key)=> {
               return (
-                <Row key={key}>
-                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{canDelete(books[key].isLent,books[key].isReserved,books[key].id)}</td>
-                </Row>
+                <React.Fragment key={key}>
+                  <LendingRow>
+                    <td><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td>{lending.startDate}</td><td>{lending.finishedAt}</td>
+                  </LendingRow>
+                </React.Fragment>
               );
             })}
           </tbody>
-        </Table>
+        </Lendings>
         <MyPaginate
           onPageChange={handlePageChange}
-          pageCount={Math.ceil(books.length / perPage)}
+          pageCount={Math.ceil(lendings.length / perPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           containerClassName='pagination'
@@ -149,7 +134,7 @@ export const AdminBookIndex = () => {
           breakClassName='page-item'
           breakLinkClassName='page-link'
         />
-      </Wrapper>
-    </>
-  );
+      </>
+    );
+  }
 };
