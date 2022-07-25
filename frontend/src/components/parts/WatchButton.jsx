@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../App';
 import { addWatchList } from '../../lib/api/watchlist'
+import { fetchIsWatching } from '../../lib/api/watchlist'
 
 export const WatchButton = (props) => {
   const { currentUser } = useContext(Context);
@@ -8,13 +9,12 @@ export const WatchButton = (props) => {
   const bookId = props;
 
   useEffect(() => {
-    const fetchIsWatching = async () => {
-      const res = await fetchPreviousLendings(currentUser.id)
-      setLendings(res.data.lendings);
-      setIsLoading(false);
+    const handleFetchIsWatching = async () => {
+      const res = await fetchIsWatching(currentUser.id, bookId.bookId)
+      setIsWatching(res.data.isWatching);
     };
-    fetchLendings();
-  }, []);
+    handleFetchIsWatching();
+  }, [currentUser.id, bookId.bookId]);
 
   const handleAddWatchList = async() => {
     const res = await addWatchList({Id:currentUser.id, bookId: bookId.bookId})
