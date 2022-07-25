@@ -4,6 +4,8 @@ class Book < ApplicationRecord
   has_many :lendings
   has_many :lending_users, through: :lendings, source: :user
   has_many :reservations
+  has_many :watch_lists, dependent: :destroy
+  has_many :watch_users, through: :watch_lists, source: :user
 
   self.per_page = 18
 
