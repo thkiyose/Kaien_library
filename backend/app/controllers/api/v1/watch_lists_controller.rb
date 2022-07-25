@@ -8,4 +8,7 @@ class Api::V1::WatchListsController < ApplicationController
       render json: watch_list.errors, status: 422
     end
   end
+
+  def is_watching
+  end
 end
