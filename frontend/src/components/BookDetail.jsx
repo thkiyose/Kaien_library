@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Context } from '../App';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
-import { FavButton } from './parts/FavButton';
+import { WatchButton } from './parts/WatchButton';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
@@ -220,7 +220,7 @@ export const BookDetail = () => {
           <Top>
             <ImageDiv>
               {book.imageUrl ? <Image src={`http://localhost:3000/${book.id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-              <FavButton/>
+              <WatchButton/>
             </ImageDiv>
             <InfoDiv>
               <h1>{book.title}</h1>
