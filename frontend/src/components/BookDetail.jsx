@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Context } from '../App';
+import ReactPaginate from 'react-paginate';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
 import { WatchButton } from './parts/WatchButton';
@@ -172,7 +173,41 @@ const InsideTabPanel = styled.div`
     text-align:center;
   }
 `
+const MyPaginate = styled(ReactPaginate).attrs({
+  activeClassName: 'active',
+})`
+  margin: 0;
+  margin-left: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0 5rem;
 
+  li a {
+    border-radius: 7px;
+    padding: 0.1rem 1rem;
+    cursor: pointer;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: ${Color.primary};
+    color: white;
+    border-color: transparent;
+    min-width: 32px;
+  }
+  li.disabled a {
+    color: grey;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
+`
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const { currentUser } = useContext(Context);
@@ -296,6 +331,15 @@ const Button = (props) => {
 
 const InfoTab = (props) => {
   const lendings = props.lendings;
+  const [ perPage ] = useState(8);
+  const [ start, setStart ] = useState(0);
+  const [ currentPage, setCurrentPage ] = useState(0);
+
+  const handlePageChange = (e) => {
+    setStart(e.selected * perPage);
+    setCurrentPage(e.selected)
+  };
+
   return (
     <>
       <Tabs>
@@ -312,7 +356,7 @@ const InfoTab = (props) => {
           <InsideTabPanel>
             <table>
               <tbody>
-                {lendings.length > 0 ? lendings.map((lending,key)=>{ return(
+                {lendings.length > 0 ? lendings.slice(start, start + perPage).map((lending,key)=>{ return(
                   <React.Fragment key={key}>
                   {lending.finishedAt === null ?
                     <tr>
@@ -326,6 +370,27 @@ const InfoTab = (props) => {
               }) : <p>貸出履歴はありません。</p>}
             </tbody>
           </table>
+          <MyPaginate
+            forcePage={currentPage}
+            onPageChange={handlePageChange}
+            pageCount={Math.ceil(lendings.length / perPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            containerClassName='pagination'
+            pageClassName='page-item'
+            pageLinkClassName='page-link'
+            activeClassName='active'
+            previousLabel='<'
+            nextLabel='>'
+            previousClassName='page-item'
+            nextClassName='page-item'
+            previousLinkClassName='page-link'
+            nextLinkClassName='page-link'
+            disabledClassName='disabled'
+            breakLabel='...'
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+          />
           </InsideTabPanel>
         </TabPanel>
       </Tabs>
