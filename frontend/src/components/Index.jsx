@@ -13,12 +13,22 @@ const SearchBar = styled.div`
   padding-bottom: 5px;
   margin-left: 70px;
 `
-const Watch = styled.input`
+const Watch = styled.div`
+  input{
+    width: 60px;
+    border-radius: 50px;å
+  }
+  p {
+    width: 60px;
+    font-size: 0.3rem;
+    padding :0;
+    margin: 0;
+    text-align: center;
+  }
   width: 60px;
   margin: 0;
   float: left;
-  border-radius: 50px;
-  :hover {
+  input:hover {
   background-color: ${Color.text};
   transition-duration: 0.3s;
 `
@@ -189,6 +199,7 @@ export const Index = () => {
     setBooks(res.data.books);
     setStart(0);
     setCurrentPage(0);
+    setToggleFlag(false);
   };
 
   const handleResetSearch = async() => {
@@ -200,6 +211,7 @@ export const Index = () => {
     categoryRef.current.value= "カテゴリを選択";
     setStart(0);
     setCurrentPage(0);
+    setToggleFlag(false);
   };
 
   const showWatchList = async() => {
@@ -229,7 +241,7 @@ export const Index = () => {
           <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
           <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
         </SearchBar>
-        <Watch type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} onClick={()=>{showWatchList()}} />
+        {toggleFlag ? <Watch><input type="image" src={`${process.env.PUBLIC_URL}/home.png`} onClick={()=>{showWatchList()}} /><p>一覧に戻る</p></Watch> : <Watch><input type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} onClick={()=>{showWatchList()}} /><p>ウォッチ</p><p>リスト</p></Watch>}
         {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
