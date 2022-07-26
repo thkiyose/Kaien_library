@@ -126,6 +126,7 @@ const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
 })`
   margin: 0;
+  margin-left: 60px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -159,10 +160,12 @@ const MyPaginate = styled(ReactPaginate).attrs({
 const NotFound = styled.div`
   background-color: ${Color.text};
   margin-top: 20px;
-  padding: 20px;
+  margin-left: 70px;
+  padding: 10px;
   border-radius: 10px;
   text-align: center;
 `
+
 export const Index = () => {
   const [ books, setBooks ] = useState({});
   const [ searchParam, setSearchParam ] = useState({});
