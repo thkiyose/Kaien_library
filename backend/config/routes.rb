@@ -22,6 +22,9 @@ Rails.application.routes.draw do
         get 'fetch_locations', on: :collection
         post 'search', on: :collection
       end
+      resources :watch_lists, only: [:index, :create, :destroy] do
+        get 'is_watching', on: :collection
+      end
       resources :lendings, only: [:show,:create] do
         get 'show_previous', on: :member
         get 'fetch_lending', on: :member

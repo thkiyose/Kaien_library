@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Context } from '../App';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
+import { WatchButton } from './parts/WatchButton';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
@@ -219,7 +220,7 @@ export const BookDetail = () => {
           <Top>
             <ImageDiv>
               {book.imageUrl ? <Image src={`http://localhost:3000/${book.id}.jpg`} /> : <Image src={`${process.env.PUBLIC_URL}/noimage.png`} />}
-              <Link to="">★</Link>
+              <WatchButton bookId={book.id}/>
             </ImageDiv>
             <InfoDiv>
               <h1>{book.title}</h1>
@@ -311,7 +312,7 @@ const InfoTab = (props) => {
           <InsideTabPanel>
             <table>
               <tbody>
-                {lendings.map((lending,key)=>{ return(
+                {lendings.length > 0 ? lendings.map((lending,key)=>{ return(
                   <React.Fragment key={key}>
                   {lending.finishedAt === null ?
                     <tr>
@@ -322,7 +323,7 @@ const InfoTab = (props) => {
                     </tr>}
                   </React.Fragment>
                 );
-              })}
+              }) : <p>貸出履歴はありません。</p>}
             </tbody>
           </table>
           </InsideTabPanel>

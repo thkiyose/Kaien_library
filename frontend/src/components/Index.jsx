@@ -7,11 +7,34 @@ import styled from "styled-components";
 import Color from './parts/Color';
 import { fetchBooks } from '../lib/api/book';
 import { search } from '../lib/api/book';
+import { fetchWatchingBooks } from '../lib/api/watchlist';
 
 const SearchBar = styled.div`
   padding-bottom: 5px;
-  margin-left: 50px;
+  margin-left: 70px;
 `
+const Watch = styled.div`
+  input{
+    width: 60px;
+    border-radius: 50px;
+    height :50px;
+  }
+  p {
+    width: 60px;
+    font-size: 0.3rem;
+    padding :0;
+    margin: 0;
+    text-align: center;
+    color: ${Color.primary}
+  }
+  width: 60px;
+  margin: 0;
+  float: left;
+  input:hover {
+  background-color: ${Color.text};
+  transition-duration: 0.3s;
+`
+
 const SearchForm = styled.input`
   outline: 0;
   background: white;
@@ -55,7 +78,9 @@ const BookList = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0 auto;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
 `
 const ImageWrap = styled.li`
   width: 100px;
@@ -146,9 +171,11 @@ export const Index = () => {
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
+  const { currentUser } = useContext(Context);
   const { categories } = useContext(Context);
   const searchRef = useRef();
   const categoryRef = useRef();
+  const [ toggleFlag, setToggleFlag ] = useState(false);
 
   const handleFetchBooks= async() => {
     const res = await fetchBooks();
@@ -174,6 +201,7 @@ export const Index = () => {
     setBooks(res.data.books);
     setStart(0);
     setCurrentPage(0);
+    setToggleFlag(false);
   };
 
   const handleResetSearch = async() => {
@@ -185,11 +213,24 @@ export const Index = () => {
     categoryRef.current.value= "カテゴリを選択";
     setStart(0);
     setCurrentPage(0);
+    setToggleFlag(false);
   };
+
+  const showWatchList = async() => {
+    const res = await fetchWatchingBooks(currentUser.id, toggleFlag);
+    setBooks(res.data.books);
+    setSearchParam("");
+    setSearchCategory("");
+    searchRef.current.value = "";
+    categoryRef.current.value= "カテゴリを選択";
+    setStart(0);
+    setCurrentPage(0);
+    setToggleFlag(!toggleFlag)
+  }
 
   return(
     <>
-      <Wrapper width={"800px"}>
+      <Wrapper width={"800px"} minHeight={"580px"}>
         <SearchBar>
           <SearchCategory name="category" ref={categoryRef} onChange={(e)=>{handleChangeCategory(e)}}>
             <option hidden>カテゴリを選択</option>
@@ -202,6 +243,7 @@ export const Index = () => {
           <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
           <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
         </SearchBar>
+        {toggleFlag ? <Watch><input type="image" src={`${process.env.PUBLIC_URL}/home.png`} onClick={()=>{showWatchList()}} /><p>一覧に戻る</p></Watch> : <Watch><input type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} onClick={()=>{showWatchList()}} /><p>ウォッチ</p><p>リスト</p></Watch>}
         {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {

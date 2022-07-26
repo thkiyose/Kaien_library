@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :lendings, dependent: :nullify
   has_many :reservations, dependent: :destroy
   has_many :books, through: :lendings
+  has_many :watch_lists, dependent: :destroy
+  has_many :watch_books, through: :watch_lists, source: :book
 
   validates :name, presence: true, length: { maximum: 15 }
 
