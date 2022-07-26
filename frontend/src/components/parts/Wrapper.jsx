@@ -8,7 +8,7 @@ const WrapperDiv = styled.div`
   margin:100px auto 0px auto;
   width: ${props => props.width};
   min-height: ${props => props.minHeight};
-  padding: 40px;
+  padding: 30px;
   overflow: scroll;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
   a {

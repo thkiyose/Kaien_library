@@ -10,8 +10,14 @@ import { search } from '../lib/api/book';
 
 const SearchBar = styled.div`
   padding-bottom: 5px;
-  margin-left: 50px;
+  margin-left: 70px;
 `
+const Watch = styled.input`
+  width: 60px;
+  margin: 0;
+  float: left;
+`
+
 const SearchForm = styled.input`
   outline: 0;
   background: white;
@@ -55,7 +61,8 @@ const BookList = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
   min-height: 510px;
 `
 const ImageWrap = styled.li`
@@ -203,6 +210,7 @@ export const Index = () => {
           <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
           <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
         </SearchBar>
+                            <Watch type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} />
         {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
