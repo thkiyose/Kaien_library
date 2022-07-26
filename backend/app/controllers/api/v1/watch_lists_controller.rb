@@ -1,8 +1,13 @@
 class Api::V1::WatchListsController < ApplicationController
   def index
     user = User.find_by(id: params[:id])
-    books = user.watch_books.where(deleted:false)
-    render json: { books: books}
+    if params[:flag] == "false"
+      books = user.watch_books.where(deleted:false)
+      render json: { books: books}
+    elsif params[:flag] == "true"
+      books = Book.where(deleted:false)
+      render json: { books: books }
+    end
   end
 
   def create

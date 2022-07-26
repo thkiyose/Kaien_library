@@ -163,6 +163,7 @@ export const Index = () => {
   const { categories } = useContext(Context);
   const searchRef = useRef();
   const categoryRef = useRef();
+  const [ toggleFlag, setToggleFlag ] = useState(false);
 
   const handleFetchBooks= async() => {
     const res = await fetchBooks();
@@ -202,7 +203,7 @@ export const Index = () => {
   };
 
   const showWatchList = async() => {
-    const res = await fetchWatchingBooks(currentUser.id);
+    const res = await fetchWatchingBooks(currentUser.id, toggleFlag);
     setBooks(res.data.books);
     setSearchParam("");
     setSearchCategory("");
@@ -210,6 +211,7 @@ export const Index = () => {
     categoryRef.current.value= "カテゴリを選択";
     setStart(0);
     setCurrentPage(0);
+    setToggleFlag(!toggleFlag)
   }
 
   return(

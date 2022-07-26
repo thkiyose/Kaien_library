@@ -1,7 +1,7 @@
 import { client } from './client';
 
-export const fetchWatchingBooks = (current_user_id) => {
-  return client.get("/watch_lists",{params:{id:current_user_id}});
+export const fetchWatchingBooks = (current_user_id, flag) => {
+  return client.get("/watch_lists",{params:{id:current_user_id, flag: flag}});
 };
 
 export const addWatchList = (params) => {
