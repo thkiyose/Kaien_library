@@ -17,6 +17,10 @@ const Watch = styled.input`
   width: 60px;
   margin: 0;
   float: left;
+  border-radius: 50px;
+  :hover {
+  background-color: ${Color.text};
+  transition-duration: 0.3s;
 `
 
 const SearchForm = styled.input`
@@ -62,9 +66,9 @@ const BookList = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start;
   margin: 0;
   padding: 0;
-  min-height: 510px;
 `
 const ImageWrap = styled.li`
   width: 100px;
