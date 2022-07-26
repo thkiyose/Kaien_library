@@ -7563,6 +7563,15 @@
     "regenerator-runtime" "^0.13.9"
     "whatwg-fetch" "^3.6.2"
 
+"react-awesome-stars-rating@^0.13.0":
+  "integrity" "sha512-LuaNkCVubfnMUNonO0vLxUYRxmo/6DJjgw0PpOTZNunieN93cQVzgI+tUjwTlgiZazs1uttWV7gdpFzVP+BgWw=="
+  "resolved" "https://registry.npmjs.org/react-awesome-stars-rating/-/react-awesome-stars-rating-0.13.0.tgz"
+  "version" "0.13.0"
+  dependencies:
+    "prop-types" "^15.8.1"
+    "react" "^17.0.2"
+    "react-dom" "^17.0.2"
+
 "react-calendar@^3.3.1", "react-calendar@^3.7.0":
   "integrity" "sha512-zkK95zWLWLC6w3O7p3SHx/FJXEyyD2UMd4jr3CrKD+G73N+G5vEwrXxYQCNivIPoFNBjqoyYYGlkHA+TBDPLCw=="
   "resolved" "https://registry.npmjs.org/react-calendar/-/react-calendar-3.7.0.tgz"
