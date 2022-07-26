@@ -31,7 +31,7 @@ export const MyPage = () => {
 
   return (
     <>
-    <Wrapper width={"900px"} minHeight={"580px"}>
+    <Wrapper width={"900px"}>
       { currentUser ?
         <>
           <SideBar>
