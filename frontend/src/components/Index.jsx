@@ -16,7 +16,8 @@ const SearchBar = styled.div`
 const Watch = styled.div`
   input{
     width: 60px;
-    border-radius: 50px;å
+    border-radius: 50px;
+    height :50px;
   }
   p {
     width: 60px;
@@ -24,6 +25,7 @@ const Watch = styled.div`
     padding :0;
     margin: 0;
     text-align: center;
+    color: ${Color.primary}
   }
   width: 60px;
   margin: 0;
