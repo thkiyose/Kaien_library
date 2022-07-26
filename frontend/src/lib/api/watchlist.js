@@ -1,5 +1,9 @@
 import { client } from './client';
 
+export const fetchWatchingBooks = (current_user_id) => {
+  return client.get("/watch_lists",{params:{id:current_user_id}});
+};
+
 export const addWatchList = (params) => {
   return client.post("/watch_lists",params);
 };

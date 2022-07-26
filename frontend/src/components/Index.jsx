@@ -7,6 +7,7 @@ import styled from "styled-components";
 import Color from './parts/Color';
 import { fetchBooks } from '../lib/api/book';
 import { search } from '../lib/api/book';
+import { fetchWatchingBooks } from '../lib/api/watchlist';
 
 const SearchBar = styled.div`
   padding-bottom: 5px;
@@ -154,6 +155,7 @@ export const Index = () => {
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
   const navigate = useNavigate();
+  const { currentUser } = useContext(Context);
   const { categories } = useContext(Context);
   const searchRef = useRef();
   const categoryRef = useRef();
@@ -195,6 +197,17 @@ export const Index = () => {
     setCurrentPage(0);
   };
 
+  const showWatchList = async() => {
+    const res = await fetchWatchingBooks(currentUser.id);
+    setBooks(res.data.books);
+    setSearchParam("");
+    setSearchCategory("");
+    searchRef.current.value = "";
+    categoryRef.current.value= "カテゴリを選択";
+    setStart(0);
+    setCurrentPage(0);
+  }
+
   return(
     <>
       <Wrapper width={"800px"} minHeight={"580px"}>
@@ -210,7 +223,7 @@ export const Index = () => {
           <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
           <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
         </SearchBar>
-                            <Watch type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} />
+        <Watch type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} onClick={()=>{showWatchList()}} />
         {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
