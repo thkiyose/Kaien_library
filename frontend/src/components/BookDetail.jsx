@@ -4,6 +4,7 @@ import { Context } from '../App';
 import ReactPaginate from 'react-paginate';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
+import { ReviewForm } from './parts/ReviewForm';
 import { WatchButton } from './parts/WatchButton';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
@@ -349,7 +350,9 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            <p>レビュー</p>
+            <div>
+              <ReviewForm/>
+            </div>
           </InsideTabPanel>
         </TabPanel>
         <TabPanel>
