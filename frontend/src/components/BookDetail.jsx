@@ -312,7 +312,7 @@ const InfoTab = (props) => {
           <InsideTabPanel>
             <table>
               <tbody>
-                {lendings.map((lending,key)=>{ return(
+                {lendings.length > 0 ? lendings.map((lending,key)=>{ return(
                   <React.Fragment key={key}>
                   {lending.finishedAt === null ?
                     <tr>
@@ -323,7 +323,7 @@ const InfoTab = (props) => {
                     </tr>}
                   </React.Fragment>
                 );
-              })}
+              }) : <p>貸出履歴はありません。</p>}
             </tbody>
           </table>
           </InsideTabPanel>
