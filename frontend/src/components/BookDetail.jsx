@@ -269,7 +269,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab lendings={lendings} />
+          <InfoTab lendings={lendings} bookId={book.id} />
         </Wrapper>
       </>
     );
@@ -332,6 +332,7 @@ const Button = (props) => {
 
 const InfoTab = (props) => {
   const lendings = props.lendings;
+  const bookId = props.bookId;
   const [ perPage ] = useState(8);
   const [ start, setStart ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
@@ -351,7 +352,7 @@ const InfoTab = (props) => {
         <TabPanel>
           <InsideTabPanel>
             <div>
-              <ReviewForm/>
+              <ReviewForm bookId={bookId}/>
             </div>
           </InsideTabPanel>
         </TabPanel>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import ReactStarsRating from 'react-awesome-stars-rating';
+import { Context } from '../../App';
 import Color from './Color';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
@@ -32,21 +33,24 @@ const FormTable = styled.table`
   }
 `
 
-export const ReviewForm = () => {
+export const ReviewForm = (props) => {
   const { register, handleSubmit } = useForm();
+  const [ rating, setRating ] = useState(0);
+  const { currentUser } = useContext(Context);
+  const { bookId } = props;
 
   const onChange = (value) => {
-    console.log(`React Stars Rating value is ${value}`);
+    setRating(value);
   };
 
   const ReactStarsExample = ({ value }) => {
-  return <ReactStarsRating onChange={onChange} value={value} size={40} secondaryColor={`${Color.dark}`} starGap={10} />;
+  return <ReactStarsRating onChange={onChange} value={rating} size={40} secondaryColor={`${Color.dark}`} starGap={10} />;
 };
   return (
     <>
       <form onSubmit={handleSubmit(async(data) => {
         try {
-          const res = await createReview(data);
+          const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
           if (res.data.status === 'SUCCESS') {
             console.log(res);
           }
