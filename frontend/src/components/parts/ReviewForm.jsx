@@ -9,6 +9,7 @@ import { createReview } from '../../lib/api/review';
 const FormTable = styled.table`
   td {
     font-size: 0.9rem;
+    padding: 0;
   }
   input[type="submit"] {
     padding: 7px;
@@ -32,10 +33,14 @@ const FormTable = styled.table`
     margin: 0;
   }
 `
+const Error = styled.td`
+  text-align: center;
+  background-color: ${Color.warning};
+`
 
 export const ReviewForm = (props) => {
   const { register, handleSubmit } = useForm();
-  const [ rating, setRating ] = useState(null);
+  const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
   const { bookId } = props;
@@ -51,6 +56,10 @@ export const ReviewForm = (props) => {
     <>
       <form onSubmit={handleSubmit(async(data) => {
         try {
+          if (rating === 0) {
+            setError("評価を選択して下さい。")
+            return;
+          }
           const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
           if (res.data.status === 'SUCCESS') {
             console.log(res);
@@ -77,7 +86,7 @@ export const ReviewForm = (props) => {
               <td><input type="submit" value="レビューを投稿する"/></td>
             </tr>
             <tr>
-              <td>{error}</td>
+              <Error>{error}</Error>
             </tr>
           </tbody>
         </FormTable>
