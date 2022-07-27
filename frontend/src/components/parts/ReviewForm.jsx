@@ -35,7 +35,8 @@ const FormTable = styled.table`
 
 export const ReviewForm = (props) => {
   const { register, handleSubmit } = useForm();
-  const [ rating, setRating ] = useState(0);
+  const [ rating, setRating ] = useState(null);
+  const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
   const { bookId } = props;
 
@@ -56,6 +57,7 @@ export const ReviewForm = (props) => {
           }
         } catch (e) {
           console.log(e);
+          setError("投稿に失敗しました。");
         }})}>
         <FormTable>
           <tbody>
@@ -73,6 +75,9 @@ export const ReviewForm = (props) => {
             </tr>
             <tr>
               <td><input type="submit" value="レビューを投稿する"/></td>
+            </tr>
+            <tr>
+              <td>{error}</td>
             </tr>
           </tbody>
         </FormTable>
