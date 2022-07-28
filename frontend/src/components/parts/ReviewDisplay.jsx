@@ -4,13 +4,12 @@ import Color from './Color';
 import styled from "styled-components";
 
 export const ReviewDisplay = (props) => {
-  const [ userName, rating, comment ] = props;
-
+  const { userName, rating, comment } = props
   return (
-    <>
+    <div>
       <p>{userName}</p>
       <p>{rating}</p>
       <p>{comment}</p>
-    </>
+    </div>
   );
 };

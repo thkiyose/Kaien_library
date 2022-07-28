@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
 import { ReviewForm } from './parts/ReviewForm';
+import { ReviewDisplay } from './parts/ReviewDisplay';
 import { WatchButton } from './parts/WatchButton';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
@@ -241,7 +242,6 @@ export const BookDetail = () => {
       setIsLoading(false);
       const reviewRes = await showReviews(bookId);
       setReviews(reviewRes.data.reviews);
-      console.log(reviewRes)
     } catch(e) {
       console.log(e);
       setIsLoading(false);
@@ -359,9 +359,7 @@ const InfoTab = (props) => {
           <InsideTabPanel>
             <ReviewForm bookId={bookId}/>
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
-              <React.Fragment key={key}>
-                <p>{review.rating}</p>
-              </React.Fragment>
+              <ReviewDisplay key={key} userName={review.userId} rating={review.rating} comment={review.comment}/>
             );
           }) : <p>貸出履歴はありません。</p>}
           </InsideTabPanel>
