@@ -220,6 +220,7 @@ const MyPaginate = styled(ReactPaginate).attrs({
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const [ reviews, setReviews ] = useState([]);
+  const [ average, setAverage ] = useState(0);
   const { currentUser } = useContext(Context);
   const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
@@ -250,6 +251,7 @@ export const BookDetail = () => {
       const reviewRes = await showReviews(bookId,currentUserId);
       setReviews(reviewRes.data.reviews);
       setAlreadyReviewed(reviewRes.data.alreadyReviewed);
+      setAverage(reviewRes.data.average);
     } catch(e) {
       console.log(e);
       setIsLoading(false);
@@ -282,7 +284,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} setReviews={setReviews} alreadyReviewed={alreadyReviewed} setAlreadyReviewed={setAlreadyReviewed} />
+          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} setReviews={setReviews} alreadyReviewed={alreadyReviewed} setAlreadyReviewed={setAlreadyReviewed} average={average} setAverage={setAverage} />
         </Wrapper>
       </>
     );
@@ -344,7 +346,7 @@ const Button = (props) => {
 }
 
 const InfoTab = (props) => {
-  const { lendings, reviews, bookId, setReviews, alreadyReviewed, setAlreadyReviewed } = props;
+  const { lendings, reviews, bookId, setReviews, alreadyReviewed, setAlreadyReviewed, average, setAverage } = props;
   const [ perPage ] = useState(8);
   const [ start, setStart ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
@@ -368,8 +370,9 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
+            <p>{average}</p>
             {!showFormFlag && !alreadyReviewed && <button onClick={()=>{handleShowForm()}}>レビューを書きませんか？</button> }
-            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} />
+            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} />
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );

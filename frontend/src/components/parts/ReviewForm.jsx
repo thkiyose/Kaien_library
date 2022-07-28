@@ -56,7 +56,7 @@ export const ReviewForm = (props) => {
   const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed } = props;
+  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed, setAverage } = props;
 
   const onChange = (value) => {
     setRating(value);
@@ -78,6 +78,7 @@ export const ReviewForm = (props) => {
               const res = await showReviews(bookId,currentUser.id);
               setReviews(res.data.reviews)
               setAlreadyReviewed(res.data.alreadyReviewed)
+              setAverage(res.data.average)
               setShowFlag(false);
             }
           } catch (e) {
