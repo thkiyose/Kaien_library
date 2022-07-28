@@ -212,6 +212,7 @@ const MyPaginate = styled(ReactPaginate).attrs({
 `
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
+  const [ reviews, setReviews ] = useState([]);
   const { currentUser } = useContext(Context);
   const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
@@ -225,19 +226,21 @@ export const BookDetail = () => {
   const navigate = useNavigate();
   const bookId = useParams();
 
-  const handleShowBook = async(bookId,currentUserId) => {
+  const handleShowDatas = async(bookId,currentUserId) => {
     try {
-      const res = await showBook(bookId,currentUserId);
-      setBook(res.data.book);
-      setLendings(res.data.lendings);
-      setCategory(res.data.category);
+      const bookRes = await showBook(bookId,currentUserId);
+      setBook(bookRes.data.book);
+      setLendings(bookRes.data.lendings);
+      setCategory(bookRes.data.category);
       setIsEmpty(false);
-      setOtherUserReserved(res.data.otherUserReserved.isReserved);
-      setCurrentUserLending(res.data.currentUserLending);
-      setCurrentUserReserved(res.data.currentUserReserved.isReserved);
-      setOnGoingOtherUserReservation(res.data.otherUserReserved.onGoing);
-      setOnGoingCurrentUserReservation(res.data.currentUserReserved.onGoing);
+      setOtherUserReserved(bookRes.data.otherUserReserved.isReserved);
+      setCurrentUserLending(bookRes.data.currentUserLending);
+      setCurrentUserReserved(bookRes.data.currentUserReserved.isReserved);
+      setOnGoingOtherUserReservation(bookRes.data.otherUserReserved.onGoing);
+      setOnGoingCurrentUserReservation(bookRes.data.currentUserReserved.onGoing);
       setIsLoading(false);
+      const reviewRes = await showReviews(bookId);
+      setReviews(reviewRes.data.reviews)
     } catch(e) {
       console.log(e);
       setIsLoading(false);
@@ -245,7 +248,7 @@ export const BookDetail = () => {
   };
 
   useEffect(() => {
-   handleShowBook(bookId.id, currentUser.id);
+   handleShowDatas(bookId.id, currentUser.id);
  }, [bookId, currentUser]);
 
   if (!isLoading && !isEmpty) {
