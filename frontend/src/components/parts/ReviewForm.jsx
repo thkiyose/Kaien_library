@@ -45,55 +45,57 @@ export const ReviewForm = (props) => {
   const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId } = props;
+  const { bookId, showFlag, setShowFlag, setReviews } = props;
 
   const onChange = (value) => {
     setRating(value);
   };
   const ReactStarsForm = ({ value }) => {
-  return <ReactStarsRating onChange={onChange} value={rating} size={40} secondaryColor={`${Color.dark}`} starGap={10} isHalf={false} />;
+  return <ReactStarsRating id={"form"} onChange={onChange} value={rating} size={40} secondaryColor={`${Color.dark}`} starGap={10} isHalf={false} />;
 };
   return (
     <>
-      <form onSubmit={handleSubmit(async(data) => {
-        try {
-          if (rating === 0) {
-            setError("評価を選択して下さい。")
-            return;
-          }
-          const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
-          if (res.data.status === 'SUCCESS') {
-            const res = await showReviews(bookId);
-            props.setReviews(res.data.reviews)
-            // 見えなくする処理
-          }
-        } catch (e) {
-          console.log(e);
-          setError("投稿に失敗しました。");
-        }})}>
-        <FormTable>
-          <tbody>
-            <tr>
-              <td>評価</td>
-            </tr>
-            <tr>
-              <td><ReactStarsForm/></td>
-            </tr>
-            <tr>
-              <td>本の感想をお聞かせ下さい。（任意）</td>
-            </tr>
-            <tr>
-              <td><textarea name="comment" {...register("comment")}/></td>
-            </tr>
-            <tr>
-              <td><input type="submit" value="レビューを投稿する"/></td>
-            </tr>
-            <tr>
-              <Error>{error}</Error>
-            </tr>
-          </tbody>
-        </FormTable>
-      </form>
+      {showFlag &&
+        <form onSubmit={handleSubmit(async(data) => {
+          try {
+            if (rating === 0) {
+              setError("評価を選択して下さい。")
+              return;
+            }
+            const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
+            if (res.data.status === 'SUCCESS') {
+              const res = await showReviews(bookId);
+              setReviews(res.data.reviews)
+              setShowFlag(false);
+            }
+          } catch (e) {
+            console.log(e);
+            setError("投稿に失敗しました。");
+          }})}>
+          <FormTable>
+            <tbody>
+              <tr>
+                <td>評価</td>
+              </tr>
+              <tr>
+                <td><ReactStarsForm/></td>
+              </tr>
+              <tr>
+                <td>本の感想をお聞かせ下さい。（任意）</td>
+              </tr>
+              <tr>
+                <td><textarea name="comment" {...register("comment")}/></td>
+              </tr>
+              <tr>
+                <td><input type="submit" value="レビューを投稿する"/></td>
+              </tr>
+              <tr>
+                <Error>{error}</Error>
+              </tr>
+            </tbody>
+          </FormTable>
+        </form>
+      }
     </>
-  )
+  );
 }

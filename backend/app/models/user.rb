@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   has_many :books, through: :lendings
   has_many :watch_lists, dependent: :destroy
   has_many :watch_books, through: :watch_lists, source: :book
-  has_many :reviews
+  has_many :reviews, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 15 }
 

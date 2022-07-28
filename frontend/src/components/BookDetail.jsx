@@ -342,15 +342,20 @@ const Button = (props) => {
 }
 
 const InfoTab = (props) => {
-  const { lendings, reviews, bookId } = props;
+  const { lendings, reviews, bookId, setReviews } = props;
   const [ perPage ] = useState(8);
   const [ start, setStart ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
+  const [ showFormFlag, setShowFormFlag ] = useState(false);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
     setCurrentPage(e.selected)
   };
+
+  const handleShowForm = () => {
+    setShowFormFlag(true);
+  }
 
   return (
     <>
@@ -361,7 +366,8 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            <ReviewForm bookId={bookId} setReviews={props.setReviews} />
+            {!showFormFlag && <button onClick={()=>{handleShowForm()}}>レビューを書きませんか？</button> }
+            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} />
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );

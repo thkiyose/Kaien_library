@@ -32,7 +32,7 @@ export const ReviewDisplay = (props) => {
   const { userName, rating, comment, createdAt } = props;
 
   const ReactStarsReview = ({ value }) => {
-    return <ReactStarsRating value={rating} isEdit={false} size={20} Half={false} />;
+    return <ReactStarsRating id={"review"} value={rating} isEdit={false} size={20} Half={false} />;
   };
 
   return (
