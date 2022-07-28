@@ -1,4 +1,9 @@
 class Api::V1::ReviewsController < ApplicationController
+  def index
+    book = Book.find_by(id:params[:id])
+    render json: { reviews: book.reviews }
+  end
+
   def create
     review = Review.new(review_params)
     if review.save!
