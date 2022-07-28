@@ -9,6 +9,7 @@ import { WatchButton } from './parts/WatchButton';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
+import { showReviews } from '../lib/api/review';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../lib/styles/tab.css';
 
@@ -351,9 +352,7 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            <div>
-              <ReviewForm bookId={bookId}/>
-            </div>
+            <ReviewForm bookId={bookId}/>
           </InsideTabPanel>
         </TabPanel>
         <TabPanel>
