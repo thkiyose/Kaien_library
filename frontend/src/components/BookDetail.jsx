@@ -240,7 +240,8 @@ export const BookDetail = () => {
       setOnGoingCurrentUserReservation(bookRes.data.currentUserReserved.onGoing);
       setIsLoading(false);
       const reviewRes = await showReviews(bookId);
-      setReviews(reviewRes.data.reviews)
+      setReviews(reviewRes.data.reviews);
+      console.log(reviewRes)
     } catch(e) {
       console.log(e);
       setIsLoading(false);
@@ -273,7 +274,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab lendings={lendings} bookId={book.id} />
+          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} />
         </Wrapper>
       </>
     );
@@ -336,6 +337,7 @@ const Button = (props) => {
 
 const InfoTab = (props) => {
   const lendings = props.lendings;
+  const reviews = props.reviews;
   const bookId = props.bookId;
   const [ perPage ] = useState(8);
   const [ start, setStart ] = useState(0);
@@ -356,6 +358,12 @@ const InfoTab = (props) => {
         <TabPanel>
           <InsideTabPanel>
             <ReviewForm bookId={bookId}/>
+            {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
+              <React.Fragment key={key}>
+                <p>{review.rating}</p>
+              </React.Fragment>
+            );
+          }) : <p>貸出履歴はありません。</p>}
           </InsideTabPanel>
         </TabPanel>
         <TabPanel>
