@@ -20,6 +20,7 @@ const FormTable = styled.table`
     outline: 0;
     color: white;
     cursor: pointer;
+    font-size: 1rem;
     width: 100%;
     :hover {
       background-color: #0c797a;
@@ -38,6 +39,16 @@ const FormTable = styled.table`
 const Error = styled.td`
   text-align: center;
   background-color: ${Color.warning};
+`
+
+const Close = styled.td`
+  text-align: center;
+  button {
+    background-color: rgb(0,0,0,0);
+    border: none;
+    font-size: 1rem;
+    text-decoration: underline;
+  }
 `
 
 export const ReviewForm = (props) => {
@@ -91,6 +102,9 @@ export const ReviewForm = (props) => {
               </tr>
               <tr>
                 <Error>{error}</Error>
+              </tr>
+              <tr>
+                <Close><button onClick={()=>{setShowFlag(false)}}>☓閉じる</button></Close>
               </tr>
             </tbody>
           </FormTable>
