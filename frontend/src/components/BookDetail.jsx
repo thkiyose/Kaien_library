@@ -223,6 +223,7 @@ export const BookDetail = () => {
   const { currentUser } = useContext(Context);
   const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
+  const [ alreadyReviewed, setAlreadyReviewed ] = useState(false);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
   const [ otherUserReserved, setOtherUserReserved ] = useState(false);
   const [ currentUserReserved, setCurrentUserReserved ] = useState(false);
@@ -246,8 +247,9 @@ export const BookDetail = () => {
       setOnGoingOtherUserReservation(bookRes.data.otherUserReserved.onGoing);
       setOnGoingCurrentUserReservation(bookRes.data.currentUserReserved.onGoing);
       setIsLoading(false);
-      const reviewRes = await showReviews(bookId);
+      const reviewRes = await showReviews(bookId,currentUserId);
       setReviews(reviewRes.data.reviews);
+      setAlreadyReviewed(reviewRes.data.alreadyReviewed);
     } catch(e) {
       console.log(e);
       setIsLoading(false);
@@ -280,7 +282,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} setReviews={setReviews} />
+          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} setReviews={setReviews} alreadyReviewed={alreadyReviewed} setAlreadyReviewed={setAlreadyReviewed} />
         </Wrapper>
       </>
     );
@@ -342,7 +344,7 @@ const Button = (props) => {
 }
 
 const InfoTab = (props) => {
-  const { lendings, reviews, bookId, setReviews } = props;
+  const { lendings, reviews, bookId, setReviews, alreadyReviewed, setAlreadyReviewed } = props;
   const [ perPage ] = useState(8);
   const [ start, setStart ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
@@ -366,8 +368,8 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            {!showFormFlag && <button onClick={()=>{handleShowForm()}}>レビューを書きませんか？</button> }
-            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} />
+            {!showFormFlag && !alreadyReviewed && <button onClick={()=>{handleShowForm()}}>レビューを書きませんか？</button> }
+            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} />
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );

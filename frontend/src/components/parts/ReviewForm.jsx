@@ -56,7 +56,7 @@ export const ReviewForm = (props) => {
   const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId, showFlag, setShowFlag, setReviews } = props;
+  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed } = props;
 
   const onChange = (value) => {
     setRating(value);
@@ -75,8 +75,9 @@ export const ReviewForm = (props) => {
             }
             const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
             if (res.data.status === 'SUCCESS') {
-              const res = await showReviews(bookId);
+              const res = await showReviews(bookId,currentUser.id);
               setReviews(res.data.reviews)
+              setAlreadyReviewed(res.data.alreadyReviewed)
               setShowFlag(false);
             }
           } catch (e) {
