@@ -5,6 +5,7 @@ import Color from './Color';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 import { createReview } from '../../lib/api/review';
+import { showReviews } from '../../lib/api/review';
 
 const FormTable = styled.table`
   td {
@@ -49,7 +50,6 @@ export const ReviewForm = (props) => {
   const onChange = (value) => {
     setRating(value);
   };
-
   const ReactStarsForm = ({ value }) => {
   return <ReactStarsRating onChange={onChange} value={rating} size={40} secondaryColor={`${Color.dark}`} starGap={10} isHalf={false} />;
 };
@@ -63,7 +63,9 @@ export const ReviewForm = (props) => {
           }
           const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
           if (res.data.status === 'SUCCESS') {
-            console.log(res);
+            const res = await showReviews(bookId);
+            props.setReviews(res.data.reviews)
+            // 見えなくする処理
           }
         } catch (e) {
           console.log(e);

@@ -280,7 +280,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} />
+          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} setReviews={setReviews} />
         </Wrapper>
       </>
     );
@@ -342,9 +342,7 @@ const Button = (props) => {
 }
 
 const InfoTab = (props) => {
-  const lendings = props.lendings;
-  const reviews = props.reviews;
-  const bookId = props.bookId;
+  const { lendings, reviews, bookId } = props;
   const [ perPage ] = useState(8);
   const [ start, setStart ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
@@ -363,7 +361,7 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            <ReviewForm bookId={bookId}/>
+            <ReviewForm bookId={bookId} setReviews={props.setReviews} />
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );
