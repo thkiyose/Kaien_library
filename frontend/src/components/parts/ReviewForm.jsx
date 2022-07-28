@@ -11,6 +11,7 @@ const FormTable = styled.table`
     font-size: 0.9rem;
     padding: 0;
   }
+  span { cursor:pointer; }
   input[type="submit"] {
     padding: 7px;
     background-color: ${Color.primary};
@@ -49,8 +50,8 @@ export const ReviewForm = (props) => {
     setRating(value);
   };
 
-  const ReactStarsExample = ({ value }) => {
-  return <ReactStarsRating onChange={onChange} value={rating} size={40} secondaryColor={`${Color.dark}`} starGap={10} />;
+  const ReactStarsForm = ({ value }) => {
+  return <ReactStarsRating onChange={onChange} value={rating} size={40} secondaryColor={`${Color.dark}`} starGap={10} isHalf={false} />;
 };
   return (
     <>
@@ -74,7 +75,7 @@ export const ReviewForm = (props) => {
               <td>評価</td>
             </tr>
             <tr>
-              <td><ReactStarsExample/></td>
+              <td><ReactStarsForm/></td>
             </tr>
             <tr>
               <td>本の感想をお聞かせ下さい。（任意）</td>

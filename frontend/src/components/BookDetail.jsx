@@ -359,7 +359,7 @@ const InfoTab = (props) => {
           <InsideTabPanel>
             <ReviewForm bookId={bookId}/>
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
-              <ReviewDisplay key={key} userName={review.userId} rating={review.rating} comment={review.comment}/>
+              <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );
           }) : <p>貸出履歴はありません。</p>}
           </InsideTabPanel>

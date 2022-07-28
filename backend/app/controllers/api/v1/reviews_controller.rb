@@ -1,7 +1,7 @@
 class Api::V1::ReviewsController < ApplicationController
   def index
     book = Book.find_by(id:params[:id])
-    render json: { reviews: book.reviews.joins(:user).select(:name, :rating, :comment) }
+    render json: { reviews: book.reviews.joins(:user).select(:name, :rating, :comment, :created_at ) }
   end
 
   def create
