@@ -15,6 +15,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../lib/styles/tab.css';
 
 const Top = styled.div`
+  font-size: 0.9rem;
 `
 
 const BackButton = styled.button`
@@ -107,6 +108,7 @@ const Description = styled.div`
   margin: 20px auto;
   background-color:${Color.text};
   padding: 20px;
+  font-size: 0.9rem;
 `
 
 const ClearFix = styled.div`
@@ -176,6 +178,9 @@ const InsideTabPanel = styled.div`
     text-align:center;
   }
 `
+const NoReview = styled.p`
+  text-align: center;
+`
 const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
 })`
@@ -211,6 +216,7 @@ const MyPaginate = styled(ReactPaginate).attrs({
     cursor: default;
   }
 `
+
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const [ reviews, setReviews ] = useState([]);
@@ -361,7 +367,7 @@ const InfoTab = (props) => {
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );
-          }) : <p>貸出履歴はありません。</p>}
+          }) : <NoReview>まだレビューがありません。</NoReview>}
           </InsideTabPanel>
         </TabPanel>
         <TabPanel>
@@ -379,7 +385,7 @@ const InfoTab = (props) => {
                     </tr>}
                   </React.Fragment>
                 );
-              }) : <p>貸出履歴はありません。</p>}
+              }) : <tr><td>貸出履歴はありません。</td></tr>}
             </tbody>
           </table>
           <MyPaginate
