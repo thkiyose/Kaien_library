@@ -185,7 +185,7 @@ const NoReview = styled.p`
 const AverageDisplay = styled.div`
   text-align: center;
   background-color:${Color.secondary};
-  padding: 10px;
+  padding: 5px;
   width: 70%;
   margin: 20px auto;
     .datas span {
@@ -366,14 +366,21 @@ const Button = (props) => {
 
 const InfoTab = (props) => {
   const { lendings, reviews, bookId, setReviews, alreadyReviewed, setAlreadyReviewed, average, setAverage } = props;
-  const [ perPage ] = useState(8);
-  const [ start, setStart ] = useState(0);
-  const [ currentPage, setCurrentPage ] = useState(0);
+  const [ perPageHistory ] = useState(8);
+  const [ perPageReview ] = useState(4);
+  const [ startHistory, setStartHistory ] = useState(0);
+  const [ startReview, setStartReview] = useState(0);
+  const [ currentPageHistory, setCurrentPageHistory ] = useState(0);
+  const [ currentPageReview, setCurrentPageReview ] = useState(0);
   const [ showFormFlag, setShowFormFlag ] = useState(false);
 
-  const handlePageChange = (e) => {
-    setStart(e.selected * perPage);
-    setCurrentPage(e.selected)
+  const handlePageChangeHistory = (e) => {
+    setStartHistory(e.selected * perPageHistory);
+    setCurrentPageHistory(e.selected)
+  };
+  const handlePageChangeReview = (e) => {
+    setStartReview(e.selected * perPageReview);
+    setCurrentPageReview(e.selected)
   };
 
   const handleShowForm = () => {
@@ -396,17 +403,38 @@ const InfoTab = (props) => {
             </AverageDisplay>}
             {!showFormFlag && !alreadyReviewed && <ShowFormButton onClick={()=>{handleShowForm()}}>レビューを書く</ShowFormButton> }
             <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} />
-            {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
+            {reviews.length > 0 ? reviews.slice(startReview, startReview + perPageReview).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );
           }) : <NoReview>まだレビューがありません。</NoReview>}
+          <MyPaginate
+            forcePage={currentPageReview}
+            onPageChange={handlePageChangeReview}
+            pageCount={Math.ceil(reviews.length / perPageReview)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            containerClassName='pagination'
+            pageClassName='page-item'
+            pageLinkClassName='page-link'
+            activeClassName='active'
+            previousLabel='<'
+            nextLabel='>'
+            previousClassName='page-item'
+            nextClassName='page-item'
+            previousLinkClassName='page-link'
+            nextLinkClassName='page-link'
+            disabledClassName='disabled'
+            breakLabel='...'
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+          />
           </InsideTabPanel>
         </TabPanel>
         <TabPanel>
           <InsideTabPanel>
             <table>
               <tbody>
-                {lendings.length > 0 ? lendings.slice(start, start + perPage).map((lending,key)=>{ return(
+                {lendings.length > 0 ? lendings.slice(startHistory, startHistory + perPageHistory).map((lending,key)=>{ return(
                   <React.Fragment key={key}>
                   {lending.finishedAt === null ?
                     <tr>
@@ -421,9 +449,9 @@ const InfoTab = (props) => {
             </tbody>
           </table>
           <MyPaginate
-            forcePage={currentPage}
-            onPageChange={handlePageChange}
-            pageCount={Math.ceil(lendings.length / perPage)}
+            forcePage={currentPageHistory}
+            onPageChange={handlePageChangeHistory}
+            pageCount={Math.ceil(lendings.length / perPageHistory)}
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             containerClassName='pagination'

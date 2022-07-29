@@ -20,7 +20,7 @@ const DataRow = styled.tr`
 `
 const CommentRow = styled.tr`
   td {
-    padding: 5px !important;
+    padding: 3px !important;
   }
 `
 
