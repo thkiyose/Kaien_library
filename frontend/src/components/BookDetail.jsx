@@ -160,7 +160,7 @@ const YouReserved = styled.div`
 
 const InsideTabPanel = styled.div`
   padding: 10px 30px;
-      justify-content: right;
+  justify-content: right;
   table {
     margin: 0 auto;
     border-collapse: collapse;
@@ -187,9 +187,9 @@ const AverageDisplay = styled.div`
   background-color:${Color.secondary};
   padding: 5px;
   width: 70%;
-  margin: 20px auto;
+  margin: 10px auto;
     .datas span {
-      margin: 10px;
+      margin: 0px 10px;
     }
 `
 const ShowFormButton = styled.button`
@@ -398,13 +398,13 @@ const InfoTab = (props) => {
           <InsideTabPanel>
           {reviews.length > 0 &&
             <AverageDisplay>
-              <p><ReactStarsRating id={"average"} value={average} size={40} secondaryColor={`${Color.dark}`} starGap={1} isEdit={false} isHalf={true} /></p>
+              <p><ReactStarsRating id={"average"} value={average} size={30} secondaryColor={`${Color.dark}`} starGap={1} isEdit={false} isHalf={true} /></p>
               <p className={"datas"}><span>{reviews.length}件のレビュー</span><span>平均評価: {average}</span></p>
             </AverageDisplay>}
             {!showFormFlag && !alreadyReviewed && <ShowFormButton onClick={()=>{handleShowForm()}}>レビューを書く</ShowFormButton> }
             <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} />
             {reviews.length > 0 ? reviews.slice(startReview, startReview + perPageReview).map((review,key)=>{ return(
-              <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
+              <ReviewDisplay key={key} userId={review.userId} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );
           }) : <NoReview>まだレビューがありません。</NoReview>}
           <MyPaginate

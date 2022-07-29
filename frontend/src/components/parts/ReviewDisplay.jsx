@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactStarsRating from 'react-awesome-stars-rating';
+import { Context } from '../../App';
 import Color from './Color';
 import styled from "styled-components";
 
@@ -21,6 +22,16 @@ const DataRow = styled.tr`
 const CommentRow = styled.tr`
   td {
     padding: 3px !important;
+    font-size: 0.9rem;
+  }
+  .yourreview {
+    text-align: right;
+    span {
+      background-color: ${Color.light};
+      color: white;
+      padding: 3px;
+      border-radius: 10px;
+    }
   }
 `
 
@@ -30,7 +41,8 @@ const Data = styled.td`
 `
 
 export const ReviewDisplay = (props) => {
-  const { userName, rating, comment, createdAt } = props;
+  const { userId, userName, rating, comment, createdAt } = props;
+  const { currentUser } = useContext(Context);
 
   const ReactStarsReview = ({ value }) => {
     return <ReactStarsRating id={"review"} value={rating} isEdit={false} size={20} Half={false} />;
@@ -40,7 +52,7 @@ export const ReviewDisplay = (props) => {
     <Display>
       <tbody>
         <DataRow><Data>{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
-        <CommentRow><td><ReactStarsReview/></td></CommentRow>
+        <CommentRow><td><ReactStarsReview/></td>{userId === currentUser.id && <td className="yourreview"><span>あなたのレビュー</span></td>}</CommentRow>
         <CommentRow><td colSpan="2">{comment}</td></CommentRow>
       </tbody>
     </Display>
