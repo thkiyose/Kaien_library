@@ -10,9 +10,18 @@ const SideBar = styled.div`
   width: 20%;
   p {
     padding: 0;
+    text-align: center;
+    margin: 0;
   }
   ul {
-    padding: 0;
+    padding: 0px 0px 0px 15px;
+    a {
+      color: black;
+      padding: 5px;
+    }
+    a:hover {
+      background-color: ${Color.text};
+    }
   }
 `
 const Main = styled.div`
@@ -21,7 +30,7 @@ const Main = styled.div`
 `
 const Icon = styled.img`
   height: 60px;
-  margin-left: 45px;
+  margin: 0 auto;
   display: block;
 `
 const ClearFix = styled.div`
@@ -40,7 +49,8 @@ export const MyPage = () => {
         <>
           <SideBar>
             <Icon src={`${process.env.PUBLIC_URL}/user.png`} />
-            <p>{currentUser.name}のマイページ</p>
+            <p>{currentUser.name}</p>
+            <p>{currentUser.email}</p>
             <ul>
               <li><Link to="lendings">レンタル/予約一覧</Link></li>
               <li><Link to="reviews">投稿したレビュー</Link></li>
