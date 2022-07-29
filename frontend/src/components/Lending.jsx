@@ -8,7 +8,7 @@ import Color from './parts/Color';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { format, addDays, eachDayOfInterval } from 'date-fns';
+import { format, addDays, subDays, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
 import { fetchLendingsAndReservations } from '../lib/api/reservation';
 import { createLending } from '../lib/api/lending';
@@ -107,14 +107,32 @@ export const Lending = () => {
 
   const handleSelect = (item,disabled) => {
     const nearestDisabled = new Date(Math.min.apply(null,disabled));
-    if (item.selection.endDate < nearestDisabled) {
+    if (disabled.length > 0) {
+        if (item.selection.endDate < nearestDisabled) {
+          setState({
+            selection: {
+              startDate: new Date(),
+              endDate: item.selection.endDate,
+              key: 'selection'
+            }
+          })
+        } else {
+          setState({
+            selection: {
+              startDate: new Date(),
+              endDate: subDays(nearestDisabled, 1),
+              key: 'selection'
+            }
+          })
+        }
+    } else {
       setState({
         selection: {
           startDate: new Date(),
           endDate: item.selection.endDate,
           key: 'selection'
         }
-      });
+    })
     }
   };
 
