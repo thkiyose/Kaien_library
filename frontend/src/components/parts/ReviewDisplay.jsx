@@ -41,7 +41,7 @@ export const ReviewDisplay = (props) => {
       <tbody>
         <DataRow><Data>{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
         <CommentRow><td><ReactStarsReview/></td></CommentRow>
-        <CommentRow><td>{comment}</td></CommentRow>
+        <CommentRow><td colSpan="2">{comment}</td></CommentRow>
       </tbody>
     </Display>
   );

@@ -182,6 +182,24 @@ const InsideTabPanel = styled.div`
 const NoReview = styled.p`
   text-align: center;
 `
+const AverageDisplay = styled.div`
+  text-align: center;
+  background-color:${Color.secondary};
+  padding: 10px;
+  width: 70%;
+  margin: 20px auto;
+    .datas span {
+      margin: 10px;
+    }
+`
+const ShowFormButton = styled.button`
+  background-color: rgb(0,0,0,0);
+  border: none;
+  margin: 0 auto;
+  display: block;
+  font-size: 1rem;
+  text-decoration: underline;
+`
 const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
 })`
@@ -372,11 +390,11 @@ const InfoTab = (props) => {
         <TabPanel>
           <InsideTabPanel>
           {reviews.length > 0 &&
-            <div>
-              <ReactStarsRating id={"average"} value={average} size={30} secondaryColor={`${Color.dark}`} starGap={1} isEdit={false} isHalf={true} />
-              <span>{reviews.length}件のレビュー</span><span>平均評価: {average}</span>
-            </div>}
-            {!showFormFlag && !alreadyReviewed && <button onClick={()=>{handleShowForm()}}>レビューを書きませんか？</button> }
+            <AverageDisplay>
+              <p><ReactStarsRating id={"average"} value={average} size={40} secondaryColor={`${Color.dark}`} starGap={1} isEdit={false} isHalf={true} /></p>
+              <p className={"datas"}><span>{reviews.length}件のレビュー</span><span>平均評価: {average}</span></p>
+            </AverageDisplay>}
+            {!showFormFlag && !alreadyReviewed && <ShowFormButton onClick={()=>{handleShowForm()}}>レビューを書く</ShowFormButton> }
             <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} />
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
               <ReviewDisplay key={key} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
