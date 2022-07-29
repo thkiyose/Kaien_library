@@ -5,7 +5,7 @@ import Color from './parts/Color';
 import { Context } from '../App';
 import { Modal } from './parts/Modal';
 
-const MypageReviews = () => {
+export const MyPageReviews = () => {
   return (
     <p>test</p>
   );
