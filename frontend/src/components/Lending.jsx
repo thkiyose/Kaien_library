@@ -105,9 +105,9 @@ export const Lending = () => {
   };
   useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);
 
-  const handleSelect = (item) => {
-    const interval = (new Date() - item.selection.endDate) / 86400000;
-    if (interval > -14) {
+  const handleSelect = (item,disabled) => {
+    const nearestDisabled = new Date(Math.min.apply(null,disabled));
+    if (item.selection.endDate < nearestDisabled) {
       setState({
         selection: {
           startDate: new Date(),
@@ -115,15 +115,7 @@ export const Lending = () => {
           key: 'selection'
         }
       });
-    } else {
-      setState({
-        selection: {
-          startDate: item.selection.startDate,
-          endDate: addDays(item.selection.startDate, 14),
-          key: 'selection'
-        }
-      });
-    };
+    }
   };
 
   const handleCreateLending = async() => {
@@ -149,7 +141,7 @@ export const Lending = () => {
               locale={ja}
               moveRangeOnFirstSelection={false}
               ranges={[state.selection]}
-              onChange={(item) => handleSelect(item)}
+              onChange={(item) => handleSelect(item,disabled)}
               minDate={new Date()}
               maxDate={addDays(new Date(), 14)}
               rangeColors={[Color.primary]}

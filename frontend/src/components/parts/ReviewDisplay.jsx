@@ -26,6 +26,7 @@ const CommentRow = styled.tr`
 
 const Data = styled.td`
   vertical-align: middle;
+  width: 50%;
 `
 
 export const ReviewDisplay = (props) => {
