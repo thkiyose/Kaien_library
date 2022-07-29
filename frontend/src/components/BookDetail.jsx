@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../App';
 import ReactPaginate from 'react-paginate';
 import styled from "styled-components";
@@ -370,7 +371,11 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            <p>{average}</p>
+          {reviews.length > 0 &&
+            <div>
+              <ReactStarsRating id={"average"} value={average} size={30} secondaryColor={`${Color.dark}`} starGap={1} isEdit={false} isHalf={true} />
+              <span>{reviews.length}件のレビュー</span><span>平均評価: {average}</span>
+            </div>}
             {!showFormFlag && !alreadyReviewed && <button onClick={()=>{handleShowForm()}}>レビューを書きませんか？</button> }
             <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} />
             {reviews.length > 0 ? reviews.slice(start, start + perPage).map((review,key)=>{ return(
