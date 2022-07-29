@@ -5,15 +5,17 @@ import Color from './Color';
 import styled from "styled-components";
 
 const Display = styled.table`
-  background-color: ${Color.secondary};
+  background-color:white;
   margin: 30px auto !important;
   width: 80%;
+  margin: 0 auto;
+  border-collapse: collapse;
 `
 const DataRow = styled.tr`
   background-color: ${Color.primary};
   color: white;
   td {
-    padding: 5px 10px !important;
+    padding: 0px 10px !important;
   }
   td:nth-of-type(2) {
     text-align: right;
@@ -51,7 +53,7 @@ export const ReviewDisplay = (props) => {
   return (
     <Display>
       <tbody>
-        <DataRow><Data>{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
+        <DataRow><Data>投稿者:{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
         <CommentRow><td><ReactStarsReview/></td>{userId === currentUser.id && <td className="yourreview"><span>あなたのレビュー</span></td>}</CommentRow>
         <CommentRow><td colSpan="2">{comment}</td></CommentRow>
       </tbody>

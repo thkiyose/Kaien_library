@@ -37,7 +37,7 @@ Rails.application.routes.draw do
           get 'fetch_current_user_reservation', on: :member
       end
       resources :reviews, only: [:create,:destroy,:update,:index] do
-          get 'user_reviews', on: :member
+          get 'user_reviews', on: :collection
       end
       namespace :auth do
         resources :sessions, only: %i[index]

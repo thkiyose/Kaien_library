@@ -3,11 +3,28 @@ import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
 import { Context } from '../App';
-import { ReviewForm } from './parts/ReviewForm';
+import { fetchUserReviews } from '../lib/api/review';
+import { ReviewDisplay } from './parts/ReviewDisplay';
 import { Modal } from './parts/Modal';
 
 export const MyPageReviews = () => {
+  const { currentUser } = useContext(Context);
+  const [ reviews, setReviews ] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const res = await fetchUserReviews(currentUser.id)
+      setReviews(res.data.reviews);
+    };
+    fetchReviews();
+  }, [currentUser]);
+
   return (
-    <p>test</p>
+    <>
+    {reviews.length > 0 ? reviews.map((review,key)=>{ return(
+      <ReviewDisplay key={key} userId={currentUser.id} userName={currentUser.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
+    );
+  }) : <p>まだレビューがありません。</p>}
+  </>
   );
 }
