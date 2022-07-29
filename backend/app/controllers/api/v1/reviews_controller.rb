@@ -4,6 +4,11 @@ class Api::V1::ReviewsController < ApplicationController
     render json: { reviews: book.reviews.joins(:user).order(created_at: :desc).select(:user_id, :name, :rating, :comment, :created_at ), already_reviewed: book.reviews.where(user_id:params[:user_id]).exists?, average: book.reviews.average(:rating).round(1).to_f}
   end
 
+  def user_reviews
+    user = User.find_by(id: params[:user_id])
+    render json: { reviews: user.reviews.joins(:books).order(created_at: :desc).select(:user_id, :name, :rating, :comment, :book.title, :created_at )}
+  end
+
   def create
     review = Review.new(review_params)
     if review.save!
