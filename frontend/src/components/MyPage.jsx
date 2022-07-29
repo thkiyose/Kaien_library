@@ -38,6 +38,7 @@ export const MyPage = () => {
             <p>{currentUser.name}のマイページ</p>
             <ul>
               <li><Link to="lendings">レンタル/予約一覧</Link></li>
+              <li><Link to="reviews">投稿したレビュー</Link></li>
             </ul>
           </SideBar>
           <Main>
