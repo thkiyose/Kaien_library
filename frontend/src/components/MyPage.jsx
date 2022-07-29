@@ -19,7 +19,11 @@ const Main = styled.div`
   float: right;
   width: 80%;
 `
-
+const Icon = styled.img`
+  height: 60px;
+  margin-left: 45px;
+  display: block;
+`
 const ClearFix = styled.div`
   content: "";
   display: block;
@@ -35,6 +39,7 @@ export const MyPage = () => {
       { currentUser ?
         <>
           <SideBar>
+            <Icon src={`${process.env.PUBLIC_URL}/user.png`} />
             <p>{currentUser.name}のマイページ</p>
             <ul>
               <li><Link to="lendings">レンタル/予約一覧</Link></li>

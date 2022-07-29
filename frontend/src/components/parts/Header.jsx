@@ -20,7 +20,7 @@ const HeaderDiv = styled.div`
   }
 `
 const HeaderLink = styled.a`
-  display: inline;
+  display: block;
 `
 
 const HeaderNavLeft = styled.ul`
@@ -40,6 +40,14 @@ const HeaderNavRight = styled.ul`
     line-height:60px;
     padding: 0px 10px;
   }
+  li a {
+    display:inline-flex;
+    align-items: center;
+  }
+`
+const Icon  = styled.img`
+  height: 30px;
+  display: inline;
 `
 
 const Logo = styled.span`
@@ -59,7 +67,7 @@ export const Header = () => {
         {isSignedIn && currentUser.admin ? <li><HeaderLink href="/admin">管理画面</HeaderLink></li> : "" }
       </HeaderNavLeft>
       <HeaderNavRight>
-        {isSignedIn && <li><HeaderLink href="/mypage/lendings">ログイン中:{currentUser.email}</HeaderLink></li>}
+        {isSignedIn && <li><HeaderLink href="/mypage/lendings"><Icon src={`${process.env.PUBLIC_URL}/user.png`} />ログイン中:{currentUser.email}</HeaderLink></li>}
         {isSignedIn && <li><LogOut setCurrentUser={setCurrentUser} setIsSignedIn={setIsSignedIn} /></li>}
       </HeaderNavRight>
     </HeaderDiv>
