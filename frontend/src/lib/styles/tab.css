@@ -1,7 +1,5 @@
 .react-tabs {
   -webkit-tap-highlight-color: transparent;
-  max-height: 600px;
-  overflow: scroll;
 }
 
 .react-tabs__tab-list {

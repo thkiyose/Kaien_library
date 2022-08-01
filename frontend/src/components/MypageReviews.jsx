@@ -7,8 +7,9 @@ import { ReviewDisplay } from './parts/ReviewDisplay';
 export const MyPageReviews = () => {
   const { currentUser } = useContext(Context);
   const [ reviews, setReviews ] = useState([]);
+  const [ showForm, setShowForm] = useState(false);
 
-  const fetchReviews = useCallback(async () => {
+  const fetchReviews = useCallback(async() => {
     const res = await fetchUserReviews(currentUser.id)
     setReviews(res.data.reviews);
   },[currentUser.id]);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../App';
 import ReactPaginate from 'react-paginate';

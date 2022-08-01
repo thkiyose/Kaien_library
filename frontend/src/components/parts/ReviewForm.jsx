@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../../App';
 import Color from './Color';
@@ -8,6 +8,7 @@ import { createReview } from '../../lib/api/review';
 import { showReviews } from '../../lib/api/review';
 
 const FormTable = styled.table`
+  margin: 0 auto;
   td {
     font-size: 0.9rem;
     padding: 0;
@@ -52,11 +53,18 @@ const Close = styled.td`
 `
 
 export const ReviewForm = (props) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm({shouldUnregister:false});
   const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed, setAverage } = props;
+  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage } = props;
+
+  const setInitialValue = useCallback((initialComment,initialRating)=>{
+    setValue("comment",initialComment);
+    setRating(initialRating);
+  },[setValue]);
+
+  useEffect(()=>{setInitialValue(initialComment,initialRating)},[setInitialValue,initialComment,initialRating]);
 
   const onChange = (value) => {
     setRating(value);
@@ -100,7 +108,7 @@ export const ReviewForm = (props) => {
                 <td><textarea name="comment" {...register("comment")}/></td>
               </tr>
               <tr>
-                <td><input type="submit" value="レビューを投稿する"/></td>
+                {submitMessage ? <td><input type="submit" value={submitMessage}/></td> : <td><input type="submit" value="レビューを投稿する"/></td>}
               </tr>
               <tr>
                 <Error>{error}</Error>
