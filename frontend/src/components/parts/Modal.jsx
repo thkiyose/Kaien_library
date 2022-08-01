@@ -19,17 +19,20 @@ const OverLay = styled.div`
   align-items: center;
   justify-content: center;
 `
-
+const Buttons = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`
 const Button = styled.button`
   outline: 0;
+  font-size: 1.2rem;
   background: ${Color.primary};
   border: 0;
-  font-size: 1.2rem;
   padding: 15px;
   color: #FFFFFF;
   cursor: pointer;
-  margin:10px;
   width: 100px;
+  margin: 10px;
 `
 
 const YesButton = styled(Button)`
@@ -50,8 +53,10 @@ export const Modal = (props) => {
         <OverLay onClick={() => {handleCloseModal()}}>
         <ModalContent>
           <p>{message}</p>
-          <YesButton onClick={() => {yesAction()}}>はい</YesButton>
-          <NoButton onClick={() => {handleCloseModal()}}>いいえ</NoButton>
+          <Buttons>
+            <YesButton onClick={() => {yesAction()}}>はい</YesButton>
+            <NoButton onClick={() => {handleCloseModal()}}>いいえ</NoButton>
+          </Buttons>
         </ModalContent>
       </OverLay>
       </>}

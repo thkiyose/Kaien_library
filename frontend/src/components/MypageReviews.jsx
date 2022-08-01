@@ -28,6 +28,7 @@ export const MyPageReviews = () => {
           createdAt={review.createdAt}
           title={review.title}
           bookId={review.bookId}
+          reviewId={review.id}
           isEdit={true}
           />
       </React.Fragment>

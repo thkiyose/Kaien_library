@@ -6,7 +6,7 @@ class Api::V1::ReviewsController < ApplicationController
 
   def user_reviews
     user = User.find_by(id: params[:user_id])
-    render json: { reviews: user.reviews.joins(:book).order(created_at: :desc).select(:rating, :comment, :title, :created_at, :book_id )}
+    render json: { reviews: user.reviews.joins(:book).order(created_at: :desc).select(:id, :rating, :comment, :title, :created_at, :book_id )}
   end
 
   def create

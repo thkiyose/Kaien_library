@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../../App';
 import Color from './Color';
 import styled from "styled-components";
+import { Modal } from '../parts/Modal';
 
 const Display = styled.table`
   background-color:white;
@@ -60,24 +61,37 @@ const Data = styled.td`
 const Icon = styled.img`
   height: 1rem;
 `
-
 export const ReviewDisplay = (props) => {
-  const { userId, userName, rating, comment, createdAt, title, bookId, isEdit } = props;
+  const { userId, userName, rating, comment, createdAt, title, bookId, reviewId, isEdit } = props;
   const { currentUser } = useContext(Context);
+  const [ showModal, setShowModal] = useState(false);
+  const [ deleteTarget, setDeleteTarget ] = useState(0);
+
+  const handleShowModal = (reviewId) => {
+    setShowModal(true);
+    setDeleteTarget(reviewId);
+  }
+
+  const handleDeleteReview = (reviewId) => {
+
+  }
 
   const ReactStarsReview = ({ value }) => {
     return <ReactStarsRating id={"review"} value={rating} isEdit={false} size={20} Half={false} />;
   };
 
   return (
-    <Display>
-      <tbody>
-        { title &&  <TitleRow><Data colSpan="2"><Link to={`/books/${bookId}`}>{title}</Link></Data></TitleRow>}
-        <DataRow><Data>投稿者:{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
-        <CommentRow><td><ReactStarsReview/></td>{userId === currentUser.id && <td className="yourreview"><span>あなたのレビュー</span></td>}</CommentRow>
-        <CommentRow><td colSpan="2">{comment}</td></CommentRow>
-        { isEdit && <EditRow><td colSpan="3"><button><Icon src={`${process.env.PUBLIC_URL}/edit.png`} />編集</button><button><Icon src={`${process.env.PUBLIC_URL}/delete.png`} />削除</button></td></EditRow>}
-      </tbody>
-    </Display>
+    <>
+      <Display>
+        <tbody>
+          { title &&  <TitleRow><Data colSpan="2"><Link to={`/books/${bookId}`}>{title}</Link></Data></TitleRow>}
+          <DataRow><Data>投稿者:{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
+          <CommentRow><td><ReactStarsReview/></td>{userId === currentUser.id && <td className="yourreview"><span>あなたのレビュー</span></td>}</CommentRow>
+          <CommentRow><td colSpan="2">{comment}</td></CommentRow>
+          { isEdit && <EditRow><td colSpan="3"><button><Icon src={`${process.env.PUBLIC_URL}/edit.png`} />編集</button><button onClick={() =>{handleShowModal(reviewId)}}><Icon src={`${process.env.PUBLIC_URL}/delete.png`} />削除</button></td></EditRow>}
+        </tbody>
+      </Display>
+      <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にレビューを削除しますか？"} yesAction={()=>{console.log("aaa")}} />
+    </>
   );
 };
