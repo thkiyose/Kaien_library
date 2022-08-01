@@ -1,4 +1,6 @@
 class Api::V1::ReviewsController < ApplicationController
+  before_action :set_review, only: [:update,:destroy]
+
   def index
     book = Book.find_by(id:params[:book_id])
     render json: { reviews: book.reviews.joins(:user).order(created_at: :desc).select(:user_id, :name, :rating, :comment, :created_at ), already_reviewed: book.reviews.where(user_id:params[:user_id]).exists?, average: book.reviews.average(:rating).round(1).to_f}
@@ -18,6 +20,15 @@ class Api::V1::ReviewsController < ApplicationController
     end
   end
 
+  def update
+    review = Review.find_by_id(params[:id])
+    if review.update(review_params)
+      render json: { status: "SUCCESS"}
+    else
+      render json:  review.errors, status: 422
+    end
+  end
+
   def destroy
     review = Review.find_by_id(params[:id])
     if review.destroy
@@ -31,5 +42,9 @@ class Api::V1::ReviewsController < ApplicationController
 
   def review_params
     params.require(:review).permit(:user_id,:book_id,:rating,:comment)
+  end
+
+  def set_review
+    review = Review.find_by_id(params[:id])
   end
 end
