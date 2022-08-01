@@ -18,6 +18,15 @@ class Api::V1::ReviewsController < ApplicationController
     end
   end
 
+  def destroy
+    review = Review.find_by_id(params[:id])
+    if review.destroy
+      render json: { status:"SUCCESS"}
+    else
+      render json:  review.errors, status: 422
+    end
+  end
+
   private
 
   def review_params
