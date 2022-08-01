@@ -10,7 +10,7 @@ import { Modal } from './parts/Modal';
 export const MyPageReviews = () => {
   const { currentUser } = useContext(Context);
   const [ reviews, setReviews ] = useState([]);
-
+  
   useEffect(() => {
     const fetchReviews = async () => {
       const res = await fetchUserReviews(currentUser.id)
@@ -22,7 +22,9 @@ export const MyPageReviews = () => {
   return (
     <>
     {reviews.length > 0 ? reviews.map((review,key)=>{ return(
-      <ReviewDisplay key={key} userId={currentUser.id} userName={currentUser.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
+      <React.Fragment key={key}>
+        <ReviewDisplay userId={currentUser.id} userName={currentUser.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt} title={review.title} bookId={review.bookId}/>
+      </React.Fragment>
     );
   }) : <p>まだレビューがありません。</p>}
   </>

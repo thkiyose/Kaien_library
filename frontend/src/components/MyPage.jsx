@@ -14,7 +14,7 @@ const SideBar = styled.div`
     margin: 0;
   }
   ul {
-    padding: 0px 0px 0px 15px;
+    padding: 0px 0px 0px 20px;
     a {
       color: black;
       padding: 5px;

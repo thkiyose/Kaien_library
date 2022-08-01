@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../../App';
 import Color from './Color';
@@ -36,6 +37,10 @@ const CommentRow = styled.tr`
     }
   }
 `
+const TitleRow = styled(DataRow)`
+  background-color: ${Color.secondary};
+  color: black;
+`
 
 const Data = styled.td`
   vertical-align: middle;
@@ -43,9 +48,9 @@ const Data = styled.td`
 `
 
 export const ReviewDisplay = (props) => {
-  const { userId, userName, rating, comment, createdAt } = props;
+  const { userId, userName, rating, comment, createdAt, title, bookId } = props;
   const { currentUser } = useContext(Context);
-
+console.log(props)
   const ReactStarsReview = ({ value }) => {
     return <ReactStarsRating id={"review"} value={rating} isEdit={false} size={20} Half={false} />;
   };
@@ -53,6 +58,7 @@ export const ReviewDisplay = (props) => {
   return (
     <Display>
       <tbody>
+        { title &&  <TitleRow><Data colSpan="2"><Link to={`/books/${bookId}`}>{title}</Link></Data></TitleRow>}
         <DataRow><Data>投稿者:{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
         <CommentRow><td><ReactStarsReview/></td>{userId === currentUser.id && <td className="yourreview"><span>あなたのレビュー</span></td>}</CommentRow>
         <CommentRow><td colSpan="2">{comment}</td></CommentRow>
