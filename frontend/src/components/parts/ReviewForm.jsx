@@ -5,6 +5,7 @@ import Color from './Color';
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 import { createReview } from '../../lib/api/review';
+import { updateReview } from '../../lib/api/review';
 import { showReviews } from '../../lib/api/review';
 
 const FormTable = styled.table`
@@ -57,7 +58,7 @@ export const ReviewForm = (props) => {
   const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage, action } = props;
+  const { bookId, reviewId, showFlag, setShowFlag, setReviewsFunc, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage, action } = props;
 
   const setInitialValue = useCallback((initialComment,initialRating)=>{
     setValue("comment",initialComment);
@@ -85,11 +86,17 @@ export const ReviewForm = (props) => {
               const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
               if (res.data.status === 'SUCCESS') {
                 const res = await showReviews(bookId,currentUser.id);
-                setReviews(res.data.reviews)
+                setReviewsFunc(res.data.reviews)
                 setAlreadyReviewed(res.data.alreadyReviewed)
                 setAverage(res.data.average)
                 setShowFlag(false);
               }
+            } else if (action === "update") {
+                const res = await updateReview(reviewId, {rating: rating, comment: data.comment});
+                if (res.data.status === 'SUCCESS') {
+                  setReviewsFunc();
+                  setShowFlag(false);
+                }
             }
           } catch (e) {
             console.log(e);

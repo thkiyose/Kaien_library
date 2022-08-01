@@ -46,6 +46,7 @@ export const MyPageReviews = () => {
           reviewId={review.id}
           isEdit={true}
           handleDeleteReview={handleDeleteReview}
+          setReviewsFunc={fetchReviews}
           />
       </React.Fragment>
     );

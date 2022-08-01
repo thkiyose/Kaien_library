@@ -16,6 +16,6 @@ export const deleteReview = (review_id) => {
   return client.delete(`/reviews/${review_id}`);
 };
 
-export const updateReview = (review_id) => {
-  return client.patch(`/reviews/${review_id}`);
+export const updateReview = (review_id,params) => {
+  return client.patch(`/reviews/${review_id}`, params);
 };
