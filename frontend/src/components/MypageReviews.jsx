@@ -28,7 +28,6 @@ export const MyPageReviews = () => {
     } catch (e) {
       console.log(e);
     }
-
   }
 
   return (
