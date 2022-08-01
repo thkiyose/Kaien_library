@@ -72,10 +72,6 @@ export const ReviewDisplay = (props) => {
     setDeleteTarget(reviewId);
   }
 
-  const handleDeleteReview = (reviewId) => {
-
-  }
-
   const ReactStarsReview = ({ value }) => {
     return <ReactStarsRating id={"review"} value={rating} isEdit={false} size={20} Half={false} />;
   };
@@ -91,7 +87,7 @@ export const ReviewDisplay = (props) => {
           { isEdit && <EditRow><td colSpan="3"><button><Icon src={`${process.env.PUBLIC_URL}/edit.png`} />編集</button><button onClick={() =>{handleShowModal(reviewId)}}><Icon src={`${process.env.PUBLIC_URL}/delete.png`} />削除</button></td></EditRow>}
         </tbody>
       </Display>
-      <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にレビューを削除しますか？"} yesAction={()=>{console.log("aaa")}} />
+      <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にレビューを削除しますか？"} yesAction={()=>{props.handleDeleteReview(deleteTarget)}} />
     </>
   );
 };
