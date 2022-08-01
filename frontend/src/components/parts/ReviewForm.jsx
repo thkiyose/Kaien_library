@@ -57,7 +57,7 @@ export const ReviewForm = (props) => {
   const [ rating, setRating ] = useState(0);
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage } = props;
+  const { bookId, showFlag, setShowFlag, setReviews, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage, action } = props;
 
   const setInitialValue = useCallback((initialComment,initialRating)=>{
     setValue("comment",initialComment);
@@ -81,13 +81,15 @@ export const ReviewForm = (props) => {
               setError("評価を選択して下さい。")
               return;
             }
-            const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
-            if (res.data.status === 'SUCCESS') {
-              const res = await showReviews(bookId,currentUser.id);
-              setReviews(res.data.reviews)
-              setAlreadyReviewed(res.data.alreadyReviewed)
-              setAverage(res.data.average)
-              setShowFlag(false);
+            if (action === "create") {
+              const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
+              if (res.data.status === 'SUCCESS') {
+                const res = await showReviews(bookId,currentUser.id);
+                setReviews(res.data.reviews)
+                setAlreadyReviewed(res.data.alreadyReviewed)
+                setAverage(res.data.average)
+                setShowFlag(false);
+              }
             }
           } catch (e) {
             console.log(e);

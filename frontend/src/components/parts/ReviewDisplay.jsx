@@ -69,7 +69,7 @@ const FormDiv = styled.div`
 `
 
 export const ReviewDisplay = (props) => {
-  const { userId, userName, rating, comment, createdAt, title, bookId, reviewId, isEdit, submitMessage } = props;
+  const { userId, userName, rating, comment, createdAt, title, bookId, reviewId, isEdit } = props;
   const { currentUser } = useContext(Context);
   const [ showModal, setShowModal] = useState(false);
   const [ showForm, setShowForm] = useState(false);
@@ -102,7 +102,7 @@ export const ReviewDisplay = (props) => {
         </Display> }
       <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にレビューを削除しますか？"} yesAction={()=>{props.handleDeleteReview(deleteTarget)}} />
       <FormDiv>
-        <ReviewForm showFlag={showForm} setShowFlag={setShowForm} initialComment={comment} initialRating={rating} submitMessage={"レビューを更新する"}/>
+        <ReviewForm showFlag={showForm} setShowFlag={setShowForm} initialComment={comment} initialRating={rating} submitMessage={"レビューを更新する"} action={"update"}/>
       </FormDiv>
     </>
   );

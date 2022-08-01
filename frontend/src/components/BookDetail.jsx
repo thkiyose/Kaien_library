@@ -402,7 +402,7 @@ const InfoTab = (props) => {
               <p className={"datas"}><span>{reviews.length}件のレビュー</span><span>平均評価: {average}</span></p>
             </AverageDisplay>}
             {!showFormFlag && !alreadyReviewed && <ShowFormButton onClick={()=>{handleShowForm()}}>レビューを書く</ShowFormButton> }
-            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} />
+            <ReviewForm bookId={bookId} setReviews={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} action={"create"} />
             {reviews.length > 0 ? reviews.slice(startReview, startReview + perPageReview).map((review,key)=>{ return(
               <ReviewDisplay key={key} userId={review.userId} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
             );
