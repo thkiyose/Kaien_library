@@ -1,6 +1,6 @@
 import React from 'react';
-import { Wrapper } from './parts/Wrapper';
-import { BookForm } from './parts/BookForm';
+import { Wrapper } from '../parts/Wrapper';
+import { BookForm } from '../parts/BookForm';
 
 export const RegisterBook = () => {
   return (

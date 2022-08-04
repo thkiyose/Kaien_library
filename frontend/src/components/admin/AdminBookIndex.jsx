@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import Color from './parts/Color';
+import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
-import { Wrapper } from './parts/Wrapper';
-import { deleteBook } from '../lib/api/book';
-import { fetchBooksForAdmin } from '../lib/api/book';
+import { Wrapper } from '../parts/Wrapper';
+import { deleteBook } from '../../lib/api/book';
+import { fetchBooksForAdmin } from '../../lib/api/book';
 
 const BackButton = styled.button`
   outline: 0;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wrapper } from './parts/Wrapper';
+import { Wrapper } from '../parts/Wrapper';
 import { Link } from 'react-router-dom';
 
 const style= {
