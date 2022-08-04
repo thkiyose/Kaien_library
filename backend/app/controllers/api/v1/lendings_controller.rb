@@ -58,7 +58,7 @@ class Api::V1::LendingsController < ApplicationController
 
   def fetch_lending
     lending = Lending.find_by(id: params[:id])
-    render json: { book: lending.book, location: lending.book.location.location, user_id: lending.user.id }
+    render json: { book: lending.book, location: lending.book.location.location, user_id: lending.user.id, already_reviewed: lending.book.reviews.where(user_id: lending.user.id).exists? }
   end
 
   def return

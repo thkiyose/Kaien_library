@@ -6,6 +6,7 @@ import Color from './Color';
 
 const HeaderDiv = styled.div`
   background-color: ${Color.secondary};
+  z-index: 1000;
   height: 60px;
   position: fixed;
   top: 0;

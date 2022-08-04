@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
@@ -68,20 +68,20 @@ export const Return = () => {
   const [ isLoading, setIsLoading ] = useState(true);
   const [ book, setBook ] = useState({});
 
-  const handleFetchLending = async(lendingId) => {
+  const handleFetchLending = useCallback(async(lendingId) => {
     const res = await fetchLending(lendingId);
     setBook(res.data);
     if ( currentUser.id !== res.data.userId ){
       navigate("/mypage");
     };
     setIsLoading(false);
-  }
-  useEffect(() => { handleFetchLending(lendingId.id)},[]);
+  },[currentUser.id, navigate])
+  useEffect(() => { handleFetchLending(lendingId.id)},[handleFetchLending,lendingId.id]);
 
   const handleReturnBook = async(lendingId,currentUserId) => {
     const res = await returnBook(lendingId,currentUserId)
     if (res.data.status === "SUCCESS") {
-      navigate("/thankyouforreturn", {state: { bookReturned: true}})
+      navigate("/thankyouforreturn", {state: { bookReturned: true, alreadyReviewed: book.alreadyReviewed}})
     }
   };
 

@@ -90,6 +90,9 @@ const BookTitle = styled.td`
 const Status = styled.td`
   text-align: center;
 `
+const Location = styled.td`
+  text-align: center;
+`
 const ToReserve = styled.button`
   background-color: rgb(0,0,0,0);
   border: none;
@@ -147,14 +150,14 @@ export const MyPageLendings = () => {
                     {Date.parse(lending.expiryDate) < today.setHours(0, 0, 0, 0) ?
                       <>
                         <OveredRow className="overExpiry">
-                          <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                          <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><Location>{lending.location}</Location><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                         </OveredRow>
                         <Warning>
                           <td colSpan="5">返却期限を過ぎています。返却手続きを行って下さい。</td>
                         </Warning>
                       </> :
                       <LendingRow key={index}>
-                        <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><td>{lending.location}</td><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
+                        <BookTitle><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></BookTitle><td>{lending.startDate}</td><td>{lending.expiryDate}</td><Location>{lending.location}</Location><td><ReturnButton onClick={() => {navigate(`/return/${lending.id}`, { state:{ bookId: lending.bookId } })}}>返却</ReturnButton></td>
                       </LendingRow> }
                   </React.Fragment>
                 );
