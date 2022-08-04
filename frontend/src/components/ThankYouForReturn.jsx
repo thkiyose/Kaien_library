@@ -88,7 +88,8 @@ export const ThankYouForReturn= () => {
             showFlag={showForm}
             setShowFlag={setShowForm}
             action={"create"}
-            navigateTo={`/books/${bookId}`}
+            navigateTo={"/mypage/lendings"}
+            submitMessage={"レビューを投稿しマイページに戻る"}
             />
         </ReviewGuide>}
       </Wrapper>
