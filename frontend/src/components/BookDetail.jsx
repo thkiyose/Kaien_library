@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../App';
+import ReactPaginate from 'react-paginate';
 import styled from "styled-components";
 import { Wrapper } from './parts/Wrapper';
+import { ReviewForm } from './parts/ReviewForm';
+import { ReviewDisplay } from './parts/ReviewDisplay';
 import { WatchButton } from './parts/WatchButton';
 import Color from './parts/Color';
 import { useParams } from 'react-router-dom';
 import { showBook } from '../lib/api/book';
+import { showReviews } from '../lib/api/review';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../lib/styles/tab.css';
 
 const Top = styled.div`
+  font-size: 0.9rem;
 `
 
 const BackButton = styled.button`
@@ -103,6 +109,7 @@ const Description = styled.div`
   margin: 20px auto;
   background-color:${Color.text};
   padding: 20px;
+  font-size: 0.9rem;
 `
 
 const ClearFix = styled.div`
@@ -153,7 +160,7 @@ const YouReserved = styled.div`
 
 const InsideTabPanel = styled.div`
   padding: 10px 30px;
-      justify-content: right;
+  justify-content: right;
   table {
     margin: 0 auto;
     border-collapse: collapse;
@@ -172,12 +179,71 @@ const InsideTabPanel = styled.div`
     text-align:center;
   }
 `
+const NoReview = styled.p`
+  text-align: center;
+`
+const AverageDisplay = styled.div`
+  text-align: center;
+  background-color:${Color.secondary};
+  padding: 5px;
+  width: 70%;
+  margin: 10px auto;
+    .datas span {
+      margin: 0px 10px;
+    }
+`
+const ShowFormButton = styled.button`
+  background-color: rgb(0,0,0,0);
+  border: none;
+  margin: 0 auto;
+  display: block;
+  font-size: 1rem;
+  text-decoration: underline;
+`
+const MyPaginate = styled(ReactPaginate).attrs({
+  activeClassName: 'active',
+})`
+  margin: 0;
+  margin-left: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0 5rem;
+
+  li a {
+    border-radius: 7px;
+    padding: 0.1rem 1rem;
+    cursor: pointer;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: ${Color.primary};
+    color: white;
+    border-color: transparent;
+    min-width: 32px;
+  }
+  li.disabled a {
+    color: grey;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
+`
 
 export const BookDetail = () => {
   const [ book, setBook ] = useState({});
+  const [ reviews, setReviews ] = useState([]);
+  const [ average, setAverage ] = useState(0);
   const { currentUser } = useContext(Context);
   const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
+  const [ alreadyReviewed, setAlreadyReviewed ] = useState(false);
   const [ currentUserLending, setCurrentUserLending ] = useState(false);
   const [ otherUserReserved, setOtherUserReserved ] = useState(false);
   const [ currentUserReserved, setCurrentUserReserved ] = useState(false);
@@ -188,19 +254,23 @@ export const BookDetail = () => {
   const navigate = useNavigate();
   const bookId = useParams();
 
-  const handleShowBook = async(bookId,currentUserId) => {
+  const handleShowDatas = async(bookId,currentUserId) => {
     try {
-      const res = await showBook(bookId,currentUserId);
-      setBook(res.data.book);
-      setLendings(res.data.lendings);
-      setCategory(res.data.category);
+      const bookRes = await showBook(bookId,currentUserId);
+      setBook(bookRes.data.book);
+      setLendings(bookRes.data.lendings);
+      setCategory(bookRes.data.category);
       setIsEmpty(false);
-      setOtherUserReserved(res.data.otherUserReserved.isReserved);
-      setCurrentUserLending(res.data.currentUserLending);
-      setCurrentUserReserved(res.data.currentUserReserved.isReserved);
-      setOnGoingOtherUserReservation(res.data.otherUserReserved.onGoing);
-      setOnGoingCurrentUserReservation(res.data.currentUserReserved.onGoing);
+      setOtherUserReserved(bookRes.data.otherUserReserved.isReserved);
+      setCurrentUserLending(bookRes.data.currentUserLending);
+      setCurrentUserReserved(bookRes.data.currentUserReserved.isReserved);
+      setOnGoingOtherUserReservation(bookRes.data.otherUserReserved.onGoing);
+      setOnGoingCurrentUserReservation(bookRes.data.currentUserReserved.onGoing);
       setIsLoading(false);
+      const reviewRes = await showReviews(bookId,currentUserId);
+      setReviews(reviewRes.data.reviews);
+      setAlreadyReviewed(reviewRes.data.alreadyReviewed);
+      setAverage(reviewRes.data.average);
     } catch(e) {
       console.log(e);
       setIsLoading(false);
@@ -208,7 +278,7 @@ export const BookDetail = () => {
   };
 
   useEffect(() => {
-   handleShowBook(bookId.id, currentUser.id);
+   handleShowDatas(bookId.id, currentUser.id);
  }, [bookId, currentUser]);
 
   if (!isLoading && !isEmpty) {
@@ -233,7 +303,7 @@ export const BookDetail = () => {
             <ClearFix />
             <Description>{book.description}</Description>
           </Top>
-          <InfoTab lendings={lendings} />
+          <InfoTab lendings={lendings} bookId={book.id} reviews={reviews} setReviews={setReviews} alreadyReviewed={alreadyReviewed} setAlreadyReviewed={setAlreadyReviewed} average={average} setAverage={setAverage} />
         </Wrapper>
       </>
     );
@@ -268,7 +338,7 @@ const Button = (props) => {
       return <ReservationToLending onClick={()=>{navigate(`/reservationlending/${book.id}`, { state:{ bookId: book.id, userId: currentUser.id } })}}><p className="up">予約中:レンタルが可能になりました。</p><p className="bottom">レンタルに進む</p></ReservationToLending>
     // 貸出無し・ログインユーザーが予約中・予約期間外である=期間になるまで待機
   } else if (!book.isLent && currentUserReserved === true && onGoingCurrentUserReservation === false) {
-      return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタルが可能になるまでお待ち下さい。</p></YouReserved>
+      return <YouReserved backgroundColor={Color.dark}><p className="up">この本は予約中です。</p><p className="down">レンタル開始日までお待ち下さい。</p></YouReserved>
     // 貸出無し・他ユーザーが予約中・予約期間内である=予約可能
   } else if (!book.isLent && currentUserReserved === false && otherUserReserved === true && onGoingOtherUserReservation === true ) 　{
       return <Reservation onClick={() => {navigate("reservation", { state:{ bookId: book.id } })}}><p className="up">本日、他ユーザーに予約されています。</p><p className="bottom">別の日で予約する</p></Reservation>
@@ -295,7 +365,28 @@ const Button = (props) => {
 }
 
 const InfoTab = (props) => {
-  const lendings = props.lendings;
+  const { lendings, reviews, bookId, setReviews, alreadyReviewed, setAlreadyReviewed, average, setAverage } = props;
+  const [ perPageHistory ] = useState(8);
+  const [ perPageReview ] = useState(4);
+  const [ startHistory, setStartHistory ] = useState(0);
+  const [ startReview, setStartReview] = useState(0);
+  const [ currentPageHistory, setCurrentPageHistory ] = useState(0);
+  const [ currentPageReview, setCurrentPageReview ] = useState(0);
+  const [ showFormFlag, setShowFormFlag ] = useState(false);
+
+  const handlePageChangeHistory = (e) => {
+    setStartHistory(e.selected * perPageHistory);
+    setCurrentPageHistory(e.selected)
+  };
+  const handlePageChangeReview = (e) => {
+    setStartReview(e.selected * perPageReview);
+    setCurrentPageReview(e.selected)
+  };
+
+  const handleShowForm = () => {
+    setShowFormFlag(true);
+  }
+
   return (
     <>
       <Tabs>
@@ -305,14 +396,45 @@ const InfoTab = (props) => {
         </TabList>
         <TabPanel>
           <InsideTabPanel>
-            <p>レビュー</p>
+          {reviews.length > 0 &&
+            <AverageDisplay>
+              <p><ReactStarsRating id={"average"} value={average} size={30} secondaryColor={`${Color.dark}`} starGap={1} isEdit={false} isHalf={true} /></p>
+              <p className={"datas"}><span>{reviews.length}件のレビュー</span><span>平均評価: {average}</span></p>
+            </AverageDisplay>}
+            {!showFormFlag && !alreadyReviewed && <ShowFormButton onClick={()=>{handleShowForm()}}>レビューを書く</ShowFormButton> }
+            <ReviewForm bookId={bookId} setReviewsFunc={setReviews} showFlag={showFormFlag} setShowFlag={setShowFormFlag} setAlreadyReviewed={setAlreadyReviewed} setAverage={setAverage} action={"create"} />
+            {reviews.length > 0 ? reviews.slice(startReview, startReview + perPageReview).map((review,key)=>{ return(
+              <ReviewDisplay key={key} userId={review.userId} userName={review.name} rating={review.rating} comment={review.comment} createdAt={review.createdAt}/>
+            );
+          }) : <NoReview>まだレビューがありません。</NoReview>}
+          <MyPaginate
+            forcePage={currentPageReview}
+            onPageChange={handlePageChangeReview}
+            pageCount={Math.ceil(reviews.length / perPageReview)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            containerClassName='pagination'
+            pageClassName='page-item'
+            pageLinkClassName='page-link'
+            activeClassName='active'
+            previousLabel='<'
+            nextLabel='>'
+            previousClassName='page-item'
+            nextClassName='page-item'
+            previousLinkClassName='page-link'
+            nextLinkClassName='page-link'
+            disabledClassName='disabled'
+            breakLabel='...'
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+          />
           </InsideTabPanel>
         </TabPanel>
         <TabPanel>
           <InsideTabPanel>
             <table>
               <tbody>
-                {lendings.length > 0 ? lendings.map((lending,key)=>{ return(
+                {lendings.length > 0 ? lendings.slice(startHistory, startHistory + perPageHistory).map((lending,key)=>{ return(
                   <React.Fragment key={key}>
                   {lending.finishedAt === null ?
                     <tr>
@@ -323,9 +445,30 @@ const InfoTab = (props) => {
                     </tr>}
                   </React.Fragment>
                 );
-              }) : <p>貸出履歴はありません。</p>}
+              }) : <tr><td>貸出履歴はありません。</td></tr>}
             </tbody>
           </table>
+          <MyPaginate
+            forcePage={currentPageHistory}
+            onPageChange={handlePageChangeHistory}
+            pageCount={Math.ceil(lendings.length / perPageHistory)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            containerClassName='pagination'
+            pageClassName='page-item'
+            pageLinkClassName='page-link'
+            activeClassName='active'
+            previousLabel='<'
+            nextLabel='>'
+            previousClassName='page-item'
+            nextClassName='page-item'
+            previousLinkClassName='page-link'
+            nextLinkClassName='page-link'
+            disabledClassName='disabled'
+            breakLabel='...'
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+          />
           </InsideTabPanel>
         </TabPanel>
       </Tabs>

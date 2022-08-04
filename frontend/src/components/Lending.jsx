@@ -8,7 +8,7 @@ import Color from './parts/Color';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { format, addDays, eachDayOfInterval } from 'date-fns';
+import { format, addDays, subDays, eachDayOfInterval } from 'date-fns';
 import ja from 'date-fns/locale/ja';
 import { fetchLendingsAndReservations } from '../lib/api/reservation';
 import { createLending } from '../lib/api/lending';
@@ -105,25 +105,35 @@ export const Lending = () => {
   };
   useLayoutEffect(()=>{disableDates(bookId.bookId)},[bookId]);
 
-  const handleSelect = (item) => {
-    const interval = (new Date() - item.selection.endDate) / 86400000;
-    if (interval > -14) {
+  const handleSelect = (item,disabled) => {
+    const nearestDisabled = new Date(Math.min.apply(null,disabled));
+    if (disabled.length > 0) {
+        if (item.selection.endDate < nearestDisabled) {
+          setState({
+            selection: {
+              startDate: new Date(),
+              endDate: item.selection.endDate,
+              key: 'selection'
+            }
+          })
+        } else {
+          setState({
+            selection: {
+              startDate: new Date(),
+              endDate: subDays(nearestDisabled, 1),
+              key: 'selection'
+            }
+          })
+        }
+    } else {
       setState({
         selection: {
           startDate: new Date(),
           endDate: item.selection.endDate,
           key: 'selection'
         }
-      });
-    } else {
-      setState({
-        selection: {
-          startDate: item.selection.startDate,
-          endDate: addDays(item.selection.startDate, 14),
-          key: 'selection'
-        }
-      });
-    };
+    })
+    }
   };
 
   const handleCreateLending = async() => {
@@ -149,7 +159,7 @@ export const Lending = () => {
               locale={ja}
               moveRangeOnFirstSelection={false}
               ranges={[state.selection]}
-              onChange={(item) => handleSelect(item)}
+              onChange={(item) => handleSelect(item,disabled)}
               minDate={new Date()}
               maxDate={addDays(new Date(), 14)}
               rangeColors={[Color.primary]}

@@ -8,6 +8,7 @@ import { BookDetail } from './components/BookDetail';
 import { MyPage } from './components/MyPage';
 import { MyPageLendings } from './components/MyPageLendings';
 import { MyPageLendingHistory } from './components/MyPageLendingHistory';
+import { MyPageReviews } from './components/MyPageReviews';
 import { AdminMenu } from './components/AdminMenu';
 import { AdminBookIndex } from './components/AdminBookIndex';
 import { RegisterBook } from './components/RegisterBook';
@@ -118,6 +119,7 @@ export const App = () => {
             <Route path={"/mypage"} element={<LoggedInRoute currentUser={currentUser}><MyPage /></LoggedInRoute>} >
               <Route path={"lendings"} element={<MyPageLendings />} />
               <Route path={"history"} element={<MyPageLendingHistory />} />
+              <Route path={"reviews"} element={<MyPageReviews />} />
             </Route>
             <Route path={"/books"} element={<LoggedInRoute currentUser={currentUser}><Index /></LoggedInRoute>} />
             <Route path={"/books/:id"} element={<LoggedInRoute currentUser={currentUser}><BookDetail /></LoggedInRoute>} />

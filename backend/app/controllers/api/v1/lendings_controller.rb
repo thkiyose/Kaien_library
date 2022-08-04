@@ -11,7 +11,7 @@ class Api::V1::LendingsController < ApplicationController
                                             title: lending.book.title,
                                             book_id: lending.book.id,
                                             location: lending.book.location.location }}
-    reservations = user.reservations.where('expiry_date >= ?', Date.today).order(start_date: :desc).map{|reservation|{
+    reservations = user.reservations.where('expiry_date >= ?', Date.today).order(start_date: :asc).map{|reservation|{
                                             id: reservation.id,
                                             start_date: reservation.start_date,
                                             expiry_date: reservation.expiry_date,
@@ -58,7 +58,7 @@ class Api::V1::LendingsController < ApplicationController
 
   def fetch_lending
     lending = Lending.find_by(id: params[:id])
-    render json: { book: lending.book, location: lending.book.location.location, user_id: lending.user.id }
+    render json: { book: lending.book, location: lending.book.location.location, user_id: lending.user.id, already_reviewed: lending.book.reviews.where(user_id: lending.user.id).exists? }
   end
 
   def return
