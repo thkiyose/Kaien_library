@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { deleteBook } from '../../lib/api/book';
-import { fetchBooksForAdmin } from '../../lib/api/book';
+import { fetchBooksAdmin } from '../../lib/api/admin';
 import { search } from '../../lib/api/book';
 
 const Title = styled.h1`
@@ -150,7 +150,7 @@ export const AdminBookIndex = () => {
   }
 
   const handleFetchBooks= async() => {
-    const res = await fetchBooksForAdmin();
+    const res = await fetchBooksAdmin();
     setBooks(res.data.books);
   }
   useEffect(() => { handleFetchBooks() }, []);

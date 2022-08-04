@@ -7,11 +7,6 @@ class Api::V1::BooksController < ApplicationController
     render json: { books: books }
   end
 
-  def index_for_admin
-    books = Book.includes(:reservations).where(deleted:false).map{|book|{ id: book.id, title: book.title, is_lent: book.is_lent, is_reserved: book.reservations.any? }}
-    render json: { books: books }
-  end
-
   def search
     if params[:q].present? && params[:category].present?
       books = Book.where(deleted: false).where(['title like ? or author like ? or description like ? or published_year like ?',"%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%"]).where(category_id: params[:category])

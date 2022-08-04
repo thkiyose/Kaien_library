@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       resources :reviews, only: [:create,:destroy,:update,:index] do
           get 'user_reviews', on: :collection
       end
+      get 'admin/book_index'
       namespace :auth do
         resources :sessions, only: %i[index]
       end

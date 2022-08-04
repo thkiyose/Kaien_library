@@ -4,10 +4,6 @@ export const fetchBooks = () => {
   return client.get("/books");
 };
 
-export const fetchBooksForAdmin = () => {
-  return client.get("/books/index_for_admin");
-};
-
 export const search = (params) => {
   return client.post(`/books/search`,params);
 };
