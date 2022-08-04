@@ -1,26 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { deleteBook } from '../../lib/api/book';
 import { fetchBooksForAdmin } from '../../lib/api/book';
 
-const BackButton = styled.button`
-  outline: 0;
-  background: ${Color.primary};
-  font-size: 0.8rem;
-  border: 0;
-  padding: 5px 15px;
-  color: #FFFFFF;
-  cursor: pointer;
-`
 const DeleteButton = styled.button`
   outline: 0;
   background: ${Color.primary};
   font-size: 0.8rem;
   border: 0;
-  padding: 5px 15px;
+  padding: 5px 5px;
   color: #FFFFFF;
   cursor: pointer;
   margin-left: 10px;
@@ -32,9 +23,27 @@ const Table = styled.table`
   width: 100%;
 `
 const Row = styled.tr`
-  td, th {
-    padding: 5px;
+  th {
+    font-weight: normal;
+    background-color: ${Color.primary};
+    color: white;
+  }
+  td {
+    font-size: 0.9rem;
     border: none;
+  }
+  .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 85%;
+  }
+  .control {
+    width: 10%;
+    text-align: center;
+  }
+  .id {
+    text-align: center;
   }
   :nth-child(odd) {
     background-color: #c2dbcf;
@@ -85,7 +94,6 @@ export const AdminBookIndex = () => {
   const [ books, setBooks ] = useState({});
   const [ perPage ] = useState(18);
   const [ start, setStart ] = useState(0);
-  const navigate = useNavigate();
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -115,13 +123,15 @@ export const AdminBookIndex = () => {
 
   return(
     <>
-      <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
       <Table>
         <tbody>
+          <Row>
+            <th>ID</th><th>タイトル</th><th></th>
+          </Row>
           {Object.keys(books).slice(start, start + perPage).map((key) => {
             return (
               <Row key={key}>
-                <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{canDelete(books[key].isLent,books[key].isReserved,books[key].id)}</td>
+                <td className="id">{books[key].id}</td><td className="title"><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td className="control">{canDelete(books[key].isLent,books[key].isReserved,books[key].id)}</td>
               </Row>
             );
           })}
