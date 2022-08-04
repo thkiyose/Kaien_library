@@ -9,7 +9,7 @@ export const AdminData = () => {
     <>
       <Wrapper width={"1000px"}>
         <SideBar>
-        <p>aaa</p>
+          <p>aaa</p>
         </SideBar>
         <Main>
           <Outlet/>

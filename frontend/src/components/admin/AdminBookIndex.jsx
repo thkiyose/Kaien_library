@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { Context } from '../../App';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { deleteBook } from '../../lib/api/book';
 import { fetchBooksForAdmin } from '../../lib/api/book';
+import { search } from '../../lib/api/book';
+
+const Title = styled.h1`
+  margin: 0 auto;
+  font-size: 1.3rem;
+`
 
 const DeleteButton = styled.button`
   outline: 0;
@@ -17,7 +24,6 @@ const DeleteButton = styled.button`
   margin-left: 10px;
 `
 const Table = styled.table`
-  margin-top: 10px;
   border: none;
   border-collapse: collapse;
   width: 100%;
@@ -53,6 +59,44 @@ const Row = styled.tr`
     padding-left: 12px;
     color: rgb(85, 85, 85);
   }
+`
+const SearchForm = styled.input`
+  outline: 0;
+  background: white;
+  border: 0;
+  margin: 0 0 10px;
+  padding: 5px;
+  font-size: 0.8rem;
+  width: 40%;
+`
+const SearchCategory = styled.select`
+  outline: 0;
+  font-size: 0.8rem;
+  background: white;
+  border: 0;
+  padding: 5px;
+  margin-right: 10px;
+}
+`
+const SearchButton = styled.button`
+  padding: 5px;
+  font-size: 0.8rem;
+  background-color: ${Color.primary};
+  border: 0;
+  outline: 0;
+  color: white;
+  margin: 0px 5px;
+  cursor: pointer;
+`
+const ResetButton = styled.button`
+  padding: 5px;
+  font-size: 0.8rem;
+  background-color: ${Color.dark};
+  border: 0;
+  outline: 0;
+  color: white;
+  margin-left: 50px;
+  cursor: pointer;
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({
@@ -92,8 +136,14 @@ const MyPaginate = styled(ReactPaginate).attrs({
 
 export const AdminBookIndex = () => {
   const [ books, setBooks ] = useState({});
-  const [ perPage ] = useState(18);
+  const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
+  const { categories } = useContext(Context);
+  const searchRef = useRef();
+  const categoryRef = useRef();
+  const [ searchParam, setSearchParam ] = useState({});
+  const [ searchCategory, setSearchCategory ] = useState({});
+  const [ currentPage, setCurrentPage ] = useState(0);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -110,6 +160,32 @@ export const AdminBookIndex = () => {
     handleFetchBooks();
   };
 
+  const handleChangeSearchParam = (e) => {
+    setSearchParam(e.target.value);
+  };
+
+  const handleChangeCategory = async(e) => {
+    setSearchCategory(e.target.value);
+  };
+
+  const handleSearch = async(e) => {
+    const res = await search({q:searchParam,category:searchCategory});
+    setBooks(res.data.books);
+    setStart(0);
+    setCurrentPage(0);
+  };
+
+  const handleResetSearch = async() => {
+    const res = await search();
+    setBooks(res.data.books);
+    setSearchParam("");
+    setSearchCategory("");
+    searchRef.current.value = "";
+    categoryRef.current.value= "カテゴリを選択";
+    setStart(0);
+    setCurrentPage(0);
+  };
+
   const canDelete = (isLent,isReserved,id) => {
     if (isLent === true) {
       return <p>貸出中</p>
@@ -123,6 +199,19 @@ export const AdminBookIndex = () => {
 
   return(
     <>
+      <Title>書籍データ一覧</Title>
+      <div>
+        <SearchCategory name="category" ref={categoryRef} onChange={(e)=>{handleChangeCategory(e)}}>
+          <option hidden>カテゴリを選択</option>
+            {Object.keys(categories).map((key) => {
+              return (
+                <option key={key} value={categories[key].id}>{categories[key].category}</option>
+              );
+            })}
+        </SearchCategory>
+        <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
+        <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
+      </div>
       <Table>
         <tbody>
           <Row>
