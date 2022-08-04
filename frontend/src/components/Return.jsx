@@ -81,7 +81,7 @@ export const Return = () => {
   const handleReturnBook = async(lendingId,currentUserId) => {
     const res = await returnBook(lendingId,currentUserId)
     if (res.data.status === "SUCCESS") {
-      navigate("/thankyouforreturn", {state: { bookReturned: true, alreadyReviewed: book.alreadyReviewed}})
+      navigate("/thankyouforreturn", {state: { bookReturned: true, alreadyReviewed: book.alreadyReviewed, title: book.book.title}})
     }
   };
 
