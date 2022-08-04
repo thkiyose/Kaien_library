@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
-import { Wrapper } from '../parts/Wrapper';
 import { deleteBook } from '../../lib/api/book';
 import { fetchBooksForAdmin } from '../../lib/api/book';
 
@@ -116,40 +115,38 @@ export const AdminBookIndex = () => {
 
   return(
     <>
-      <Wrapper width={"800px"}>
-        <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <Table>
-          <tbody>
-            {Object.keys(books).slice(start, start + perPage).map((key) => {
-              return (
-                <Row key={key}>
-                  <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{canDelete(books[key].isLent,books[key].isReserved,books[key].id)}</td>
-                </Row>
-              );
-            })}
-          </tbody>
-        </Table>
-        <MyPaginate
-          onPageChange={handlePageChange}
-          pageCount={Math.ceil(books.length / perPage)}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          containerClassName='pagination'
-          pageClassName='page-item'
-          pageLinkClassName='page-link'
-          activeClassName='active'
-          previousLabel='<'
-          nextLabel='>'
-          previousClassName='page-item'
-          nextClassName='page-item'
-          previousLinkClassName='page-link'
-          nextLinkClassName='page-link'
-          disabledClassName='disabled'
-          breakLabel='...'
-          breakClassName='page-item'
-          breakLinkClassName='page-link'
-        />
-      </Wrapper>
+      <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
+      <Table>
+        <tbody>
+          {Object.keys(books).slice(start, start + perPage).map((key) => {
+            return (
+              <Row key={key}>
+                <td><Link to={`/books/${books[key].id}`}>{books[key].title}</Link></td><td>{canDelete(books[key].isLent,books[key].isReserved,books[key].id)}</td>
+              </Row>
+            );
+          })}
+        </tbody>
+      </Table>
+      <MyPaginate
+        onPageChange={handlePageChange}
+        pageCount={Math.ceil(books.length / perPage)}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        containerClassName='pagination'
+        pageClassName='page-item'
+        pageLinkClassName='page-link'
+        activeClassName='active'
+        previousLabel='<'
+        nextLabel='>'
+        previousClassName='page-item'
+        nextClassName='page-item'
+        previousLinkClassName='page-link'
+        nextLinkClassName='page-link'
+        disabledClassName='disabled'
+        breakLabel='...'
+        breakClassName='page-item'
+        breakLinkClassName='page-link'
+      />
     </>
   );
 };
