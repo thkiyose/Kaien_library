@@ -10,7 +10,6 @@ import ReactPaginate from 'react-paginate';
 export const MyPageReviews = () => {
   const { currentUser } = useContext(Context);
   const [ reviews, setReviews ] = useState([]);
-  const [ showForm, setShowForm] = useState(false);
   const [ perPage ] = useState(4);
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
