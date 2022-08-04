@@ -54,6 +54,7 @@ export const ThankYouForReturn= () => {
   const { bookReturned } = location.state;
   const { alreadyReviewed } = location.state;
   const { title } = location.state;
+  const { bookId } = location.state;
   const navigate = useNavigate();
   const [ showForm, setShowForm] = useState(false);
 
@@ -83,9 +84,11 @@ export const ThankYouForReturn= () => {
           <p>いかがでしたか？あなたの感想を是非お寄せ下さい！{ !showForm && <button onClick={()=>{handleShowForm()}}>レビューを書く</button> }</p>
           { showForm && <Title>{title}</Title> }
           <ReviewForm
+            bookId={bookId}
             showFlag={showForm}
             setShowFlag={setShowForm}
             action={"create"}
+            navigateTo={`/books/${bookId}`}
             />
         </ReviewGuide>}
       </Wrapper>

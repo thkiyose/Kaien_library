@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../../App';
 import Color from './Color';
@@ -56,9 +57,10 @@ const Close = styled.td`
 export const ReviewForm = (props) => {
   const { register, handleSubmit, setValue } = useForm({shouldUnregister:false});
   const [ rating, setRating ] = useState(0);
+  const navigate = useNavigate();
   const [ error, setError ] = useState("");
   const { currentUser } = useContext(Context);
-  const { bookId, reviewId, showFlag, setShowFlag, setReviewsFunc, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage, action } = props;
+  const { bookId, reviewId, showFlag, setShowFlag, setReviewsFunc, setAlreadyReviewed, setAverage, initialComment, initialRating, submitMessage, action, navigateTo } = props;
 
   const setInitialValue = useCallback((initialComment,initialRating)=>{
     setValue("comment",initialComment);
@@ -86,10 +88,11 @@ export const ReviewForm = (props) => {
               const res = await createReview({user_id: currentUser.id, book_id: bookId, rating: rating,comment:data.comment});
               if (res.data.status === 'SUCCESS') {
                 const res = await showReviews(bookId,currentUser.id);
-                setReviewsFunc(res.data.reviews)
-                setAlreadyReviewed(res.data.alreadyReviewed)
-                setAverage(res.data.average)
+                if (typeof(setReviewsFunc) === "function") { setReviewsFunc(res.data.reviews) }
+                if (typeof(setAlreadyReviewed) === "function") { setAlreadyReviewed(res.data.alreadyReviewed) }
+                if (typeof(setAverage) === "function") { setAverage(res.data.average) }
                 setShowFlag(false);
+                if (navigateTo) { navigate(navigateTo) }
               }
             } else if (action === "update") {
                 const res = await updateReview(reviewId, {rating: rating, comment: data.comment});
