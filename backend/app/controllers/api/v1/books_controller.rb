@@ -57,15 +57,6 @@ class Api::V1::BooksController < ApplicationController
     end
   end
 
-  def delete_book
-    book = Book.find_by(id: params[:id])
-    if book.is_lent == false && !Reservation.where(book_id: book.id).exists?
-      book.update(deleted:true)
-    else
-      render json: {message:"貸出中につき削除出来ません。"}
-    end
-  end
-
   private
 
   def book_params

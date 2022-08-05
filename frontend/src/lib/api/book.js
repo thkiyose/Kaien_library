@@ -27,7 +27,3 @@ export const fetchLocations = () => {
 export const createBook = (params) => {
   return client.post("/books",params);
 };
-
-export const deleteBook = (book_id) => {
-  return client.patch(`books/${book_id}/delete_book`);
-};

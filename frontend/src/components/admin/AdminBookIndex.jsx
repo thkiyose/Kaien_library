@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
-import { deleteBook } from '../../lib/api/book';
+import { deleteBook } from '../../lib/api/admin';
 import { fetchBooksAdmin } from '../../lib/api/admin';
 import { searchBooks } from '../../lib/api/admin';
 
