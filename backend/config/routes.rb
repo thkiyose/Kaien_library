@@ -40,7 +40,9 @@ Rails.application.routes.draw do
         get 'user_reviews', on: :collection
       end
       namespace :admin do
-        get 'book_index'
+        resources :books, only: [:index,:destroy] do
+          get "search", on: :collection
+        end
         get 'user_index'
         post 'search_books'
       end

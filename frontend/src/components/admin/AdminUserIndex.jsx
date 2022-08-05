@@ -12,7 +12,7 @@ export const AdminUserIndex = () => {
   const [ start, setStart ] = useState(0);
   const { currentUser } = useContext(Context);
   const searchRef = useRef();
-  const [ searchParam, setSearchParam ] = useState({});
+  const [ searchParam, setSearchParam ] = useState("");
   const [ currentPage, setCurrentPage ] = useState(0);
 
   const handlePageChange = (e) => {

@@ -1,13 +1,13 @@
 import { client } from './client';
 
 export const fetchBooksAdmin = () => {
-  return client.get("/admin/book_index");
+  return client.get("/admin/books");
 };
 
 export const fetchUsersAdmin = () => {
-  return client.get("/admin/user_index");
+  return client.get("/admin/users");
 };
 
-export const searchBooks = (params) => {
-  return client.post(`/admin/search_books`,params);
+export const searchBooks = (free_word,category_id) => {
+  return client.get(`/admin/books/search`, { params:{q : free_word, category :category_id}});
 };

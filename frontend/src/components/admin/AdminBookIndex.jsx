@@ -141,8 +141,8 @@ export const AdminBookIndex = () => {
   const { categories } = useContext(Context);
   const searchRef = useRef();
   const categoryRef = useRef();
-  const [ searchParam, setSearchParam ] = useState({});
-  const [ searchCategory, setSearchCategory ] = useState({});
+  const [ searchParam, setSearchParam ] = useState("");
+  const [ searchCategory, setSearchCategory ] = useState("");
   const [ currentPage, setCurrentPage ] = useState(0);
 
   const handlePageChange = (e) => {
@@ -170,7 +170,7 @@ export const AdminBookIndex = () => {
   };
 
   const handleSearch = async(e) => {
-    const res = await searchBooks({q:searchParam,category:searchCategory});
+    const res = await searchBooks(searchParam,searchCategory);
     setBooks(res.data.books);
     setStart(0);
     setCurrentPage(0);
