@@ -8,15 +8,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def search
-    if params[:q].present? && params[:category].present?
-      books = Book.where(deleted: false).where(['title like ? or author like ? or description like ? or published_year like ?',"%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%"]).where(category_id: params[:category])
-    elsif params[:q].present? && !params[:category].present?
-      books = Book.where(deleted: false).where(['title like ? or author like ? or description like ? or published_year like ?',"%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%","%#{params[:q]}%"])
-    elsif !params[:q].present? && params[:category].present?
-      books = Book.where(deleted: false).where(category_id: params[:category])
-    elsif !params[:q].present? && !params[:category].present?
-      books = Book.where(deleted:false)
-    end
+    books = Book.where(deleted: false).search_with_free_word(params[:q]).search_with_category(params[:category])
     render json: { books: books }
   end
 

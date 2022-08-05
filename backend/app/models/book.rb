@@ -20,6 +20,7 @@ class Book < ApplicationRecord
   validates :version, length: { maximum: 2 }
 
   scope :search_with_free_word, -> (word){
+    return if word.blank?
     where(['title like ? or author like ? or description like ? or published_year like ?',"%#{word}%","%#{word}%","%#{word}%","%#{word}%"])
   }
   scope :search_with_category, -> (category_id){
