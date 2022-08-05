@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   private
 
   def email_downcase
-    self.email.downcase!
+    self.email.downcase! if self.email
   end
 
   def ensure_admin

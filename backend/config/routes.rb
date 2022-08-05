@@ -42,8 +42,7 @@ Rails.application.routes.draw do
         resources :books, only: [:index,:destroy] do
           get "search", on: :collection
         end
-        get 'user_index'
-        post 'search_books'
+        resources :users, only: [:index, :destroy]
       end
       namespace :auth do
         resources :sessions, only: %i[index]
