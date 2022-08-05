@@ -11,7 +11,7 @@ export const AdminData = () => {
         <SideBar>
           <ul>
             <li><Link to="books">書籍データ一覧</Link></li>
-            <li><Link to="reviews">投稿したレビュー</Link></li>
+            <li><Link to="users">ユーザーデータ一覧</Link></li>
           </ul>
         </SideBar>
         <Main>
