@@ -6,7 +6,7 @@ class Api::V1::Admin::UsersController < ApplicationController
 
   def destroy
     user = User.find_by(id:params[:id])
-    if user.destroy
+    if !user.lendings.where(finished_at: nil).exists? && user.destroy
       render json: {status:"SUCCESS"}
     end
   end
