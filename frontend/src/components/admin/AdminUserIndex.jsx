@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
+import { fetchUsersAdmin } from '../../lib/api/admin';
 
 export const AdminUserIndex = () => {
-  const [ users, setUsers ] = useState({});
+  const [ users, setUsers ] = useState([]);
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const { currentUser } = useContext(Context);
@@ -16,7 +17,14 @@ export const AdminUserIndex = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
+    setCurrentPage(e.selected)
   }
+
+  const handleFetchUsers= async() => {
+    const res = await fetchUsersAdmin();
+    setUsers(res.data.users);
+  }
+  useEffect(() => { handleFetchUsers() }, []);
 
   return(
     <>
@@ -24,17 +32,19 @@ export const AdminUserIndex = () => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>タイトル</th><th></th>
+            <th>ID</th><th>名前</th><th>email</th>
           </Row>
-          {Object.keys(users).slice(start, start + perPage).map((key) => {
+          {users.slice(start, start + perPage).map((user,index) => {
             return (
-              <Row key={key}>
+              <Row key={index}>
+                <td>{user.id}</td><td>{user.name}</td><td>{user.email}</td>
               </Row>
             );
           })}
         </tbody>
       </Table>
       <MyPaginate
+        forcePage={currentPage}
         onPageChange={handlePageChange}
         pageCount={Math.ceil(users.length / perPage)}
         marginPagesDisplayed={2}

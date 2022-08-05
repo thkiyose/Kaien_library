@@ -147,6 +147,7 @@ export const AdminBookIndex = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
+    setCurrentPage(e.selected)
   }
 
   const handleFetchBooks= async() => {
@@ -226,6 +227,7 @@ export const AdminBookIndex = () => {
         </tbody>
       </Table>
       <MyPaginate
+        forcePage={currentPage}
         onPageChange={handlePageChange}
         pageCount={Math.ceil(books.length / perPage)}
         marginPagesDisplayed={2}
