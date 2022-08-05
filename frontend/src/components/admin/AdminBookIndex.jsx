@@ -144,7 +144,7 @@ export const AdminBookIndex = () => {
   const [ searchParam, setSearchParam ] = useState({});
   const [ searchCategory, setSearchCategory ] = useState({});
   const [ currentPage, setCurrentPage ] = useState(0);
-  
+
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
@@ -196,7 +196,7 @@ export const AdminBookIndex = () => {
     }
   };
 
-
+console.log(books)
   return(
     <>
       <Title>書籍データ一覧</Title>
