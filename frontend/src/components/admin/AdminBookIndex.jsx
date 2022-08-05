@@ -196,7 +196,6 @@ export const AdminBookIndex = () => {
     }
   };
 
-console.log(books)
   return(
     <>
       <Title>書籍データ一覧</Title>

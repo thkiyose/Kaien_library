@@ -9,7 +9,10 @@ export const AdminData = () => {
     <>
       <Wrapper width={"1000px"}>
         <SideBar>
-          <p>aaa</p>
+          <ul>
+            <li><Link to="books">書籍データ一覧</Link></li>
+            <li><Link to="reviews">投稿したレビュー</Link></li>
+          </ul>
         </SideBar>
         <Main>
           <Outlet/>
@@ -22,6 +25,23 @@ export const AdminData = () => {
 const SideBar = styled.div`
   width: 20%;
   float: left;
+  p {
+    padding: 0;
+    text-align: center;
+    margin: 0;
+  }
+  ul {
+    padding: 0px 0px 0px 20px;
+    a {
+      color: black;
+      padding: 5px;
+      margin-right: 10px;
+      display:block;
+    }
+    a:hover {
+      background-color: ${Color.text};
+    }
+  }
 `
 const Main = styled.div`
   float: right;
