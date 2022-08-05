@@ -6,7 +6,7 @@ class Api::V1::Admin::UsersController < ApplicationController
 
   def destroy
     user = User.find_by(id:params[:id])
-    if user.update(deleted:true, uid: nil, email:nil, name:"退会済みユーザー", encrypted_password: nil)
+    if user.update!(deleted:true, uid: nil, email:nil, name:"退会済みユーザー", encrypted_password: nil)
       render json: {status:"SUCCESS"}
     end
   end

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { fetchUsersAdmin } from '../../lib/api/admin';
+import { deleteUser } from '../../lib/api/admin';
 
 export const AdminUserIndex = () => {
   const [ users, setUsers ] = useState([]);
@@ -26,6 +27,11 @@ export const AdminUserIndex = () => {
   }
   useEffect(() => { handleFetchUsers() }, []);
 
+  const handleDeleteUser = async(userId) => {
+    await deleteUser(userId);
+    handleFetchUsers();
+  };
+
   return(
     <>
       <Title>ユーザーデータ一覧</Title>
@@ -37,7 +43,7 @@ export const AdminUserIndex = () => {
           {users.slice(start, start + perPage).map((user,index) => {
             return (
               <Row key={index}>
-                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control"></td>
+                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control"><DeleteButton onClick={() => handleDeleteUser(user.id)}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -154,4 +160,14 @@ const MyPaginate = styled(ReactPaginate).attrs({
   li.disabled a {
     cursor: default;
   }
+`
+const DeleteButton = styled.button`
+  outline: 0;
+  background: ${Color.primary};
+  font-size: 0.8rem;
+  border: 0;
+  padding: 5px 5px;
+  color: #FFFFFF;
+  cursor: pointer;
+  margin-left: 10px;
 `

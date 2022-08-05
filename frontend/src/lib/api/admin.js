@@ -15,3 +15,7 @@ export const deleteBook = (book_id) => {
 export const fetchUsersAdmin = () => {
   return client.get("/admin/users");
 };
+
+export const deleteUser = (user_id) => {
+  return client.delete(`/admin/users/${user_id}`);
+};
