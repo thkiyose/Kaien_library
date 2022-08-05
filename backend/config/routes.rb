@@ -33,13 +33,14 @@ Rails.application.routes.draw do
         patch 'return', on: :member
       end
       resources :reservations, only: [:create, :destroy] do
-          get 'fetch_lendings_and_reservations', on: :member
-          get 'fetch_current_user_reservation', on: :member
+        get 'fetch_lendings_and_reservations', on: :member
+        get 'fetch_current_user_reservation', on: :member
       end
       resources :reviews, only: [:create,:destroy,:update,:index] do
-          get 'user_reviews', on: :collection
+        get 'user_reviews', on: :collection
       end
       get 'admin/book_index'
+      post 'admin/search_books'
       namespace :auth do
         resources :sessions, only: %i[index]
       end

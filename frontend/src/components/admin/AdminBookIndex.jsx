@@ -6,7 +6,7 @@ import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { deleteBook } from '../../lib/api/book';
 import { fetchBooksAdmin } from '../../lib/api/admin';
-import { search } from '../../lib/api/book';
+import { searchBooks } from '../../lib/api/admin';
 
 const Title = styled.h1`
   margin: 0 auto;
@@ -144,7 +144,7 @@ export const AdminBookIndex = () => {
   const [ searchParam, setSearchParam ] = useState({});
   const [ searchCategory, setSearchCategory ] = useState({});
   const [ currentPage, setCurrentPage ] = useState(0);
-
+  
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
@@ -169,14 +169,14 @@ export const AdminBookIndex = () => {
   };
 
   const handleSearch = async(e) => {
-    const res = await search({q:searchParam,category:searchCategory});
+    const res = await searchBooks({q:searchParam,category:searchCategory});
     setBooks(res.data.books);
     setStart(0);
     setCurrentPage(0);
   };
 
   const handleResetSearch = async() => {
-    const res = await search();
+    const res = await searchBooks();
     setBooks(res.data.books);
     setSearchParam("");
     setSearchCategory("");
