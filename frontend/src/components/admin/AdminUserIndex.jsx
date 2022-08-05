@@ -32,12 +32,12 @@ export const AdminUserIndex = () => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>名前</th><th>email</th>
+            <th>ID</th><th>名前</th><th>email</th><th>権限</th><th></th>
           </Row>
           {users.slice(start, start + perPage).map((user,index) => {
             return (
               <Row key={index}>
-                <td>{user.id}</td><td>{user.name}</td><td>{user.email}</td>
+                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control"></td>
               </Row>
             );
           })}
@@ -88,17 +88,27 @@ const Row = styled.tr`
     font-size: 0.9rem;
     border: none;
   }
-  .title {
+  .name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 85%;
+    width: 20%;
+  }
+  .email {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 20%;
   }
   .control {
     width: 10%;
     text-align: center;
   }
   .id {
+    text-align: center;
+    width: 2%;
+  }
+  .admin {
     text-align: center;
   }
   :nth-child(odd) {
