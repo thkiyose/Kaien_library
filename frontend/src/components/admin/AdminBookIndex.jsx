@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
+import { Modal } from '../parts/Modal';
 import { deleteBook } from '../../lib/api/admin';
 import { fetchBooksAdmin } from '../../lib/api/admin';
 import { searchBooks } from '../../lib/api/admin';
@@ -144,6 +145,8 @@ export const AdminBookIndex = () => {
   const [ searchParam, setSearchParam ] = useState("");
   const [ searchCategory, setSearchCategory ] = useState("");
   const [ currentPage, setCurrentPage ] = useState(0);
+  const [ showModal, setShowModal ] = useState(false);
+  const [ targetId, setTargetId ] = useState(0);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -187,13 +190,18 @@ export const AdminBookIndex = () => {
     setCurrentPage(0);
   };
 
-  const canDelete = (isLent,isReserved,id) => {
+  const handleShowModal = (targetId) => {
+    setShowModal(true);
+    setTargetId(targetId);
+  };
+
+  const canDelete = (isLent,isReserved,bookId) => {
     if (isLent === true) {
       return <p>貸出中</p>
     } else if (isReserved === true) {
       return <p>予約済み</p>
     } else {
-      return <DeleteButton onClick={() => handleDeleteBook(id)}>削除</DeleteButton>
+      return <DeleteButton onClick={() => handleShowModal(bookId)}>削除</DeleteButton>
     }
   };
 
@@ -247,6 +255,7 @@ export const AdminBookIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteBook(targetId)} message={"書籍を削除してよろしいですか？"}/>
     </>
   );
 };
