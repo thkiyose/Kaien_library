@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
+import { Modal } from '../parts/Modal';
 import { fetchUsersAdmin } from '../../lib/api/admin';
 import { deleteUser } from '../../lib/api/admin';
 
@@ -12,10 +13,10 @@ export const AdminUserIndex = () => {
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const { currentUser } = useContext(Context);
-  const searchRef = useRef();
-  const [ searchParam, setSearchParam ] = useState("");
+  const [ showModal, setShowModal ] = useState(false);
+  const [ targetId, setTargetId ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
-
+  
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
     setCurrentPage(e.selected)
@@ -32,14 +33,18 @@ export const AdminUserIndex = () => {
     handleFetchUsers();
   };
 
+  const handleShowModal = (targetId) => {
+    setShowModal(true);
+    setTargetId(targetId);
+  };
+
   const canDelete = (isLending, userId) => {
     if (isLending === true) {
       return <p>貸出有</p>
     } else {
-      return <DeleteButton onClick={() => handleDeleteUser(userId)}>削除</DeleteButton>
+      return <DeleteButton onClick={() => handleShowModal(userId)}>削除</DeleteButton>
     }
   };
-
   return(
     <>
       <Title>ユーザーデータ一覧</Title>
@@ -78,6 +83,7 @@ export const AdminUserIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーを削除してよろしいですか？"}/>
     </>
   );
 };
@@ -106,13 +112,11 @@ const Row = styled.tr`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 20%;
   }
   .email {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 20%;
   }
   .control {
     width: 10%;
@@ -120,7 +124,6 @@ const Row = styled.tr`
   }
   .id {
     text-align: center;
-    width: 2%;
   }
   .admin {
     text-align: center;

@@ -43,13 +43,13 @@ const NoButton = styled(Button)`
 `
 
 export const Modal = (props) => {
-  const { setShowModal, message, yesAction } = props;
+  const { showFlag, setShowModal, message, yesAction } = props;
   const handleCloseModal = () => {
     setShowModal(false);
   };
   return (
     <>
-      { props.showFlag && <>
+      { showFlag && <>
         <OverLay onClick={() => {handleCloseModal()}}>
         <ModalContent>
           <p>{message}</p>

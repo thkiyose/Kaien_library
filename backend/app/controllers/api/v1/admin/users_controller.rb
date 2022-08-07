@@ -1,7 +1,9 @@
 class Api::V1::Admin::UsersController < ApplicationController
   def index
-    users = User.includes(:lendings).map{|user|{ id: user.id, name: user.name, email: user.email, admin: user.admin, is_lending: user.lendings.any?}}
-    render json: { users: users }
+    lending_users = User.includes(:lendings).where(lendings: {finished_at: nil})
+    not_lending_users = (User.all - lending_users)
+    users = not_lending_users.as_json.map{|user| user.merge({"is_lending"=>false})} + lending_users.as_json.map{|user| user.merge({"is_lending"=>true})}
+    render json: { users: users.sort_by{|user| user["id"]} }
   end
 
   def destroy
