@@ -32,6 +32,14 @@ export const AdminUserIndex = () => {
     handleFetchUsers();
   };
 
+  const canDelete = (isLending, userId) => {
+    if (isLending === true) {
+      return <p>貸出有</p>
+    } else {
+      return <DeleteButton onClick={() => handleDeleteUser(userId)}>削除</DeleteButton>
+    }
+  };
+
   return(
     <>
       <Title>ユーザーデータ一覧</Title>
@@ -43,7 +51,7 @@ export const AdminUserIndex = () => {
           {users.slice(start, start + perPage).map((user,index) => {
             return (
               <Row key={index}>
-                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control"><DeleteButton onClick={() => handleDeleteUser(user.id)}>削除</DeleteButton></td>
+                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control"></td>
               </Row>
             );
           })}

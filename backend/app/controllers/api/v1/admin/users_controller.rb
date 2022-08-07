@@ -1,6 +1,6 @@
 class Api::V1::Admin::UsersController < ApplicationController
   def index
-    users = User.all.map{|user|{ id: user.id, name: user.name, email: user.email, admin: user.admin }}
+    users = User.includes(:lendings).map{|user|{ id: user.id, name: user.name, email: user.email, admin: user.admin, is_lending: user.lendings.any?}}
     render json: { users: users }
   end
 
