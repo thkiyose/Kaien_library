@@ -51,7 +51,7 @@ export const AdminUserIndex = () => {
           {users.slice(start, start + perPage).map((user,index) => {
             return (
               <Row key={index}>
-                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control"></td>
+                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control">{canDelete(user.isLending, user.id)}</td>
               </Row>
             );
           })}
