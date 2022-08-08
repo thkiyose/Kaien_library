@@ -8,6 +8,7 @@ import { Modal } from '../parts/Modal';
 import { fetchUsersAdmin } from '../../lib/api/admin';
 import { deleteUser } from '../../lib/api/admin';
 import { adminChangeUser } from '../../lib/api/admin';
+import { searchUsers } from '../../lib/api/admin';
 
 export const AdminUserIndex = () => {
   const [ users, setUsers ] = useState([]);

@@ -23,3 +23,7 @@ export const adminChangeUser = (user_id) => {
 export const deleteUser = (user_id) => {
   return client.delete(`/admin/users/${user_id}`);
 };
+
+export const searcUsers = (params) => {
+  return client.get(`/admin/users/search`,params);
+};
