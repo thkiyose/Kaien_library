@@ -29,4 +29,9 @@ class Api::V1::Admin::UsersController < ApplicationController
       render json: {status:"SUCCESS"}
     end
   end
+
+  def search
+    users = User.search_with_id(params[:id])
+    render json: { users: users }
+  end
 end

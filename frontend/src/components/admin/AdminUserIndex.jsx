@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Context } from '../../App';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
@@ -21,6 +21,12 @@ export const AdminUserIndex = () => {
   const [ targetId, setTargetId ] = useState(0);
   const [ targetAdmin, setTargetAdmin ] = useState(false);
   const [ currentPage, setCurrentPage ] = useState(0);
+  const [ searchParam, setSearchParam ] = useState({
+    id: "",
+    name:"",
+    email:"",
+    admin:""
+  });
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -64,6 +70,17 @@ export const AdminUserIndex = () => {
     setTargetAdmin(targetAdmin);
   };
 
+  const onChange = (param,type) => {
+    if (type === "id"){
+      setSearchParam({...searchParam,id:param})
+    } else if (type === "name") {
+      setSearchParam({...searchParam,name:param})
+    } else if (type === "email") {
+      setSearchParam({...searchParam,email:param})
+    } else if (type === "admin") {
+      setSearchParam({...searchParam,admin:param})
+    }
+  }
   const canDelete = (isLending, userId) => {
     if (isLending === true) {
       return <p>貸出有</p>
@@ -75,8 +92,8 @@ export const AdminUserIndex = () => {
     <>
       <Title>ユーザーデータ一覧</Title>
       <UserSearch>
-        ID<input type="text" name="id" className="id"></input>名前<input type="text"></input>email<input type="text"></input>
-        権限<select>
+        ID<input type="text" name="id" className="id" onChange={(e)=>{onChange(e.target.value,"id")}}></input>名前<input type="text" onChange={(e)=>{onChange(e.target.value,"name")}}></input>email<input type="text" onChange={(e)=>{onChange(e.target.value,"email")}}></input>
+        権限<select onChange={(e)=>{onChange(e.target.value,"admin")}}>
               <option hidden></option>
               <option value="false">一般</option>
               <option value="true">管理者</option>

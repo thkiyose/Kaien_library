@@ -24,4 +24,9 @@ class User < ActiveRecord::Base
       throw :abort
     end
   end
+
+  scope :search_with_id, -> (id){
+    return if id.blank?
+    where(id: id)
+  }
 end
