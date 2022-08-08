@@ -31,7 +31,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def search
-    users = User.search_with_id(params[:id]).search_with_name(params[:name]).search_with_email(params[:email])
+    users = User.search_with_id(params[:id]).search_with_name(params[:name]).search_with_email(params[:email]).search_with_admin(params[:admin])
     render json: { users: users }
   end
 end

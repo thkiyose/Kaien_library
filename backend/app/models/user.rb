@@ -37,4 +37,8 @@ class User < ActiveRecord::Base
     return if email.blank?
     where(['email like ?',"%#{email}%"])
   }
+  scope :search_with_admin, -> (admin){
+    return if admin.blank?
+    where(admin:admin)
+  }
 end
