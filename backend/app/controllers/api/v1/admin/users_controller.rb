@@ -6,9 +6,18 @@ class Api::V1::Admin::UsersController < ApplicationController
     render json: { users: users.sort_by{|user| user["id"]} }
   end
 
+  def update
+    user = User.find_by(id:params[:id])
+    if user.update(admin: !user.admin)
+      render json: {status: "SUCCESS"}
+    else
+      render json: user.errors
+    end
+  end
+
   def destroy
     user = User.find_by(id:params[:id])
-    if !user.lendings.where(finished_at: nil).exists? && user.destroy
+    if user.lendings.where(finished_at: nil).empty? && user.destroy
       render json: {status:"SUCCESS"}
     end
   end
