@@ -74,6 +74,15 @@ export const AdminUserIndex = () => {
   return(
     <>
       <Title>ユーザーデータ一覧</Title>
+      <UserSearch>
+        ID<input type="text" name="id" className="id"></input>名前<input type="text"></input>email<input type="text"></input>
+        権限<select>
+              <option hidden></option>
+              <option value="false">一般</option>
+              <option value="true">管理者</option>
+            </select>
+        <button className="searchButton">検索</button><button className="resetButton">リセット</button>
+      </UserSearch>
       {error && <Error>{error}</Error>}
       <Table>
         <tbody>
@@ -119,6 +128,44 @@ export const AdminUserIndex = () => {
 const Title = styled.h1`
   margin: 0 auto;
   font-size: 1.3rem;
+`
+const UserSearch = styled.div`
+  input {
+    outline: 0;
+    background: white;
+    border: 0;
+    margin: 0 0 10px;
+    padding: 5px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  select {
+    outline: 0;
+    background: white;
+    border: 0;
+    margin: 0 0 10px;
+    padding: 5px;
+    margin-right: 5px;
+  }
+  button {
+    outline: 0;
+    font-size: 0.8rem;
+    border: 0;
+    padding: 5px 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+  }
+  .searchButton {
+    background-color: ${Color.primary};
+    padding: 5px 10px;
+  }
+  .resetButton {
+    background-color: ${Color.dark};
+    float:right;
+  }
+  .id {
+    width: 50px;
+  }
 `
 
 const Table = styled.table`
