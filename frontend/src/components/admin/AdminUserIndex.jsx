@@ -74,7 +74,7 @@ export const AdminUserIndex = () => {
   return(
     <>
       <Title>ユーザーデータ一覧</Title>
-      {error && <p>{error}</p>}
+      {error && <Error>{error}</Error>}
       <Table>
         <tbody>
           <Row>
@@ -232,4 +232,10 @@ const DeleteButton = styled.button`
   color: #FFFFFF;
   cursor: pointer;
   margin-left: 10px;
+`
+
+const Error = styled.p`
+  margin:0;
+  background-color: ${Color.warning};
+  text-align: center;
 `
