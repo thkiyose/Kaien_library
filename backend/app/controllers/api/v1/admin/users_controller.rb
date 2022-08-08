@@ -13,7 +13,11 @@ class Api::V1::Admin::UsersController < ApplicationController
       return
     end
     if user.update(admin: !user.admin)
-      render json: {status: "SUCCESS"}
+      if user.admin == false
+        render json: {status: "SUCCESS", admin_to_normal: true, user: user}
+      else
+        render json: {status: "SUCCESS", user: user}
+      end
     else
       render json: user.errors
     end

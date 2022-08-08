@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from '../../App';
 import styled from "styled-components";
 import Color from "./Color"
 
@@ -46,7 +47,9 @@ const NoButton = styled(Button)`
 `
 
 export const Modal = (props) => {
-  const { showFlag, setShowModal, message, yesAction, adminGuide, targetAdmin } = props;
+  const { showFlag, setShowModal, message, yesAction, adminGuide, targetId, targetAdmin } = props;
+  const { currentUser } = useContext(Context);
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -57,6 +60,7 @@ export const Modal = (props) => {
         <ModalContent>
           <p>{message}</p>
           { adminGuide && <p>{ targetAdmin? "管理者→一般" : "一般→管理者"}</p>}
+          { adminGuide && targetAdmin && targetId === currentUser.id && <p>（あなたが一般ユーザーになると、管理画面から離れます。）</p>}
           <Buttons>
             <YesButton onClick={() => {yesAction()}}>はい</YesButton>
             <NoButton onClick={() => {handleCloseModal()}}>いいえ</NoButton>

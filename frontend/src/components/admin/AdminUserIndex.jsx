@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Context } from '../../App';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
@@ -11,10 +11,11 @@ import { adminChangeUser } from '../../lib/api/admin';
 
 export const AdminUserIndex = () => {
   const [ users, setUsers ] = useState([]);
+  const navigate = useNavigate();
   const [ error, setError ] = useState("");
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
-  const { currentUser } = useContext(Context);
+  const { currentUser, setCurrentUser } = useContext(Context);
   const [ showModal, setShowModal ] = useState(false);
   const [ showModalAdmin, setShowModalAdmin ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
@@ -45,6 +46,10 @@ export const AdminUserIndex = () => {
     if (res.data.status === "SUCCESS") {
       setError("");
       handleFetchUsers();
+    }
+    if (currentUser.id === userId && res.data.adminToNormal ){
+      setCurrentUser(res.data.user);
+      navigate("/");
     }
   }
 
@@ -106,7 +111,7 @@ export const AdminUserIndex = () => {
         breakLinkClassName='page-link'
       />
       <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーを削除してよろしいですか？"}/>
-      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleChangeAdmin(targetId)} message={"ユーザーの権限を変更しますか？"} adminGuide={true} targetAdmin={targetAdmin} />
+      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleChangeAdmin(targetId)} message={"ユーザーの権限を変更しますか？"} adminGuide={true} targetId={targetId} targetAdmin={targetAdmin} />
     </>
   );
 };
