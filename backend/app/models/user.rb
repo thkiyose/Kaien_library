@@ -29,4 +29,12 @@ class User < ActiveRecord::Base
     return if id.blank?
     where(id: id)
   }
+  scope :search_with_name, -> (name){
+    return if name.blank?
+    where(['name like ?',"%#{name}%"])
+  }
+  scope :search_with_email, -> (email){
+    return if email.blank?
+    where(['email like ?',"%#{email}%"])
+  }
 end

@@ -87,8 +87,6 @@ export const AdminUserIndex = () => {
   const handleSearch = async(params) => {
     const res = await searchUsers(params);
     setUsers(res.data.users);
-    idRef.current.value = "";
-    setSearchParam("");
   };
 
   const canDelete = (isLending, userId) => {
