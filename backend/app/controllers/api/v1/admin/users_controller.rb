@@ -1,6 +1,6 @@
 class Api::V1::Admin::UsersController < ApplicationController
   def index
-    lending_users = User.includes(:lendings).where(lendings: {finished_at: nil})
+    lending_users = User.joins(:lendings).where("lendings.id IS NOT NULL").where("lendings.finished_at IS NULL")
     not_lending_users = (User.all - lending_users)
     users = not_lending_users.as_json.map{|user| user.merge({"is_lending"=>false})} + lending_users.as_json.map{|user| user.merge({"is_lending"=>true})}
     render json: { users: users.sort_by{|user| user["id"]} }
