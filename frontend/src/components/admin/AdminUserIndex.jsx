@@ -28,6 +28,7 @@ export const AdminUserIndex = () => {
     email:"",
     admin:""
   });
+  const idRef = useRef();
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -82,6 +83,14 @@ export const AdminUserIndex = () => {
       setSearchParam({...searchParam,admin:param})
     }
   }
+
+  const handleSearch = async(params) => {
+    const res = await searchUsers(params);
+    setUsers(res.data.users);
+    idRef.current.value = "";
+    setSearchParam("");
+  };
+
   const canDelete = (isLending, userId) => {
     if (isLending === true) {
       return <p>貸出有</p>
@@ -93,13 +102,13 @@ export const AdminUserIndex = () => {
     <>
       <Title>ユーザーデータ一覧</Title>
       <UserSearch>
-        ID<input type="text" name="id" className="id" onChange={(e)=>{onChange(e.target.value,"id")}}></input>名前<input type="text" onChange={(e)=>{onChange(e.target.value,"name")}}></input>email<input type="text" onChange={(e)=>{onChange(e.target.value,"email")}}></input>
+        ID<input type="text" name="id" className="id" ref={idRef} onChange={(e)=>{onChange(e.target.value,"id")}}></input>名前<input type="text" onChange={(e)=>{onChange(e.target.value,"name")}}></input>email<input type="text" onChange={(e)=>{onChange(e.target.value,"email")}}></input>
         権限<select onChange={(e)=>{onChange(e.target.value,"admin")}}>
               <option hidden></option>
               <option value="false">一般</option>
               <option value="true">管理者</option>
             </select>
-        <button className="searchButton">検索</button><button className="resetButton">リセット</button>
+        <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton">リセット</button>
       </UserSearch>
       {error && <Error>{error}</Error>}
       <Table>
