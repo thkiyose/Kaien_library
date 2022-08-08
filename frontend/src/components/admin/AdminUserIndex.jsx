@@ -11,6 +11,7 @@ import { adminChangeUser } from '../../lib/api/admin';
 
 export const AdminUserIndex = () => {
   const [ users, setUsers ] = useState([]);
+  const [ error, setError ] = useState("");
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const { currentUser } = useContext(Context);
@@ -38,8 +39,11 @@ export const AdminUserIndex = () => {
 
   const handleChangeAdmin = async(userId) => {
     const res = await adminChangeUser(userId)
-    console.log(res);
+    if (res.data.error) {
+      setError(res.data.error);
+    }
     if (res.data.status === "SUCCESS") {
+      setError("");
       handleFetchUsers();
     }
   }
@@ -65,6 +69,7 @@ export const AdminUserIndex = () => {
   return(
     <>
       <Title>ユーザーデータ一覧</Title>
+      {error && <p>{error}</p>}
       <Table>
         <tbody>
           <Row>

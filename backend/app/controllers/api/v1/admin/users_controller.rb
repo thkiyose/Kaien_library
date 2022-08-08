@@ -8,6 +8,10 @@ class Api::V1::Admin::UsersController < ApplicationController
 
   def update
     user = User.find_by(id:params[:id])
+    if user.admin == true && User.where(admin:true).count == 1
+      render json: {error: "管理者は最低一人必要です。"}
+      return
+    end
     if user.update(admin: !user.admin)
       render json: {status: "SUCCESS"}
     else
