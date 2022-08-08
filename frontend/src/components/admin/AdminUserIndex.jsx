@@ -14,9 +14,10 @@ export const AdminUserIndex = () => {
   const [ start, setStart ] = useState(0);
   const { currentUser } = useContext(Context);
   const [ showModal, setShowModal ] = useState(false);
+  const [ showModalAdmin, setShowModalAdmin ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
-  
+
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
     setCurrentPage(e.selected)
@@ -38,6 +39,11 @@ export const AdminUserIndex = () => {
     setTargetId(targetId);
   };
 
+  const handleShowModalAdmin = (targetId) => {
+    setShowModalAdmin(true);
+    setTargetId(targetId);
+  };
+
   const canDelete = (isLending, userId) => {
     if (isLending === true) {
       return <p>貸出有</p>
@@ -51,12 +57,12 @@ export const AdminUserIndex = () => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>名前</th><th>email</th><th>権限</th><th></th>
+            <th>ID</th><th>名前</th><th>email</th><th colSpan="2">権限</th><th></th>
           </Row>
           {users.slice(start, start + perPage).map((user,index) => {
             return (
               <Row key={index}>
-                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td><td className="admin">{user.admin ? "管理者" : "一般"}</td><td className="control">{canDelete(user.isLending, user.id)}</td>
+                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td>{user.admin ? <td className="admin">管理者</td> : <td className="normal">一般</td>}<td className="change_button"><button onClick={()=>{handleShowModalAdmin()}}>変更</button></td><td className="control">{canDelete(user.isLending, user.id)}</td>
               </Row>
             );
           })}
@@ -84,6 +90,7 @@ export const AdminUserIndex = () => {
         breakLinkClassName='page-link'
       />
       <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーを削除してよろしいですか？"}/>
+      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーの権限を変更しますか？"}/>
     </>
   );
 };
@@ -103,6 +110,7 @@ const Row = styled.tr`
     font-weight: normal;
     background-color: ${Color.primary};
     color: white;
+    text-align: center;
   }
   td {
     font-size: 0.9rem;
@@ -127,6 +135,28 @@ const Row = styled.tr`
   }
   .admin {
     text-align: center;
+    width: 7%;
+    background-color: ${Color.dark};
+    color: white;
+    font-size: 0.8rem;
+  }
+  .normal {
+    text-align: center;
+    width: 7%;
+    background-color: ${Color.text};
+    font-size: 0.8rem;
+  }
+  .change_button {
+    width: 7%;
+    button {
+      outline: 0;
+      background: ${Color.primary};
+      font-size: 0.8rem;
+      border: 0;
+      padding: 5px 5px;
+      color: #FFFFFF;
+      cursor: pointer;
+    }
   }
   :nth-child(odd) {
     background-color: #c2dbcf;
