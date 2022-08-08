@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchUsersAdmin } from '../../lib/api/admin';
 import { deleteUser } from '../../lib/api/admin';
+import { adminChangeUser } from '../../lib/api/admin';
 
 export const AdminUserIndex = () => {
   const [ users, setUsers ] = useState([]);
@@ -34,6 +35,14 @@ export const AdminUserIndex = () => {
     await deleteUser(userId);
     handleFetchUsers();
   };
+
+  const handleChangeAdmin = async(userId) => {
+    const res = await adminChangeUser(userId)
+    console.log(res);
+    if (res.data.status === "SUCCESS") {
+      handleFetchUsers();
+    }
+  }
 
   const handleShowModal = (targetId) => {
     setShowModal(true);
@@ -92,7 +101,7 @@ export const AdminUserIndex = () => {
         breakLinkClassName='page-link'
       />
       <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーを削除してよろしいですか？"}/>
-      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーの権限を変更しますか？"} adminGuide={true} targetAdmin={targetAdmin} />
+      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleChangeAdmin(targetId)} message={"ユーザーの権限を変更しますか？"} adminGuide={true} targetAdmin={targetAdmin} />
     </>
   );
 };

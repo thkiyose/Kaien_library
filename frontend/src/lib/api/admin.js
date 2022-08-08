@@ -16,6 +16,10 @@ export const fetchUsersAdmin = () => {
   return client.get("/admin/users");
 };
 
+export const adminChangeUser = (user_id) => {
+  return client.patch(`/admin/users/${user_id}`);
+};
+
 export const deleteUser = (user_id) => {
   return client.delete(`/admin/users/${user_id}`);
 };
