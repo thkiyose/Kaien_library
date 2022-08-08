@@ -6,6 +6,9 @@ const ModalContent = styled.div`
   background-color: white;
   padding : 40px;
   font-size:1.2rem;
+  p {
+    text-align: center;
+  }
 `
 
 const OverLay = styled.div`
@@ -43,7 +46,7 @@ const NoButton = styled(Button)`
 `
 
 export const Modal = (props) => {
-  const { showFlag, setShowModal, message, yesAction } = props;
+  const { showFlag, setShowModal, message, yesAction, adminGuide, targetAdmin } = props;
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -53,6 +56,7 @@ export const Modal = (props) => {
         <OverLay onClick={() => {handleCloseModal()}}>
         <ModalContent>
           <p>{message}</p>
+          { adminGuide && <p>{ targetAdmin? "管理者→一般" : "一般→管理者"}</p>}
           <Buttons>
             <YesButton onClick={() => {yesAction()}}>はい</YesButton>
             <NoButton onClick={() => {handleCloseModal()}}>いいえ</NoButton>

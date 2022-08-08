@@ -16,6 +16,7 @@ export const AdminUserIndex = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ showModalAdmin, setShowModalAdmin ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
+  const [ targetAdmin, setTargetAdmin ] = useState(false);
   const [ currentPage, setCurrentPage ] = useState(0);
 
   const handlePageChange = (e) => {
@@ -39,9 +40,10 @@ export const AdminUserIndex = () => {
     setTargetId(targetId);
   };
 
-  const handleShowModalAdmin = (targetId) => {
+  const handleShowModalAdmin = (targetId,targetAdmin) => {
     setShowModalAdmin(true);
     setTargetId(targetId);
+    setTargetAdmin(targetAdmin);
   };
 
   const canDelete = (isLending, userId) => {
@@ -62,7 +64,7 @@ export const AdminUserIndex = () => {
           {users.slice(start, start + perPage).map((user,index) => {
             return (
               <Row key={index}>
-                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td>{user.admin ? <td className="admin">管理者</td> : <td className="normal">一般</td>}<td className="change_button"><button onClick={()=>{handleShowModalAdmin()}}>変更</button></td><td className="control">{canDelete(user.isLending, user.id)}</td>
+                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td>{user.admin ? <td className="admin">管理者</td> : <td className="normal">一般</td>}<td className="change_button"><button onClick={()=>{handleShowModalAdmin(user.id,user.admin)}}>変更</button></td><td className="control">{canDelete(user.isLending, user.id)}</td>
               </Row>
             );
           })}
@@ -90,7 +92,7 @@ export const AdminUserIndex = () => {
         breakLinkClassName='page-link'
       />
       <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーを削除してよろしいですか？"}/>
-      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーの権限を変更しますか？"}/>
+      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーの権限を変更しますか？"} adminGuide={true} targetAdmin={targetAdmin} />
     </>
   );
 };
