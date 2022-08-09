@@ -6,7 +6,7 @@ class Api::V1::Admin::LendingsController < ApplicationController
 
   def destroy
     lending = Lending.find_by(id:params[:id])
-    if user.destroy
+    if lending.destroy
       render json: {status:"SUCCESS"}
     end
   end

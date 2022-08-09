@@ -6,6 +6,7 @@ import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchLendingsAdmin } from '../../lib/api/admin';
+import { deleteLending } from '../../lib/api/admin';
 
 export const AdminLendingsIndex = () => {
   const [ lendings, setLendings ] = useState([]);
@@ -39,6 +40,11 @@ export const AdminLendingsIndex = () => {
   }
   useEffect(() => { handleFetchLendings() }, []);
 
+  const handleDeleteLending = async(lendingId) => {
+    await deleteLending(lendingId);
+    handleFetchLendings();
+  };
+
   const handleShowModal = (targetId) => {
     setShowModal(true);
     setTargetId(targetId);
@@ -68,7 +74,7 @@ export const AdminLendingsIndex = () => {
           {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="deleteButton"><DeleteButton>削除</DeleteButton></td>
+                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="deleteButton"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -95,7 +101,7 @@ export const AdminLendingsIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} message={"ユーザーを削除してよろしいですか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteLending(targetId)} message={"貸出データを削除してよろしいですか？"}/>
     </>
   );
 };
