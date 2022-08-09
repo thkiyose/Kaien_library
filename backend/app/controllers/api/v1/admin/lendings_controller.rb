@@ -1,6 +1,10 @@
 class Api::V1::Admin::LendingsController < ApplicationController
   def index
-    lendings = Lending.joins(:book).where(finished_at:nil).order(created_at: :desc).select(:id,:book_id,:title,:start_date,:finished_at,:user_id)
+    if !params[:show_finished].blank?
+      lendings = Lending.joins(:book).show_finished(params[:show_finished]).order(created_at: :desc).select(:id,:book_id,:title,:start_date,:finished_at,:user_id)
+    else
+      lendings = Lending.joins(:book).where(finished_at:nil).order(created_at: :desc).select(:id,:book_id,:title,:start_date,:finished_at,:user_id)
+    end
     render json: { lendings: lendings }
   end
 

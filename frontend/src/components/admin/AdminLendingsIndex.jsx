@@ -8,6 +8,7 @@ import { Modal } from '../parts/Modal';
 import { fetchLendingsAdmin } from '../../lib/api/admin';
 import { deleteLending } from '../../lib/api/admin';
 import { searchLendings } from '../../lib/api/admin';
+import { returnLending } from '../../lib/api/admin';
 
 export const AdminLendingsIndex = () => {
   const [ lendings, setLendings ] = useState([]);
@@ -36,15 +37,26 @@ export const AdminLendingsIndex = () => {
     setCurrentPage(e.selected)
   }
 
-  const handleFetchLendings= async() => {
-    const res = await fetchLendingsAdmin();
+  const handleReturnLending = async(lendingId) => {
+    const res = await returnLending(lendingId)
+    if (res.data.error) {
+      setError(res.data.error);
+    }
+    if (res.data.status === "SUCCESS") {
+      setError("");
+      handleFetchLendings(searchParam);
+    }
+  }
+
+  const handleFetchLendings= async(param) => {
+    const res = await fetchLendingsAdmin(param);
     setLendings(res.data.lendings);
   }
-  useEffect(() => { handleFetchLendings() }, []);
+  useEffect(() => { handleFetchLendings(searchParam) }, []);
 
   const handleDeleteLending = async(lendingId) => {
     await deleteLending(lendingId);
-    handleFetchLendings();
+    handleFetchLendings(searchParam);
   };
 
   const handleShowModal = (targetId) => {
@@ -127,7 +139,7 @@ export const AdminLendingsIndex = () => {
         breakLinkClassName='page-link'
       />
       <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteLending(targetId)} message={"貸出データを削除してよろしいですか？（未返却の場合、本は返却扱いになります。）"}/>
-      <Modal showFlag={showModalReturn} setShowModal={setShowModalReturn} yesAction={()=>handleDeleteLending(targetId)} message={"この貸出データを返却済みにしますか？"}/>
+      <Modal showFlag={showModalReturn} setShowModal={setShowModalReturn} yesAction={()=>handleReturnLending(targetId)} message={"この貸出データを返却済みにしますか？"}/>
     </>
   );
 };

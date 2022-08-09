@@ -28,8 +28,8 @@ export const searchUsers = (params) => {
   return client.get(`/admin/users/search`,{params});
 };
 
-export const fetchLendingsAdmin = () => {
-  return client.get("/admin/lendings");
+export const fetchLendingsAdmin = (params) => {
+  return client.get("/admin/lendings",{params});
 };
 
 export const returnLending = (lending_id) => {
