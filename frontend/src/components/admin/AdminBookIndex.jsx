@@ -40,9 +40,6 @@ const Row = styled.tr`
     border: none;
   }
   .title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     width: 85%;
   }
   .control {

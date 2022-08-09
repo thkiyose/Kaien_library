@@ -5,22 +5,17 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
-import { fetchUsersAdmin } from '../../lib/api/admin';
-import { deleteUser } from '../../lib/api/admin';
-import { adminChangeUser } from '../../lib/api/admin';
-import { searchUsers } from '../../lib/api/admin';
+import { fetchLendingsAdmin } from '../../lib/api/admin';
 
 export const AdminLendingsIndex = () => {
-  const [ users, setUsers ] = useState([]);
+  const [ lendings, setLendings ] = useState([]);
   const navigate = useNavigate();
   const [ error, setError ] = useState("");
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const { currentUser, setCurrentUser } = useContext(Context);
   const [ showModal, setShowModal ] = useState(false);
-  const [ showModalAdmin, setShowModalAdmin ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
-  const [ targetAdmin, setTargetAdmin ] = useState(false);
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
     id: "",
@@ -38,41 +33,15 @@ export const AdminLendingsIndex = () => {
     setCurrentPage(e.selected)
   }
 
-  const handleFetchUsers= async() => {
-    const res = await fetchUsersAdmin();
-    setUsers(res.data.users);
+  const handleFetchLendings= async() => {
+    const res = await fetchLendingsAdmin();
+    setLendings(res.data.lendings);
   }
-  useEffect(() => { handleFetchUsers() }, []);
-
-  const handleDeleteUser = async(userId) => {
-    await deleteUser(userId);
-    handleFetchUsers();
-  };
-
-  const handleChangeAdmin = async(userId) => {
-    const res = await adminChangeUser(userId)
-    if (res.data.error) {
-      setError(res.data.error);
-    }
-    if (res.data.status === "SUCCESS") {
-      setError("");
-      handleFetchUsers();
-    }
-    if (currentUser.id === userId && res.data.adminToNormal ){
-      setCurrentUser(res.data.user);
-      navigate("/");
-    }
-  }
+  useEffect(() => { handleFetchLendings() }, []);
 
   const handleShowModal = (targetId) => {
     setShowModal(true);
     setTargetId(targetId);
-  };
-
-  const handleShowModalAdmin = (targetId,targetAdmin) => {
-    setShowModalAdmin(true);
-    setTargetId(targetId);
-    setTargetAdmin(targetAdmin);
   };
 
   const onChange = (param,type) => {
@@ -87,49 +56,19 @@ export const AdminLendingsIndex = () => {
     }
   }
 
-  const handleSearch = async(params) => {
-    const res = await searchUsers(params);
-    setUsers(res.data.users);
-  };
-
-  const handleResetSearch = () => {
-    setSearchParam("")
-    handleSearch("")
-    idRef.current.value = "";
-    nameRef.current.value = "";
-    emailRef.current.value = "";
-    adminRef.current.value = "";
-  };
-
-  const canDelete = (isLending, userId) => {
-    if (isLending === true) {
-      return <p>貸出有</p>
-    } else {
-      return <DeleteButton onClick={() => handleShowModal(userId)}>削除</DeleteButton>
-    }
-  };
   return(
     <>
-      <Title>ユーザーデータ一覧</Title>
-      <UserSearch>
-        ID<input type="text" name="id" className="id" ref={idRef} onChange={(e)=>{onChange(e.target.value,"id")}}></input>名前<input type="text" ref={nameRef} onChange={(e)=>{onChange(e.target.value,"name")}}></input>email<input type="text" ref={emailRef} onChange={(e)=>{onChange(e.target.value,"email")}}></input>
-        権限<select ref={adminRef} onChange={(e)=>{onChange(e.target.value,"admin")}}>
-              <option hidden></option>
-              <option value="false">一般</option>
-              <option value="true">管理者</option>
-            </select>
-        <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}}>リセット</button>
-      </UserSearch>
+      <Title>貸出データ一覧</Title>
       {error && <Error>{error}</Error>}
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>名前</th><th>email</th><th colSpan="2">権限</th><th></th>
+            <th>ID</th><th>貸出書籍</th><th>貸出開始日</th><th>返却日</th><th></th>
           </Row>
-          {users.slice(start, start + perPage).map((user,index) => {
+          {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{user.id}</td><td className="name">{user.name}</td><td className="email">{user.email}</td>{user.admin ? <td className="admin">管理者</td> : <td className="normal">一般</td>}<td className="change_button"><button onClick={()=>{handleShowModalAdmin(user.id,user.admin)}}>変更</button></td><td className="control">{canDelete(user.isLending, user.id)}</td>
+                <td className="id">{lending.id}</td><td className="title">{lending.title}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="deleteButton"><DeleteButton>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -138,7 +77,7 @@ export const AdminLendingsIndex = () => {
       <MyPaginate
         forcePage={currentPage}
         onPageChange={handlePageChange}
-        pageCount={Math.ceil(users.length / perPage)}
+        pageCount={Math.ceil(lendings.length / perPage)}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         containerClassName='pagination'
@@ -156,8 +95,7 @@ export const AdminLendingsIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteUser(targetId)} message={"ユーザーを削除してよろしいですか？"}/>
-      <Modal showFlag={showModalAdmin} setShowModal={setShowModalAdmin} yesAction={()=>handleChangeAdmin(targetId)} message={"ユーザーの権限を変更しますか？"} adminGuide={true} targetId={targetId} targetAdmin={targetAdmin} />
+      <Modal showFlag={showModal} setShowModal={setShowModal} message={"ユーザーを削除してよろしいですか？"}/>
     </>
   );
 };
@@ -165,44 +103,6 @@ export const AdminLendingsIndex = () => {
 const Title = styled.h1`
   margin: 0 auto;
   font-size: 1.3rem;
-`
-const UserSearch = styled.div`
-  input {
-    outline: 0;
-    background: white;
-    border: 0;
-    margin: 0 0 10px;
-    padding: 5px;
-    font-size: 0.8rem;
-    margin-right: 5px;
-  }
-  select {
-    outline: 0;
-    background: white;
-    border: 0;
-    margin: 0 0 10px;
-    padding: 5px;
-    margin-right: 5px;
-  }
-  button {
-    outline: 0;
-    font-size: 0.8rem;
-    border: 0;
-    padding: 5px 5px;
-    color: #FFFFFF;
-    cursor: pointer;
-  }
-  .searchButton {
-    background-color: ${Color.primary};
-    padding: 5px 10px;
-  }
-  .resetButton {
-    background-color: ${Color.dark};
-    float:right;
-  }
-  .id {
-    width: 50px;
-  }
 `
 
 const Table = styled.table`
@@ -221,47 +121,19 @@ const Row = styled.tr`
     font-size: 0.9rem;
     border: none;
   }
-  .name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .title {
+    width:60%;
   }
-  .email {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .startDate {
+    width: 15%;
+    text-align: center;
   }
-  .control {
-    width: 10%;
+  .finishedAt {
+    width: 15%;
     text-align: center;
   }
   .id {
     text-align: center;
-  }
-  .admin {
-    text-align: center;
-    width: 7%;
-    background-color: ${Color.dark};
-    color: white;
-    font-size: 0.8rem;
-  }
-  .normal {
-    text-align: center;
-    width: 7%;
-    background-color: ${Color.text};
-    font-size: 0.8rem;
-  }
-  .change_button {
-    width: 7%;
-    button {
-      outline: 0;
-      background: ${Color.primary};
-      font-size: 0.8rem;
-      border: 0;
-      padding: 5px 5px;
-      color: #FFFFFF;
-      cursor: pointer;
-    }
   }
   :nth-child(odd) {
     background-color: #c2dbcf;

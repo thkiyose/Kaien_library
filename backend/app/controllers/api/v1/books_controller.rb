@@ -41,7 +41,7 @@ class Api::V1::BooksController < ApplicationController
     book = Book.new(book_params)
 
     if book.save!
-      if !book.image_url.nil?
+      if !book.image_url.blank?
         url = book.image_url
         file = "./public/#{book.id}.jpg"
         URI.open(file, 'w') do |pass|
