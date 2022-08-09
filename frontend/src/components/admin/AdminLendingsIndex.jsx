@@ -52,6 +52,11 @@ export const AdminLendingsIndex = () => {
     setTargetId(targetId);
   };
 
+  const handleShowModalReturn = (targetId) => {
+    setShowModalReturn(true);
+    setTargetId(targetId);
+  };
+
   const onChange = (param,type) => {
     if (type === "id"){
       setSearchParam({...searchParam,id:param})
@@ -94,7 +99,7 @@ export const AdminLendingsIndex = () => {
           {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt ? lending.finishedAt : <><span>未返却</span><button>変更</button></>}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
+                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt ? lending.finishedAt : <><span>未返却</span><button onClick={()=>{handleShowModalReturn(lending.id)}}>変更</button></>}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
