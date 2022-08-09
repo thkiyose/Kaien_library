@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Context } from '../../App';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
@@ -68,7 +68,7 @@ export const AdminLendingsIndex = () => {
           {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title">{lending.title}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="deleteButton"><DeleteButton>削除</DeleteButton></td>
+                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="deleteButton"><DeleteButton>削除</DeleteButton></td>
               </Row>
             );
           })}
