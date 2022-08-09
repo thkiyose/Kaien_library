@@ -122,7 +122,7 @@ const Row = styled.tr`
     border: none;
   }
   .title {
-    width:60%;
+    width:61%;
   }
   .startDate {
     width: 15%;
