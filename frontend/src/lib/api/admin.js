@@ -32,6 +32,10 @@ export const fetchLendingsAdmin = () => {
   return client.get("/admin/lendings");
 };
 
+export const returnLending = (lending_id) => {
+  return client.patch(`/admin/lendings/${lending_id}`);
+};
+
 export const deleteLending = (lending_id) => {
   return client.delete(`/admin/lendings/${lending_id}`);
 };
