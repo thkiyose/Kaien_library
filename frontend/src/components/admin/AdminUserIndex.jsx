@@ -29,6 +29,9 @@ export const AdminUserIndex = () => {
     admin:""
   });
   const idRef = useRef();
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const adminRef = useRef();
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -89,6 +92,15 @@ export const AdminUserIndex = () => {
     setUsers(res.data.users);
   };
 
+  const handleResetSearch = () => {
+    setSearchParam("")
+    handleSearch("")
+    idRef.current.value = "";
+    nameRef.current.value = "";
+    emailRef.current.value = "";
+    adminRef.current.value = "";
+  };
+
   const canDelete = (isLending, userId) => {
     if (isLending === true) {
       return <p>貸出有</p>
@@ -100,13 +112,13 @@ export const AdminUserIndex = () => {
     <>
       <Title>ユーザーデータ一覧</Title>
       <UserSearch>
-        ID<input type="text" name="id" className="id" ref={idRef} onChange={(e)=>{onChange(e.target.value,"id")}}></input>名前<input type="text" onChange={(e)=>{onChange(e.target.value,"name")}}></input>email<input type="text" onChange={(e)=>{onChange(e.target.value,"email")}}></input>
-        権限<select onChange={(e)=>{onChange(e.target.value,"admin")}}>
+        ID<input type="text" name="id" className="id" ref={idRef} onChange={(e)=>{onChange(e.target.value,"id")}}></input>名前<input type="text" ref={nameRef} onChange={(e)=>{onChange(e.target.value,"name")}}></input>email<input type="text" ref={emailRef} onChange={(e)=>{onChange(e.target.value,"email")}}></input>
+        権限<select ref={adminRef} onChange={(e)=>{onChange(e.target.value,"admin")}}>
               <option hidden></option>
               <option value="false">一般</option>
               <option value="true">管理者</option>
             </select>
-        <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton">リセット</button>
+        <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}}>リセット</button>
       </UserSearch>
       {error && <Error>{error}</Error>}
       <Table>
