@@ -198,6 +198,7 @@ const ShowFormButton = styled.button`
   margin: 0 auto;
   display: block;
   font-size: 1rem;
+  cursor: pointer;
   text-decoration: underline;
 `
 const MyPaginate = styled(ReactPaginate).attrs({

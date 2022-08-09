@@ -50,6 +50,7 @@ const Close = styled.td`
     background-color: rgb(0,0,0,0);
     border: none;
     font-size: 1rem;
+    cursor: pointer;
     text-decoration: underline;
   }
 `
