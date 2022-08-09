@@ -27,3 +27,7 @@ export const deleteUser = (user_id) => {
 export const searchUsers = (params) => {
   return client.get(`/admin/users/search`,{params});
 };
+
+export const fetchLendingsAdmin = () => {
+  return client.get("/admin/lendings");
+};
