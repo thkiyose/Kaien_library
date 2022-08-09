@@ -45,6 +45,9 @@ Rails.application.routes.draw do
         resources :users, only: [:index, :destroy, :update] do
           get "search", on: :collection
         end
+        resources :lendings, only: [:index, :destroy, :update] do
+          get "search", on: :collection
+        end
       end
       namespace :auth do
         resources :sessions, only: %i[index]
