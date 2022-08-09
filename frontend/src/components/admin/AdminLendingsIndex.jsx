@@ -77,7 +77,6 @@ export const AdminLendingsIndex = () => {
       handleSearch({...searchParam,showFinished: true});
     }
   }
-  console.log(searchParam)
 
   return(
     <>
@@ -89,12 +88,12 @@ export const AdminLendingsIndex = () => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>貸出書籍</th><th>貸出開始日</th><th>返却日</th><th></th>
+            <th>ID</th><th>貸出書籍</th><th>ﾕｰｻﾞｰid</th><th>貸出開始日</th><th>返却日</th><th></th>
           </Row>
           {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
+                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -144,6 +143,7 @@ const Row = styled.tr`
     font-weight: normal;
     background-color: ${Color.primary};
     color: white;
+    font-size: 0.9rem;
     text-align: center;
   }
   td {
@@ -151,20 +151,25 @@ const Row = styled.tr`
     border: none;
   }
   .title {
-    width:61%;
+    width:60%;
   }
   .startDate {
-    width: 12%;
+    width: 11%;
     text-align: center;
   }
   .finishedAt {
-    width: 12%;
+    width: 11%;
     text-align: center;
   }
   .control {
-    width: 7%;
+    width: 6%;
   }
   .id {
+    width: 5%;
+    text-align: center;
+  }
+  .userName {
+    width:6%;
     text-align: center;
   }
   :nth-child(odd) {
