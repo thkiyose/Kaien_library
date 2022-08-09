@@ -10,8 +10,10 @@ class Lending < ApplicationRecord
   end
 
   def restore_is_lent
-    book = Book.find_by(id: self.book_id)
-    book.update(is_lent: false)
+    if self.finished_at == nil
+      book = Book.find_by(id: self.book_id)
+      book.update(is_lent: false)
+    end
   end
 
   scope :show_finished, -> (show_flag){
