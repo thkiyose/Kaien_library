@@ -17,6 +17,7 @@ export const AdminLendingsIndex = () => {
   const [ start, setStart ] = useState(0);
   const { currentUser, setCurrentUser } = useContext(Context);
   const [ showModal, setShowModal ] = useState(false);
+  const [ showModalReturn, setShowModalReturn ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
@@ -93,7 +94,7 @@ export const AdminLendingsIndex = () => {
           {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
+                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt ? lending.finishedAt : <><span>未返却</span><button>変更</button></>}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -121,6 +122,7 @@ export const AdminLendingsIndex = () => {
         breakLinkClassName='page-link'
       />
       <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteLending(targetId)} message={"貸出データを削除してよろしいですか？（未返却の場合、本は返却扱いになります。）"}/>
+      <Modal showFlag={showModalReturn} setShowModal={setShowModalReturn} yesAction={()=>handleDeleteLending(targetId)} message={"この貸出データを返却済みにしますか？"}/>
     </>
   );
 };
@@ -160,6 +162,18 @@ const Row = styled.tr`
   .finishedAt {
     width: 11%;
     text-align: center;
+    span {
+      font-size: 0.8rem;
+    }
+    button {
+      outline: 0;
+      background: rgb(0,0,0,0);
+      font-size: 0.8rem;
+      border: 0;
+      padding: 5px 5px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
   .control {
     width: 6%;
