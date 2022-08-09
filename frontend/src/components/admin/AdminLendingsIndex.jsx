@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchLendingsAdmin } from '../../lib/api/admin';
 import { deleteLending } from '../../lib/api/admin';
+import { searchLendings } from '../../lib/api/admin';
 
 export const AdminLendingsIndex = () => {
   const [ lendings, setLendings ] = useState([]);
@@ -20,9 +21,9 @@ export const AdminLendingsIndex = () => {
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
     id: "",
-    name:"",
-    email:"",
-    admin:""
+    title:"",
+    startDate:"",
+    showFinished:""
   });
   const idRef = useRef();
   const nameRef = useRef();
@@ -57,14 +58,33 @@ export const AdminLendingsIndex = () => {
       setSearchParam({...searchParam,name:param})
     } else if (type === "email") {
       setSearchParam({...searchParam,email:param})
-    } else if (type === "admin") {
-      setSearchParam({...searchParam,admin:param})
+    } else if (type === "finishedAt") {
+      setSearchParam({...searchParam,finishedAt:param})
     }
   }
+
+  const handleSearch = async(params) => {
+    const res = await searchLendings(params);
+    setLendings(res.data.lendings);
+  };
+
+  const handleShowFinished = () => {
+    if (searchParam.showFinished) {
+      setSearchParam({...searchParam,showFinished: false})
+      handleSearch({...searchParam,showFinished: false});
+    } else if (!searchParam.showFinished) {
+      setSearchParam({...searchParam,showFinished: true})
+      handleSearch({...searchParam,showFinished: true});
+    }
+  }
+  console.log(searchParam)
 
   return(
     <>
       <Title>貸出データ一覧</Title>
+      <LendingSearch>
+        返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} />
+      </LendingSearch>
       {error && <Error>{error}</Error>}
       <Table>
         <tbody>
@@ -74,7 +94,7 @@ export const AdminLendingsIndex = () => {
           {lendings.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="deleteButton"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
+                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -110,6 +130,9 @@ const Title = styled.h1`
   margin: 0 auto;
   font-size: 1.3rem;
 `
+const LendingSearch = styled.div`
+  font-size: 0.9rem;
+`
 
 const Table = styled.table`
   border: none;
@@ -131,12 +154,15 @@ const Row = styled.tr`
     width:61%;
   }
   .startDate {
-    width: 15%;
+    width: 12%;
     text-align: center;
   }
   .finishedAt {
-    width: 15%;
+    width: 12%;
     text-align: center;
+  }
+  .control {
+    width: 7%;
   }
   .id {
     text-align: center;

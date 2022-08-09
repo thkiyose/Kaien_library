@@ -13,4 +13,13 @@ class Lending < ApplicationRecord
     book = Book.find_by(id: self.book_id)
     book.update(is_lent: false)
   end
+
+  scope :show_finished, -> (show_flag){
+    return if show_flag.blank?
+    if show_flag == "true"
+      all
+    else show_flag == "false"
+      where(finished_at: nil)
+    end
+  }
 end
