@@ -20,7 +20,7 @@ export const AdminLendingsIndex = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ showModalReturn, setShowModalReturn ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
-  const [ currentPage, setCurrentPage ] = useState(0);
+  const [ currentPage, setCurrentPage ] = useState(-1);
   const [ searchParam, setSearchParam ] = useState({
     id: "",
     title:"",
@@ -98,9 +98,8 @@ export const AdminLendingsIndex = () => {
 
   return(
     <>
-      <Title>貸出データ一覧</Title>
+      <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
       <LendingSearch>
-        返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} />
       </LendingSearch>
       {error && <Error>{error}</Error>}
       <Table>
@@ -120,7 +119,7 @@ export const AdminLendingsIndex = () => {
       <MyPaginate
         forcePage={currentPage}
         onPageChange={handlePageChange}
-        pageCount={Math.ceil(lendings.length / perPage)}
+        pageCount={parseInt(Math.ceil(lendings.length / perPage))}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         containerClassName='pagination'
@@ -147,6 +146,14 @@ export const AdminLendingsIndex = () => {
 const Title = styled.h1`
   margin: 0 auto;
   font-size: 1.3rem;
+  display: inline;
+`
+const ShowFinished = styled.span`
+  font-size: 0.9rem;
+  margin-left: 20px;
+  input[type="checkbox"] {
+
+  }
 `
 const LendingSearch = styled.div`
   font-size: 0.9rem;
