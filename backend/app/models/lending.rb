@@ -43,4 +43,15 @@ class Lending < ApplicationRecord
     return if id.blank?
     where(user_id: id)
   }
+
+  scope :search_with_start_date, -> (startdate,enddate){
+    return if startdate.blank? && enddate.blank?
+    if startdate && enddate.blank?
+      where('start_date >= ?',startdate)
+    elsif startdate.blank? && enddate
+      where('start_date <= ?',enddate)
+    else
+      where(start_date: startdate..enddate)
+    end
+  }
 end

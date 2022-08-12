@@ -27,8 +27,8 @@ export const AdminLendingsIndex = () => {
     title:"",
     userName: "",
     userEmail: "",
-    startDate:{ start:"",end: ""},
-    expiryDate:{ start:"",end: ""},
+    startDate:["",""],
+    expiryDate:["",""],
     showFinished:""
   });
   const idRef = useRef();
@@ -55,7 +55,6 @@ export const AdminLendingsIndex = () => {
     const res = await fetchLendingsAdmin();
     setLendings(res.data.lendings);
     setPageCount(Math.ceil(res.data.lendings.length/perPage));
-    setCurrentPage(0);
   }
   useEffect(() => { handleFetchLendings() }, []);
 
@@ -85,6 +84,10 @@ export const AdminLendingsIndex = () => {
       setSearchParam({...searchParam,userEmail:param})
     } else if (type === "userId") {
       setSearchParam({...searchParam,userId:param})
+    } else if (type === "startDateStart") {
+      setSearchParam({...searchParam,startDate:[param, searchParam.startDate[1]]})
+    } else if (type === "startDateEnd") {
+      setSearchParam({...searchParam,startDate:[searchParam.startDate[0],param]})
     }
   }
 
@@ -92,7 +95,6 @@ export const AdminLendingsIndex = () => {
     const res = await searchLendings(params);
     setLendings(res.data.lendings);
     setPageCount(Math.ceil(res.data.lendings.length/perPage))
-    setCurrentPage(0);
     setStart(0);
   };
 
@@ -110,11 +112,16 @@ export const AdminLendingsIndex = () => {
     <>
       <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
       <LendingSearch>
-        書籍タイトル<input type="text" className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
-        ユーザーID<input type="text" className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
-        ユーザー名<input type="text" className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
-        ユーザーemail<input type="text" className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
-        <button onClick={()=>{handleSearch(searchParam)}}>検索</button>
+        <p>
+          書籍タイトル<input type="text" className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
+          ユーザーID<input type="text" className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
+          ユーザー名<input type="text" className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
+          ユーザーemail<input type="text" className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
+        </p>
+        <p>
+          貸出開始日<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"startDateStart")}}/>〜<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"startDateEnd")}}/>
+          <button onClick={()=>{handleSearch(searchParam)}}>検索</button>
+        </p>
       </LendingSearch>
       {error && <Error>{error}</Error>}
       <Table>
@@ -132,7 +139,6 @@ export const AdminLendingsIndex = () => {
         </tbody>
       </Table>
       <MyPaginate
-        forcePage={currentPage}
         onPageChange={handlePageChange}
         pageCount={pageCount}
         marginPagesDisplayed={2}
@@ -172,6 +178,12 @@ const ShowFinished = styled.span`
 `
 const LendingSearch = styled.div`
   font-size: 0.9rem;
+  p {
+    margin: 0;
+  }
+  .userId {
+    width: 25px;
+  }
 `
 
 const Table = styled.table`
