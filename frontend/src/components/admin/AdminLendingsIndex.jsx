@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import { Context } from '../../App';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
@@ -12,15 +11,12 @@ import { returnLending } from '../../lib/api/admin';
 
 export const AdminLendingsIndex = () => {
   const [ lendings, setLendings ] = useState([]);
-  const navigate = useNavigate();
   const [ error, setError ] = useState("");
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
-  const { currentUser, setCurrentUser } = useContext(Context);
   const [ showModal, setShowModal ] = useState(false);
   const [ showModalReturn, setShowModalReturn ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
-  const [ currentPage, setCurrentPage] = useState(0);
   const [ pageCount, setPageCount] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
     userId: "",
@@ -31,10 +27,6 @@ export const AdminLendingsIndex = () => {
     finishedAt:["",""],
     showFinished:""
   });
-  const idRef = useRef();
-  const nameRef = useRef();
-  const emailRef = useRef();
-  const adminRef = useRef();
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -102,6 +94,11 @@ export const AdminLendingsIndex = () => {
     setStart(0);
   };
 
+  const handleResetSearch = () => {
+    setSearchParam({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],finishedAt:["",""],showFinished:searchParam.showFinished})
+    handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],finishedAt:["",""],showFinished:searchParam.showFinished});
+  };
+
   const handleShowFinished = () => {
     if (searchParam.showFinished) {
       setSearchParam({...searchParam,showFinished: false})
@@ -114,18 +111,18 @@ export const AdminLendingsIndex = () => {
 
   return(
     <>
-      <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
+      <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input value={searchParam.showFinished} type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
       <LendingSearch>
         <p>
-          書籍タイトル<input type="text" className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
-          ユーザーID<input type="text" className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
-          ユーザー名<input type="text" className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
-          ユーザーemail<input type="text" className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
+          書籍タイトル<input type="text" value={searchParam.title} className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
+          ユーザーID<input type="text" value={searchParam.userId} className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
+          ユーザー名<input type="text" value={searchParam.userName} className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
+          ユーザーemail<input type="text" value={searchParam.userEmail} className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
         </p>
         <p>
-          貸出開始日<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"startDateStart")}}/>〜<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"startDateEnd")}}/>
-          返却日<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtStart")}}/>〜<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtEnd")}}/>
-          <button onClick={()=>{handleSearch(searchParam)}}>検索</button>
+          貸出開始日<input type="date" value={searchParam.startDate[0]} className="date" onChange={(e)=>{onChange(e.target.value,"startDateStart")}}/>〜<input type="date" value={searchParam.startDate[1]} className="date" onChange={(e)=>{onChange(e.target.value,"startDateEnd")}}/>
+          返却日<input type="date" value={searchParam.finishedAt[0]} className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtStart")}}/>〜<input type="date" value={searchParam.finishedAt[1]} className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtEnd")}}/>
+          <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}}>リセット</button>
         </p>
       </LendingSearch>
       {error && <Error>{error}</Error>}
@@ -186,8 +183,36 @@ const LendingSearch = styled.div`
   p {
     margin: 0;
   }
+  input {
+    outline: 0;
+    background: white;
+    border: 0;
+    margin: 0 0 10px;
+    padding: 5px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  button {
+    outline: 0;
+    font-size: 0.8rem;
+    border: 0;
+    padding: 5px 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+  }
+  .searchButton {
+    background-color: ${Color.primary};
+    padding: 5px 10px;
+  }
+  .resetButton {
+    background-color: ${Color.dark};
+    float:right;
+  }
   .userId {
     width: 25px;
+  }
+  .userName {
+    width: 70px;
   }
 `
 
