@@ -32,6 +32,7 @@ class Api::V1::Admin::LendingsController < ApplicationController
     .search_with_user_email(params[:user_email])
     .search_with_user_id(params[:user_id])
     .search_with_start_date(params[:start_date][0],params[:start_date][1])
+    .search_with_finished_at(params[:finished_at][0],params[:finished_at][1])
     .select(:id,:book_id,:title,:start_date,:finished_at,:user_id)
     render json: { lendings: lendings }
   end

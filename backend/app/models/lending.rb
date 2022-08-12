@@ -54,4 +54,15 @@ class Lending < ApplicationRecord
       where(start_date: startdate..enddate)
     end
   }
+
+  scope :search_with_finished_at, -> (startdate,enddate){
+    return if startdate.blank? && enddate.blank?
+    if startdate && enddate.blank?
+      where('finished_at >= ?',startdate)
+    elsif startdate.blank? && enddate
+      where('finished_at <= ?',enddate)
+    else
+      where(finished_at: startdate..enddate)
+    end
+  }
 end

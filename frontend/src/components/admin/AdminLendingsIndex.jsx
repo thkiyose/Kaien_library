@@ -28,7 +28,7 @@ export const AdminLendingsIndex = () => {
     userName: "",
     userEmail: "",
     startDate:["",""],
-    expiryDate:["",""],
+    finishedAt:["",""],
     showFinished:""
   });
   const idRef = useRef();
@@ -88,6 +88,10 @@ export const AdminLendingsIndex = () => {
       setSearchParam({...searchParam,startDate:[param, searchParam.startDate[1]]})
     } else if (type === "startDateEnd") {
       setSearchParam({...searchParam,startDate:[searchParam.startDate[0],param]})
+    } else if (type === "finishedAtStart") {
+      setSearchParam({...searchParam,finishedAt:[param, searchParam.finishedAt[1]]})
+    } else if (type === "finishedAtEnd") {
+      setSearchParam({...searchParam,finishedAt:[searchParam.finishedAt[0],param]})
     }
   }
 
@@ -120,6 +124,7 @@ export const AdminLendingsIndex = () => {
         </p>
         <p>
           貸出開始日<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"startDateStart")}}/>〜<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"startDateEnd")}}/>
+          返却日<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtStart")}}/>〜<input type="date" className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtEnd")}}/>
           <button onClick={()=>{handleSearch(searchParam)}}>検索</button>
         </p>
       </LendingSearch>
