@@ -20,12 +20,13 @@ export const AdminLendingsIndex = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ showModalReturn, setShowModalReturn ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
-  const [ currentPage, setCurrentPage ] = useState(-1);
+  const [ currentPage, setCurrentPage] = useState(0);
+  const [ pageCount, setPageCount] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
-    id: "",
+    userId: "",
     title:"",
-    user_id: "",
-    user_email: "",
+    userName: "",
+    userEmail: "",
     startDate:{ start:"",end: ""},
     expiryDate:{ start:"",end: ""},
     showFinished:""
@@ -37,7 +38,6 @@ export const AdminLendingsIndex = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
-    setCurrentPage(e.selected)
   }
 
   const handleReturnLending = async(lendingId) => {
@@ -51,11 +51,13 @@ export const AdminLendingsIndex = () => {
     }
   }
 
-  const handleFetchLendings= async(param) => {
-    const res = await fetchLendingsAdmin(param);
+  const handleFetchLendings= async() => {
+    const res = await fetchLendingsAdmin();
     setLendings(res.data.lendings);
+    setPageCount(Math.ceil(res.data.lendings.length/perPage));
+    setCurrentPage(0);
   }
-  useEffect(() => { handleFetchLendings() }, [searchParam.showFinished]);
+  useEffect(() => { handleFetchLendings() }, []);
 
   const handleDeleteLending = async(lendingId) => {
     await deleteLending(lendingId);
@@ -77,25 +79,30 @@ export const AdminLendingsIndex = () => {
       setSearchParam({...searchParam,id:param})
     } else if (type === "title") {
       setSearchParam({...searchParam,title:param})
-    } else if (type === "email") {
-      setSearchParam({...searchParam,email:param})
-    } else if (type === "finishedAt") {
-      setSearchParam({...searchParam,finishedAt:param})
+    } else if (type === "userName") {
+      setSearchParam({...searchParam,userName:param})
+    } else if (type === "userEmail") {
+      setSearchParam({...searchParam,userEmail:param})
+    } else if (type === "userId") {
+      setSearchParam({...searchParam,userId:param})
     }
   }
 
   const handleSearch = async(params) => {
     const res = await searchLendings(params);
     setLendings(res.data.lendings);
+    setPageCount(Math.ceil(res.data.lendings.length/perPage))
+    setCurrentPage(0);
+    setStart(0);
   };
-console.log(searchParam)
+
   const handleShowFinished = () => {
     if (searchParam.showFinished) {
       setSearchParam({...searchParam,showFinished: false})
-      handleSearch({...searchParam,showFinished: false});
+      handleSearch({...searchParam,showFinished: false})
     } else if (!searchParam.showFinished) {
       setSearchParam({...searchParam,showFinished: true})
-      handleSearch({...searchParam,showFinished: true});
+      handleSearch({...searchParam,showFinished: true})
     }
   }
 
@@ -103,7 +110,11 @@ console.log(searchParam)
     <>
       <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
       <LendingSearch>
-        <input type="text" className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/><button onClick={()=>{handleSearch(searchParam)}}>検索</button>
+        書籍タイトル<input type="text" className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
+        ユーザーID<input type="text" className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
+        ユーザー名<input type="text" className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
+        ユーザーemail<input type="text" className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
+        <button onClick={()=>{handleSearch(searchParam)}}>検索</button>
       </LendingSearch>
       {error && <Error>{error}</Error>}
       <Table>
@@ -123,7 +134,7 @@ console.log(searchParam)
       <MyPaginate
         forcePage={currentPage}
         onPageChange={handlePageChange}
-        pageCount={parseInt(Math.ceil(lendings.length / perPage))}
+        pageCount={pageCount}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         containerClassName='pagination'

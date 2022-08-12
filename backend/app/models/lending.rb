@@ -28,4 +28,19 @@ class Lending < ApplicationRecord
     return if title.blank?
     where(['title like ?',"%#{title}%"])
   }
+
+  scope :search_with_user_name, -> (name){
+    return if name.blank?
+    where(['name like ?',"%#{name}%"])
+  }
+
+  scope :search_with_user_email, -> (email){
+    return if name.blank?
+    where(['email like ?',"%#{email}%"])
+  }
+
+  scope :search_with_user_id, -> (id){
+    return if id.blank?
+    where(user_id: id)
+  }
 end
