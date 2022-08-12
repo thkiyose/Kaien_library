@@ -17,11 +17,15 @@ class Lending < ApplicationRecord
   end
 
   scope :show_finished, -> (show_flag){
-    return if show_flag.blank?
     if show_flag == "true"
       all
-    else show_flag == "false"
+    else show_flag == "false" || show_flag.blank?
       where(finished_at: nil)
     end
+  }
+
+  scope :search_with_book_title, -> (title){
+    return if title.blank?
+    where(['title like ?',"%#{title}%"])
   }
 end

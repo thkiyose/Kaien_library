@@ -25,7 +25,7 @@ class Api::V1::Admin::LendingsController < ApplicationController
   end
 
   def search
-    lendings = Lending.joins(:book).order(created_at: :desc).show_finished(params[:show_finished]).select(:id,:book_id,:title,:start_date,:finished_at,:user_id)
+    lendings = Lending.joins(:book).order(created_at: :desc).show_finished(params[:show_finished]).search_with_book_title(params[:title]).select(:id,:book_id,:title,:start_date,:finished_at,:user_id)
     render json: { lendings: lendings }
   end
 end

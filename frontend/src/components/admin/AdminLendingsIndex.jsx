@@ -24,7 +24,10 @@ export const AdminLendingsIndex = () => {
   const [ searchParam, setSearchParam ] = useState({
     id: "",
     title:"",
-    startDate:"",
+    user_id: "",
+    user_email: "",
+    startDate:{ start:"",end: ""},
+    expiryDate:{ start:"",end: ""},
     showFinished:""
   });
   const idRef = useRef();
@@ -52,7 +55,7 @@ export const AdminLendingsIndex = () => {
     const res = await fetchLendingsAdmin(param);
     setLendings(res.data.lendings);
   }
-  useEffect(() => { handleFetchLendings(searchParam) }, []);
+  useEffect(() => { handleFetchLendings() }, [searchParam.showFinished]);
 
   const handleDeleteLending = async(lendingId) => {
     await deleteLending(lendingId);
@@ -72,8 +75,8 @@ export const AdminLendingsIndex = () => {
   const onChange = (param,type) => {
     if (type === "id"){
       setSearchParam({...searchParam,id:param})
-    } else if (type === "name") {
-      setSearchParam({...searchParam,name:param})
+    } else if (type === "title") {
+      setSearchParam({...searchParam,title:param})
     } else if (type === "email") {
       setSearchParam({...searchParam,email:param})
     } else if (type === "finishedAt") {
@@ -85,7 +88,7 @@ export const AdminLendingsIndex = () => {
     const res = await searchLendings(params);
     setLendings(res.data.lendings);
   };
-
+console.log(searchParam)
   const handleShowFinished = () => {
     if (searchParam.showFinished) {
       setSearchParam({...searchParam,showFinished: false})
@@ -100,6 +103,7 @@ export const AdminLendingsIndex = () => {
     <>
       <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
       <LendingSearch>
+        <input type="text" className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/><button onClick={()=>{handleSearch(searchParam)}}>検索</button>
       </LendingSearch>
       {error && <Error>{error}</Error>}
       <Table>
