@@ -47,7 +47,7 @@ export const AdminLendingsIndex = () => {
     }
     if (res.data.status === "SUCCESS") {
       setError("");
-      handleFetchLendings(searchParam);
+      handleSearch(searchParam);
     }
   }
 
@@ -60,7 +60,7 @@ export const AdminLendingsIndex = () => {
 
   const handleDeleteLending = async(lendingId) => {
     await deleteLending(lendingId);
-    handleFetchLendings(searchParam);
+    handleSearch(searchParam);
   };
 
   const handleShowModal = (targetId) => {
