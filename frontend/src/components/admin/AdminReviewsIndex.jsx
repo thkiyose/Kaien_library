@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
+import { ToggleDetail } from '../parts/ToggleDetail';
 import { fetchReviewsAdmin } from '../../lib/api/admin';
 
 export const AdminReviewsIndex = () => {
@@ -13,6 +14,7 @@ export const AdminReviewsIndex = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(0);
+  const [ showDetail, setShowDetail] = useState(false);
   const [ searchParam, setSearchParam ] = useState({
   });
 
@@ -32,6 +34,9 @@ export const AdminReviewsIndex = () => {
     setShowModal(true);
     setTargetId(targetId);
   };
+
+  const handleShowDetail = (e) => {
+  }
 
   const onChange = (param,type) => {
   }
@@ -60,13 +65,16 @@ export const AdminReviewsIndex = () => {
           </Row>
           {reviews.slice(start, start + perPage).map((review,index) => {
             return (
-              <Row key={index}>
-                <td className="id">{review.id}</td>
-                <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
-                <td>+</td>
-                <td className="userName">{review.userId ? review.userId : "退会済"}</td>
-                <td className="control"><DeleteButton onClick={() => {handleShowModal(review.id)}}>削除</DeleteButton></td>
-              </Row>
+              <React.Fragment key={index}>
+                <Row>
+                  <td className="id">{review.id}</td>
+                  <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
+                  <td onClick={(e)=>{handleShowDetail(e)}}>+</td>
+                  <td className="userName">{review.userId ? review.userId : "退会済"}</td>
+                  <td className="control"><DeleteButton onClick={() => {handleShowModal(review.id)}}>削除</DeleteButton></td>
+                </Row>
+                <ToggleDetail/>
+              </React.Fragment>
             );
           })}
         </tbody>
@@ -144,6 +152,12 @@ const Table = styled.table`
   border: none;
   border-collapse: collapse;
   width: 100%;
+  .hidden {
+    display: none;
+  }
+  .show {
+    display: block;
+  }
 `
 const Row = styled.tr`
   th {
@@ -179,6 +193,8 @@ const Row = styled.tr`
     padding-left: 12px;
     color: rgb(85, 85, 85);
   }
+`
+const DetailRow = styled.tr`
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({
