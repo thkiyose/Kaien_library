@@ -5,7 +5,7 @@ import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchReservationsAdmin } from '../../lib/api/admin';
-import { deleteLending } from '../../lib/api/admin';
+import { deleteReseravtion } from '../../lib/api/admin';
 import { searchReservations } from '../../lib/api/admin';
 import { returnLending } from '../../lib/api/admin';
 export const AdminReservationsIndex = () => {
@@ -14,7 +14,6 @@ export const AdminReservationsIndex = () => {
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
-  const [ showModalReturn, setShowModalReturn ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
@@ -31,17 +30,6 @@ export const AdminReservationsIndex = () => {
     setStart(e.selected * perPage);
   }
 
-  const handleReturnLending = async(lendingId) => {
-    const res = await returnLending(lendingId)
-    if (res.data.error) {
-      setError(res.data.error);
-    }
-    if (res.data.status === "SUCCESS") {
-      setError("");
-      handleSearch(searchParam);
-    }
-  }
-
   const handleFetchReservations = useCallback(async() => {
     const res = await fetchReservationsAdmin();
     console.log(res)
@@ -50,18 +38,13 @@ export const AdminReservationsIndex = () => {
   },[perPage])
   useEffect(() => { handleFetchReservations() }, [handleFetchReservations]);
 
-  const handleDeleteLending = async(lendingId) => {
-    await deleteLending(lendingId);
+  const handleDeleteReservation = async(reservationId) => {
+    await deleteReseravtion(reservationId);
     handleSearch(searchParam);
   };
 
   const handleShowModal = (targetId) => {
     setShowModal(true);
-    setTargetId(targetId);
-  };
-
-  const handleShowModalReturn = (targetId) => {
-    setShowModalReturn(true);
     setTargetId(targetId);
   };
 
@@ -149,8 +132,7 @@ export const AdminReservationsIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteLending(targetId)} message={"貸出データを削除してよろしいですか？（未返却の場合、本は返却扱いになります。）"}/>
-      <Modal showFlag={showModalReturn} setShowModal={setShowModalReturn} yesAction={()=>handleReturnLending(targetId)} message={"この貸出データを返却済みにしますか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteReservation(targetId)} message={"予約データを削除してよろしいですか？"}/>
     </>
   );
 };

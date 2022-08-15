@@ -51,3 +51,7 @@ export const fetchReservationsAdmin = (params) => {
 export const searchReservations = (params) => {
   return client.get(`/admin/reservations/search`,{params});
 };
+
+export const deleteReseravtion = (reservation_id) => {
+  return client.delete(`/admin/reservations/${reservation_id}`);
+};

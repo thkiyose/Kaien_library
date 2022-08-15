@@ -8,6 +8,13 @@ class Api::V1::Admin::ReservationsController < ApplicationController
     render json: { reservations: reservations }
   end
 
+  def destroy
+    reservation = Reservation.find_by(id:params[:id])
+    if reservation.destroy
+      render json: {status:"SUCCESS"}
+    end
+  end
+
   def search
     reservations = Reservation.joins(:book,:user).order(created_at: :desc)
     .show_expired(params[:show_expired])
