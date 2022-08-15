@@ -13,7 +13,7 @@ class Reservation < ApplicationRecord
     if show_flag == "true"
       all
     else show_flag == "false" || show_flag.blank?
-      where('expiry_date <= ?',Date.today)
+      where('expiry_date > ?',Date.today)
     end
   }
 end

@@ -26,7 +26,7 @@ export const AdminReservationsIndex = () => {
     expiryDate:["",""],
     showExpired:""
   });
-console.log(searchParam)
+
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
@@ -44,6 +44,7 @@ console.log(searchParam)
 
   const handleFetchReservations = useCallback(async() => {
     const res = await fetchReservationsAdmin();
+    console.log(res)
     setReservations(res.data.reservations);
     setPageCount(Math.ceil(res.data.reservations.length/perPage));
   },[perPage])
@@ -110,19 +111,19 @@ console.log(searchParam)
 
   return(
     <>
-      <Title>予約データ一覧</Title><ShowFinished>返却済み項目も表示する<input value={searchParam.showExpired} type="checkbox" onClick={()=>{handleShowExpired()}} /></ShowFinished>
-      <LendingSearch>
-      </LendingSearch>
+      <Title>予約データ一覧</Title><ShowFinished>期限切れ項目も表示する<input value={searchParam.showExpired} type="checkbox" onClick={()=>{handleShowExpired()}} /></ShowFinished>
+      <ReservationSearch>
+      </ReservationSearch>
       {error && <Error>{error}</Error>}
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>貸出書籍</th><th>ﾕｰｻﾞｰid</th><th>貸出開始日</th><th>返却日</th><th></th>
+            <th>ID</th><th>予約書籍</th><th>ﾕｰｻﾞｰid</th><th>予約開始日</th><th>予約終了日</th><th></th>
           </Row>
-          {reservations.slice(start, start + perPage).map((lending,index) => {
+          {reservations.slice(start, start + perPage).map((reservation,index) => {
             return (
               <Row key={index}>
-                <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt ? lending.finishedAt : <><span>未返却</span><button onClick={()=>{handleShowModalReturn(lending.id)}}>変更</button></>}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
+                <td className="id">{reservation.id}</td><td className="title"><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></td><td className="userName">{reservation.userId ? reservation.userId : "退会済"}</td><td className="startDate">{reservation.startDate}</td><td className="expiryDate">{reservation.expiryDate}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(reservation.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -166,7 +167,7 @@ const ShowFinished = styled.span`
 
   }
 `
-const LendingSearch = styled.div`
+const ReservationSearch = styled.div`
   font-size: 0.9rem;
   p {
     margin: 0;
