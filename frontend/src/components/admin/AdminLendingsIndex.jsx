@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from '../parts/Color';
@@ -43,12 +43,12 @@ export const AdminLendingsIndex = () => {
     }
   }
 
-  const handleFetchLendings= async() => {
+  const handleFetchLendings = useCallback(async() => {
     const res = await fetchLendingsAdmin();
     setLendings(res.data.lendings);
     setPageCount(Math.ceil(res.data.lendings.length/perPage));
-  }
-  useEffect(() => { handleFetchLendings() }, []);
+  },[perPage])
+  useEffect(() => { handleFetchLendings() }, [handleFetchLendings]);
 
   const handleDeleteLending = async(lendingId) => {
     await deleteLending(lendingId);
@@ -111,7 +111,7 @@ export const AdminLendingsIndex = () => {
 
   return(
     <>
-      <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input value={searchParam.showFinished} type="checkbox" value="true" onClick={()=>{handleShowFinished()}} /></ShowFinished>
+      <Title>貸出データ一覧</Title><ShowFinished>返却済み項目も表示する<input value={searchParam.showFinished} type="checkbox" onClick={()=>{handleShowFinished()}} /></ShowFinished>
       <LendingSearch>
         <p>
           書籍タイトル<input type="text" value={searchParam.title} className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
