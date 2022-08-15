@@ -1,9 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from "styled-components";
 
-export const ToggleDetail = () => {
+export const ToggleDetail = (props) => {
+  const { review, handleShowModal } = props;
+  const [ showDetail, setShowDetail ] = useState(false);
+
+  const handleShowDetail = () => {
+    setShowDetail(!showDetail);
+  }
+
   return (
-    <tr>
-      <td>テスト</td>
-    </tr>
+    <>
+      <Row>
+        <td className="id">{review.id}</td>
+        <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
+        <td onClick={()=>{handleShowDetail()}}>+</td>
+        <td className="userName">{review.userId ? review.userId : "退会済"}</td>
+        <td className="control"><button onClick={() => {handleShowModal(review.id)}}>削除</button></td>
+      </Row>
+      {showDetail === true &&
+        <tr>
+          <td></td><td>テスト</td>
+        </tr>
+      }
+    </>
   );
 }
+
+const Row = styled.tr`
+  th {
+    font-weight: normal;
+    color: white;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  td {
+    font-size: 0.9rem;
+    border: none;
+  }
+  .title {
+    width:60%;
+  }
+  .control {
+    width: 6%;
+  }
+  .id {
+    width: 5%;
+    text-align: center;
+  }
+  .userName {
+    width:6%;
+    text-align: center;
+  }
+  :nth-child(odd) {
+    background-color: #c2dbcf;
+  }
+  p {
+    margin: 0;
+    padding-left: 12px;
+    color: rgb(85, 85, 85);
+  }
+`

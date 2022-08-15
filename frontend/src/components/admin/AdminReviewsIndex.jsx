@@ -66,14 +66,7 @@ export const AdminReviewsIndex = () => {
           {reviews.slice(start, start + perPage).map((review,index) => {
             return (
               <React.Fragment key={index}>
-                <Row>
-                  <td className="id">{review.id}</td>
-                  <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
-                  <td onClick={(e)=>{handleShowDetail(e)}}>+</td>
-                  <td className="userName">{review.userId ? review.userId : "退会済"}</td>
-                  <td className="control"><DeleteButton onClick={() => {handleShowModal(review.id)}}>削除</DeleteButton></td>
-                </Row>
-                <ToggleDetail/>
+                <ToggleDetail review={review} handleShowModal={handleShowModal}/>
               </React.Fragment>
             );
           })}
@@ -166,32 +159,6 @@ const Row = styled.tr`
     color: white;
     font-size: 0.9rem;
     text-align: center;
-  }
-  td {
-    font-size: 0.9rem;
-    border: none;
-  }
-  .title {
-    width:60%;
-  }
-  .control {
-    width: 6%;
-  }
-  .id {
-    width: 5%;
-    text-align: center;
-  }
-  .userName {
-    width:6%;
-    text-align: center;
-  }
-  :nth-child(odd) {
-    background-color: #c2dbcf;
-  }
-  p {
-    margin: 0;
-    padding-left: 12px;
-    color: rgb(85, 85, 85);
   }
 `
 const DetailRow = styled.tr`
