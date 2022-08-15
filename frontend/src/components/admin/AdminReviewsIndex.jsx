@@ -28,6 +28,7 @@ export const AdminReviewsIndex = () => {
   }
 
   const handleSearch = async(params) => {
+    const res =[];
     setPageCount(Math.ceil(res.data.reservations.length/perPage))
     setStart(0);
   };
@@ -77,7 +78,7 @@ export const AdminReviewsIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteReservation(targetId)} message={"予約データを削除してよろしいですか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} message={"予約データを削除してよろしいですか？"}/>
     </>
   );
 };
