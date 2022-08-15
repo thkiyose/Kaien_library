@@ -14,6 +14,7 @@ export const AdminData = () => {
             <li><Link to="users">ユーザーデータ一覧</Link></li>
             <li><Link to="lendings">貸出データ一覧</Link></li>
             <li><Link to="reservations">予約データ一覧</Link></li>
+            <li><Link to="reviews">レビューデータ一覧</Link></li>
           </ul>
         </SideBar>
         <Main>
