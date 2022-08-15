@@ -18,6 +18,12 @@ class Api::V1::Admin::ReservationsController < ApplicationController
   def search
     reservations = Reservation.joins(:book,:user).order(created_at: :desc)
     .show_expired(params[:show_expired])
+    .search_with_book_title(params[:title])
+    .search_with_user_name(params[:user_name])
+    .search_with_user_email(params[:user_email])
+    .search_with_user_id(params[:user_id])
+    .search_with_start_date(params[:start_date][0],params[:start_date][1])
+    .search_with_expiry_date(params[:expiry_date][0],params[:expiry_date][1])
     .select(:id,:book_id,:title,:start_date,:expiry_date,:user_id)
     render json: { reservations: reservations }
   end

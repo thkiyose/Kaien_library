@@ -7,10 +7,8 @@ import { Modal } from '../parts/Modal';
 import { fetchReservationsAdmin } from '../../lib/api/admin';
 import { deleteReseravtion } from '../../lib/api/admin';
 import { searchReservations } from '../../lib/api/admin';
-import { returnLending } from '../../lib/api/admin';
 export const AdminReservationsIndex = () => {
   const [ reservations, setReservations ] = useState([]);
-  const [ error, setError ] = useState("");
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
@@ -32,7 +30,6 @@ export const AdminReservationsIndex = () => {
 
   const handleFetchReservations = useCallback(async() => {
     const res = await fetchReservationsAdmin();
-    console.log(res)
     setReservations(res.data.reservations);
     setPageCount(Math.ceil(res.data.reservations.length/perPage));
   },[perPage])
@@ -63,10 +60,10 @@ export const AdminReservationsIndex = () => {
       setSearchParam({...searchParam,startDate:[param, searchParam.startDate[1]]})
     } else if (type === "startDateEnd") {
       setSearchParam({...searchParam,startDate:[searchParam.startDate[0],param]})
-    } else if (type === "finishedAtStart") {
-      setSearchParam({...searchParam,finishedAt:[param, searchParam.finishedAt[1]]})
-    } else if (type === "finishedAtEnd") {
-      setSearchParam({...searchParam,finishedAt:[searchParam.finishedAt[0],param]})
+    } else if (type === "expiryDateStart") {
+      setSearchParam({...searchParam,expiryDate:[param, searchParam.expiryDate[1]]})
+    } else if (type === "expiryDateEnd") {
+      setSearchParam({...searchParam,expiryDate:[searchParam.expiryDate[0],param]})
     }
   }
 
@@ -78,8 +75,8 @@ export const AdminReservationsIndex = () => {
   };
 
   const handleResetSearch = () => {
-    setSearchParam({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],finishedAt:["",""],showFinished:searchParam.showFinished})
-    handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],finishedAt:["",""],showFinished:searchParam.showFinished});
+    setSearchParam({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired})
+    handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired});
   };
 
   const handleShowExpired = () => {
@@ -96,8 +93,18 @@ export const AdminReservationsIndex = () => {
     <>
       <Title>予約データ一覧</Title><ShowFinished>期限切れ項目も表示する<input value={searchParam.showExpired} type="checkbox" onClick={()=>{handleShowExpired()}} /></ShowFinished>
       <ReservationSearch>
+        <p>
+          書籍タイトル<input type="text" value={searchParam.title} className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
+          ユーザーID<input type="text" value={searchParam.userId} className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
+          ユーザー名<input type="text" value={searchParam.userName} className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
+          ユーザーemail<input type="text" value={searchParam.userEmail} className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
+        </p>
+        <p>
+          予約開始日<input type="date" value={searchParam.startDate[0]} className="date" onChange={(e)=>{onChange(e.target.value,"startDateStart")}}/>〜<input type="date" value={searchParam.startDate[1]} className="date" onChange={(e)=>{onChange(e.target.value,"startDateEnd")}}/>
+          予約終了日<input type="date" value={searchParam.expiryDate[0]} className="date" onChange={(e)=>{onChange(e.target.value,"expiryDateStart")}}/>〜<input type="date" value={searchParam.expiryDate[1]} className="date" onChange={(e)=>{onChange(e.target.value,"expiryDateEnd")}}/>
+          <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}}>リセット</button>
+        </p>
       </ReservationSearch>
-      {error && <Error>{error}</Error>}
       <Table>
         <tbody>
           <Row>
@@ -150,7 +157,7 @@ const ShowFinished = styled.span`
   }
 `
 const ReservationSearch = styled.div`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   p {
     margin: 0;
   }
@@ -211,7 +218,7 @@ const Row = styled.tr`
     width: 11%;
     text-align: center;
   }
-  .finishedAt {
+  .expiryDate {
     width: 11%;
     text-align: center;
     span {
@@ -291,10 +298,4 @@ const DeleteButton = styled.button`
   color: #FFFFFF;
   cursor: pointer;
   margin-left: 10px;
-`
-
-const Error = styled.p`
-  margin:0;
-  background-color: ${Color.warning};
-  text-align: center;
 `
