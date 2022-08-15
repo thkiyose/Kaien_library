@@ -51,6 +51,9 @@ Rails.application.routes.draw do
         resources :reservations, only: [:index, :destroy] do
           get "search", on: :collection
         end
+        resources :reviews, only: [:index, :destroy] do
+          get "search", on: :collection
+        end
       end
       namespace :auth do
         resources :sessions, only: %i[index]
