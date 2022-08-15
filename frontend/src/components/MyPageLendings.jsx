@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
@@ -114,15 +114,15 @@ export const MyPageLendings = () => {
   const today = new Date();
   const navigate = useNavigate();
 
-  const handleFetchLendings = async() => {
+  const handleFetchLendings = useCallback(async() => {
     const res = await fetchLendings(currentUser.id);
     setLendings(res.data.lendings);
     setReservations(res.data.reservations);
     setIsLoading(false);
-  };
+  },[currentUser.id]);
 
   useEffect(() => {handleFetchLendings();
-  },[currentUser]);
+  },[handleFetchLendings,currentUser]);
 
   const handleDestroyReservation = async(id) => {
     await destroyReservation(id);
