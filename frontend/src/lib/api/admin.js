@@ -47,3 +47,7 @@ export const searchLendings = (params) => {
 export const fetchReservationsAdmin = (params) => {
   return client.get("/admin/reservations",{params});
 };
+
+export const searchReservations = (params) => {
+  return client.get(`/admin/reservations/search`,{params});
+};

@@ -6,9 +6,8 @@ import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchReservationsAdmin } from '../../lib/api/admin';
 import { deleteLending } from '../../lib/api/admin';
-import { searchLendings } from '../../lib/api/admin';
+import { searchReservations } from '../../lib/api/admin';
 import { returnLending } from '../../lib/api/admin';
-
 export const AdminReservationsIndex = () => {
   const [ reservations, setReservations ] = useState([]);
   const [ error, setError ] = useState("");
@@ -24,10 +23,10 @@ export const AdminReservationsIndex = () => {
     userName: "",
     userEmail: "",
     startDate:["",""],
-    finishedAt:["",""],
-    showFinished:""
+    expiryDate:["",""],
+    showExpired:""
   });
-
+console.log(searchParam)
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
@@ -88,7 +87,7 @@ export const AdminReservationsIndex = () => {
   }
 
   const handleSearch = async(params) => {
-    const res = await searchLendings(params);
+    const res = await searchReservations(params);
     setReservations(res.data.reservations);
     setPageCount(Math.ceil(res.data.reservations.length/perPage))
     setStart(0);
@@ -99,31 +98,20 @@ export const AdminReservationsIndex = () => {
     handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],finishedAt:["",""],showFinished:searchParam.showFinished});
   };
 
-  const handleShowFinished = () => {
-    if (searchParam.showFinished) {
-      setSearchParam({...searchParam,showFinished: false})
-      handleSearch({...searchParam,showFinished: false})
-    } else if (!searchParam.showFinished) {
-      setSearchParam({...searchParam,showFinished: true})
-      handleSearch({...searchParam,showFinished: true})
+  const handleShowExpired = () => {
+    if (searchParam.showExpired) {
+      setSearchParam({...searchParam,showExpired: false})
+      handleSearch({...searchParam,showExpired: false})
+    } else if (!searchParam.showExpired) {
+      setSearchParam({...searchParam,showExpired: true})
+      handleSearch({...searchParam,showExpired: true})
     }
   }
 
   return(
     <>
-      <Title>予約データ一覧</Title><ShowFinished>返却済み項目も表示する<input value={searchParam.showFinished} type="checkbox" onClick={()=>{handleShowFinished()}} /></ShowFinished>
+      <Title>予約データ一覧</Title><ShowFinished>返却済み項目も表示する<input value={searchParam.showExpired} type="checkbox" onClick={()=>{handleShowExpired()}} /></ShowFinished>
       <LendingSearch>
-        <p>
-          書籍タイトル<input type="text" value={searchParam.title} className="title" onChange={(e)=>{onChange(e.target.value,"title")}}/>
-          ユーザーID<input type="text" value={searchParam.userId} className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
-          ユーザー名<input type="text" value={searchParam.userName} className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
-          ユーザーemail<input type="text" value={searchParam.userEmail} className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
-        </p>
-        <p>
-          貸出開始日<input type="date" value={searchParam.startDate[0]} className="date" onChange={(e)=>{onChange(e.target.value,"startDateStart")}}/>〜<input type="date" value={searchParam.startDate[1]} className="date" onChange={(e)=>{onChange(e.target.value,"startDateEnd")}}/>
-          返却日<input type="date" value={searchParam.finishedAt[0]} className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtStart")}}/>〜<input type="date" value={searchParam.finishedAt[1]} className="date" onChange={(e)=>{onChange(e.target.value,"finishedAtEnd")}}/>
-          <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}}>リセット</button>
-        </p>
       </LendingSearch>
       {error && <Error>{error}</Error>}
       <Table>
