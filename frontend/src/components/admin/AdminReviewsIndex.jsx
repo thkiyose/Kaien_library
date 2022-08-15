@@ -4,9 +4,10 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
+import { fetchReviewsAdmin } from '../../lib/api/admin';
 
 export const AdminReviewsIndex = () => {
-  const [ reservations, setReservations ] = useState([]);
+  const [ reviews, setReviews ] = useState([]);
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
@@ -18,6 +19,14 @@ export const AdminReviewsIndex = () => {
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
+
+  const handleFetchReviews = useCallback(async() => {
+    const res = await fetchReviewsAdmin();
+    console.log(res)
+    setReviews(res.data.reviews);
+    setPageCount(Math.ceil(res.data.reviews.length/perPage));
+  },[perPage])
+  useEffect(() => { handleFetchReviews() }, [handleFetchReviews]);
 
   const handleShowModal = (targetId) => {
     setShowModal(true);
@@ -47,12 +56,16 @@ export const AdminReviewsIndex = () => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>予約書籍</th><th>ﾕｰｻﾞｰid</th><th>予約開始日</th><th>予約終了日</th><th></th>
+            <th>ID</th><th>レビュー対象タイトル</th><th></th><th>ﾕｰｻﾞｰid</th><th></th>
           </Row>
-          {reservations.slice(start, start + perPage).map((reservation,index) => {
+          {reviews.slice(start, start + perPage).map((review,index) => {
             return (
               <Row key={index}>
-                <td className="id">{reservation.id}</td><td className="title"><Link to={`/books/${reservation.bookId}`}>{reservation.title}</Link></td><td className="userName">{reservation.userId ? reservation.userId : "退会済"}</td><td className="startDate">{reservation.startDate}</td><td className="expiryDate">{reservation.expiryDate}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(reservation.id)}}>削除</DeleteButton></td>
+                <td className="id">{review.id}</td>
+                <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
+                <td>+</td>
+                <td className="userName">{review.userId ? review.userId : "退会済"}</td>
+                <td className="control"><DeleteButton onClick={() => {handleShowModal(review.id)}}>削除</DeleteButton></td>
               </Row>
             );
           })}
@@ -146,26 +159,6 @@ const Row = styled.tr`
   }
   .title {
     width:60%;
-  }
-  .startDate {
-    width: 11%;
-    text-align: center;
-  }
-  .expiryDate {
-    width: 11%;
-    text-align: center;
-    span {
-      font-size: 0.8rem;
-    }
-    button {
-      outline: 0;
-      background: rgb(0,0,0,0);
-      font-size: 0.8rem;
-      border: 0;
-      padding: 5px 5px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
   }
   .control {
     width: 6%;
