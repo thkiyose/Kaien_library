@@ -43,3 +43,7 @@ export const deleteLending = (lending_id) => {
 export const searchLendings = (params) => {
   return client.get(`/admin/lendings/search`,{params});
 };
+
+export const fetchReservationsAdmin = (params) => {
+  return client.get("/admin/reservations",{params});
+};

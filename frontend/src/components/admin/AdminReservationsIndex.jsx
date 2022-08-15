@@ -4,13 +4,13 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
-import { fetchLendingsAdmin } from '../../lib/api/admin';
+import { fetchReservationsAdmin } from '../../lib/api/admin';
 import { deleteLending } from '../../lib/api/admin';
 import { searchLendings } from '../../lib/api/admin';
 import { returnLending } from '../../lib/api/admin';
 
 export const AdminReservationsIndex = () => {
-  const [ lendings, setLendings ] = useState([]);
+  const [ reservations, setReservations ] = useState([]);
   const [ error, setError ] = useState("");
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
@@ -43,12 +43,12 @@ export const AdminReservationsIndex = () => {
     }
   }
 
-  const handleFetchLendings = useCallback(async() => {
-    const res = await fetchLendingsAdmin();
-    setLendings(res.data.lendings);
-    setPageCount(Math.ceil(res.data.lendings.length/perPage));
+  const handleFetchReservations = useCallback(async() => {
+    const res = await fetchReservationsAdmin();
+    setReservations(res.data.reservations);
+    setPageCount(Math.ceil(res.data.reservations.length/perPage));
   },[perPage])
-  useEffect(() => { handleFetchLendings() }, [handleFetchLendings]);
+  useEffect(() => { handleFetchReservations() }, [handleFetchReservations]);
 
   const handleDeleteLending = async(lendingId) => {
     await deleteLending(lendingId);
@@ -89,8 +89,8 @@ export const AdminReservationsIndex = () => {
 
   const handleSearch = async(params) => {
     const res = await searchLendings(params);
-    setLendings(res.data.lendings);
-    setPageCount(Math.ceil(res.data.lendings.length/perPage))
+    setReservations(res.data.reservations);
+    setPageCount(Math.ceil(res.data.reservations.length/perPage))
     setStart(0);
   };
 
@@ -131,7 +131,7 @@ export const AdminReservationsIndex = () => {
           <Row>
             <th>ID</th><th>貸出書籍</th><th>ﾕｰｻﾞｰid</th><th>貸出開始日</th><th>返却日</th><th></th>
           </Row>
-          {lendings.slice(start, start + perPage).map((lending,index) => {
+          {reservations.slice(start, start + perPage).map((lending,index) => {
             return (
               <Row key={index}>
                 <td className="id">{lending.id}</td><td className="title"><Link to={`/books/${lending.bookId}`}>{lending.title}</Link></td><td className="userName">{lending.userId ? lending.userId : "退会済"}</td><td className="startDate">{lending.startDate}</td><td className="finishedAt">{lending.finishedAt ? lending.finishedAt : <><span>未返却</span><button onClick={()=>{handleShowModalReturn(lending.id)}}>変更</button></>}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(lending.id)}}>削除</DeleteButton></td>
