@@ -16,7 +16,7 @@ class Api::V1::Admin::ReservationsController < ApplicationController
   end
 
   def search
-    reservations = Reservation.joins(:book,:user).order(created_at: :desc)
+    reservations = Reservation.joins(:book,:user).order(start_date: :desc)
     .show_expired(params[:show_expired])
     .search_with_book_title(params[:title])
     .search_with_user_name(params[:user_name])
