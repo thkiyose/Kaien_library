@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
-import { ToggleDetail } from '../parts/ToggleDetail';
+import { ReviewToggleDetail } from '../parts/ReviewToggleDetail';
 import { fetchReviewsAdmin } from '../../lib/api/admin';
 
 export const AdminReviewsIndex = () => {
@@ -66,7 +66,7 @@ export const AdminReviewsIndex = () => {
           {reviews.slice(start, start + perPage).map((review,index) => {
             return (
               <React.Fragment key={index}>
-                <ToggleDetail review={review} handleShowModal={handleShowModal}/>
+                <ReviewToggleDetail review={review} handleShowModal={handleShowModal}/>
               </React.Fragment>
             );
           })}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
 
-export const ToggleDetail = (props) => {
+export const ReviewToggleDetail = (props) => {
   const { review, handleShowModal } = props;
   const [ showDetail, setShowDetail ] = useState(false);
 
