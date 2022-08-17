@@ -15,6 +15,11 @@ export const AdminReviewsIndex = () => {
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(0);
   const [ searchParam, setSearchParam ] = useState({
+    userId: "",
+    userName:"",
+    userEmail:"",
+    bookTitle:"",
+    rating:["",""]
   });
 
   const handlePageChange = (e) => {
@@ -52,6 +57,19 @@ export const AdminReviewsIndex = () => {
   }
 
   const onChange = (param,type) => {
+    if (type === "userId"){
+      setSearchParam({...searchParam,userId:param})
+    } else if (type === "userName") {
+      setSearchParam({...searchParam,userName:param})
+    } else if (type === "userEmail") {
+      setSearchParam({...searchParam,userEmail:param})
+    } else if (type === "bookTitle") {
+      setSearchParam({...searchParam,bookTitle:param})
+    } else if (type === "ratingStart") {
+      setSearchParam({...searchParam,rating:[param, searchParam.rating[1]]})
+    } else if (type === "ratingEnd") {
+      setSearchParam({...searchParam,rating:[searchParam.rating[0],param ]})
+    }
   }
 
   const handleSearch = async(params) => {
