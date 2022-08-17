@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
-import { ReviewToggleDetail } from '../parts/ReviewToggleDetail';
 import { fetchReviewsAdmin } from '../../lib/api/admin';
 
 export const AdminReviewsIndex = () => {
@@ -14,17 +13,24 @@ export const AdminReviewsIndex = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(0);
-  const [ showDetail, setShowDetail] = useState(false);
   const [ searchParam, setSearchParam ] = useState({
   });
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
+    const hiddens = Array.from(document.getElementsByClassName("show"));
+    const buttons = Array.from(document.getElementsByClassName("detailButton"));
+    hiddens.map((element)=>{
+      element.classList.remove("show");
+      element.classList.add("hidden");
+    })
+    buttons.map((element)=>{
+      element.innerText = "＋";
+    })
   }
 
   const handleFetchReviews = useCallback(async() => {
     const res = await fetchReviewsAdmin();
-    console.log(res)
     setReviews(res.data.reviews);
     setPageCount(Math.ceil(res.data.reviews.length/perPage));
   },[perPage])
@@ -34,9 +40,6 @@ export const AdminReviewsIndex = () => {
     setShowModal(true);
     setTargetId(targetId);
   };
-
-  const handleShowDetail = (e) => {
-  }
 
   const onChange = (param,type) => {
   }
@@ -52,7 +55,18 @@ export const AdminReviewsIndex = () => {
     handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired});
   };
 
-
+const onClick = (e,id) => {
+  const target = document.getElementById(`row_${id}`)
+  if (e.target.innerHTML === "＋") {
+    target.classList.remove('hidden');
+    target.classList.add('show');
+    e.target.innerHTML = "ー";
+  } else if (e.target.innerHTML === "ー") {
+    target.classList.remove('show');
+    target.classList.add('hidden');
+    e.target.innerHTML = "＋";
+  }
+}
   return(
     <>
       <Title>レビューデータ一覧</Title>
@@ -66,7 +80,16 @@ export const AdminReviewsIndex = () => {
           {reviews.slice(start, start + perPage).map((review,index) => {
             return (
               <React.Fragment key={index}>
-                <ReviewToggleDetail review={review} handleShowModal={handleShowModal}/>
+                <Row>
+                  <td className="id">{review.id}</td>
+                  <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
+                  <td className="detailButton" onClick={(e)=>{onClick(e,index)}}>＋</td>
+                  <td className="userName">{review.userId ? review.userId : "退会済"}</td>
+                  <td className="control"><button onClick={() => {handleShowModal(review.id)}}>削除</button></td>
+                </Row>
+                <DetailRow id={`row_${index}`} className="hidden">
+                  <td colSpan="2">{review.comment}</td>
+                </DetailRow>
               </React.Fragment>
             );
           })}
@@ -148,9 +171,6 @@ const Table = styled.table`
   .hidden {
     display: none;
   }
-  .show {
-    display: block;
-  }
 `
 const Row = styled.tr`
   th {
@@ -160,8 +180,40 @@ const Row = styled.tr`
     font-size: 0.9rem;
     text-align: center;
   }
+  td {
+    font-size: 0.9rem;
+    border: none;
+  }
+  .title {
+    width:60%;
+  }
+  .control {
+    width: 6%;
+  }
+  .id {
+    width: 5%;
+    text-align: center;
+  }
+  .userName {
+    width:6%;
+    text-align: center;
+  }
+  .detailButton {
+    cursor: pointer;
+  }
+  :nth-of-type(4n) {
+    background-color: #c2dbcf;
+  }
+  p {
+    margin: 0;
+    padding-left: 12px;
+    color: rgb(85, 85, 85);
+  }
 `
+
 const DetailRow = styled.tr`
+  background-color: white;
+  font-size: 0.9rem;
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({

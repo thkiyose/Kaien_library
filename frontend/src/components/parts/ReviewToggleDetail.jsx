@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
 
-export const ReviewToggleDetail = (props) => {
+export const ReviewToggleDetail = forwardRef((props,ref) => {
   const { review, handleShowModal } = props;
   const [ showDetail, setShowDetail ] = useState(false);
 
   const handleShowDetail = () => {
-    setShowDetail(!showDetail);
+    setShowDetail(!showDetail)
   }
+
+  useImperativeHandle(ref, () => ({
+    setShowDetailFalse() {
+      setShowDetail(false)
+    }
+  }));
 
   return (
     <>
       <Row>
         <td className="id">{review.id}</td>
         <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
-        <td onClick={()=>{handleShowDetail()}}>+</td>
+        <td className="detailButton" onClick={()=>{handleShowDetail()}}>{showDetail ? "ー" : "＋"}</td>
         <td className="userName">{review.userId ? review.userId : "退会済"}</td>
         <td className="control"><button onClick={() => {handleShowModal(review.id)}}>削除</button></td>
       </Row>
       {showDetail === true &&
-        <tr>
-          <td></td><td>テスト</td>
-        </tr>
+        <DetailRow>
+          <td></td><td>{review.comment}</td>
+        </DetailRow>
       }
     </>
   );
-}
+})
 
 const Row = styled.tr`
   th {
@@ -53,6 +59,9 @@ const Row = styled.tr`
     width:6%;
     text-align: center;
   }
+  .detailButton {
+    cursor: pointer;
+  }
   :nth-child(odd) {
     background-color: #c2dbcf;
   }
@@ -61,4 +70,9 @@ const Row = styled.tr`
     padding-left: 12px;
     color: rgb(85, 85, 85);
   }
+`
+
+const DetailRow = styled.tr`
+  background-color: white;
+  font-size: 0.8rem;
 `
