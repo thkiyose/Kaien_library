@@ -56,7 +56,18 @@ export const AdminReviewsIndex = () => {
   const handleDeleteReview = async(reviewId) => {
     const res = await deleteReview(reviewId);
     if (res.data.status === "SUCCESS") {
-      handleFetchReviews();
+      const hiddens = Array.from(document.getElementsByClassName("show"));
+      const buttons = Array.from(document.getElementsByClassName("detailButton"));
+      hiddens.map((element)=>{
+        element.classList.remove("show");
+        element.classList.add("hidden");
+        return element
+      })
+      buttons.map((element)=>{
+        element.innerText = "＋";
+        return element
+      })
+      handleSearch(searchParam);
     }
   }
 
@@ -98,8 +109,8 @@ export const AdminReviewsIndex = () => {
   };
 
   const handleResetSearch = () => {
-    setSearchParam({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired})
-    handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired});
+    setSearchParam({userId: "",userName:"",userEmail:"",bookTitle:"",comment:"",rating:["",""]})
+    handleSearch({userId: "",userName:"",userEmail:"",bookTitle:"",comment:"",rating:["",""]});
     const hiddens = Array.from(document.getElementsByClassName("show"));
     const buttons = Array.from(document.getElementsByClassName("detailButton"));
     hiddens.map((element)=>{
