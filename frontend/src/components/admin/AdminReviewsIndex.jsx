@@ -23,9 +23,11 @@ export const AdminReviewsIndex = () => {
     hiddens.map((element)=>{
       element.classList.remove("show");
       element.classList.add("hidden");
+      return element
     })
     buttons.map((element)=>{
       element.innerText = "＋";
+      return element
     })
   }
 
@@ -85,7 +87,7 @@ const onClick = (e,id) => {
                   <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
                   <td className="detailButton" onClick={(e)=>{onClick(e,index)}}>＋</td>
                   <td className="userName">{review.userId ? review.userId : "退会済"}</td>
-                  <td className="control"><button onClick={() => {handleShowModal(review.id)}}>削除</button></td>
+                  <td className="control"><DeleteButton onClick={() => {handleShowModal(review.id)}}>削除</DeleteButton></td>
                 </Row>
                 <DetailRow id={`row_${index}`} className="hidden">
                   <td colSpan="2"><p>評価:{review.rating}</p>{review.comment}</td><td colSpan="3"><p>ユーザー:</p><p>{review.name}</p><p></p>{review.email}</td>
@@ -115,7 +117,7 @@ const onClick = (e,id) => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} message={"予約データを削除してよろしいですか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} message={"レビューデータを削除してよろしいですか？"}/>
     </>
   );
 };
