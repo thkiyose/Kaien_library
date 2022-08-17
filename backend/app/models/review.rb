@@ -20,4 +20,8 @@ class Review < ApplicationRecord
     return if id.blank?
     where(user_id: id)
   }
+  scope :search_with_comment, -> (comment){
+    return if comment.blank?
+    where(['comment like ?',"%#{comment}%"])
+  }
 end
