@@ -16,4 +16,8 @@ class Review < ApplicationRecord
     return if email.blank?
     where(['email like ?',"%#{email}%"])
   }
+  scope :search_with_user_id, -> (id){
+    return if id.blank?
+    where(user_id: id)
+  }
 end
