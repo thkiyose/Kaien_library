@@ -24,4 +24,8 @@ class Review < ApplicationRecord
     return if comment.blank?
     where(['comment like ?',"%#{comment}%"])
   }
+  scope :search_with_rating_min, -> (min){
+    return if min.blank?
+    where('rating >= ?',min)
+  }
 end
