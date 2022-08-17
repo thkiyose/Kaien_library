@@ -75,12 +75,12 @@ const onClick = (e,id) => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>レビュー対象タイトル</th><th></th><th>ﾕｰｻﾞｰid</th><th></th>
+            <th>ID</th><th>レビュー対象タイトル</th><th>詳細表示</th><th>ﾕｰｻﾞｰid</th><th></th>
           </Row>
           {reviews.slice(start, start + perPage).map((review,index) => {
             return (
               <React.Fragment key={index}>
-                <Row>
+                <Row className={index % 2 === 0 ? "even": "odd"}>
                   <td className="id">{review.id}</td>
                   <td className="title"><Link to={`/books/${review.bookId}`}>{review.title}</Link></td>
                   <td className="detailButton" onClick={(e)=>{onClick(e,index)}}>＋</td>
@@ -88,7 +88,7 @@ const onClick = (e,id) => {
                   <td className="control"><button onClick={() => {handleShowModal(review.id)}}>削除</button></td>
                 </Row>
                 <DetailRow id={`row_${index}`} className="hidden">
-                  <td colSpan="2">{review.comment}</td>
+                  <td colSpan="2"><p>評価:{review.rating}</p>{review.comment}</td><td colSpan="3"><p>ユーザー:</p><p>{review.name}</p><p></p>{review.email}</td>
                 </DetailRow>
               </React.Fragment>
             );
@@ -171,6 +171,9 @@ const Table = styled.table`
   .hidden {
     display: none;
   }
+  .odd {
+    background-color: #c2dbcf;
+  }
 `
 const Row = styled.tr`
   th {
@@ -200,9 +203,8 @@ const Row = styled.tr`
   }
   .detailButton {
     cursor: pointer;
-  }
-  :nth-of-type(4n) {
-    background-color: #c2dbcf;
+    width: 7%;
+    text-align:center;
   }
   p {
     margin: 0;
@@ -214,6 +216,18 @@ const Row = styled.tr`
 const DetailRow = styled.tr`
   background-color: white;
   font-size: 0.9rem;
+  p {
+    margin:0;
+    padding:0;
+  }
+  td {
+    padding: 10px;
+  }
+  .label {
+    background-color:${Color.primary};
+    color: white;
+    text-align: center;
+  }
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({
