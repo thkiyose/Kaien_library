@@ -25,7 +25,7 @@ class Api::V1::Admin::LendingsController < ApplicationController
   end
 
   def search
-    lendings = Lending.joins(:book,:user).order(created_at: :desc)
+    lendings = Lending.left_joins(:book,:user).order(created_at: :desc)
     .show_finished(params[:show_finished])
     .search_with_book_title(params[:title])
     .search_with_user_name(params[:user_name])

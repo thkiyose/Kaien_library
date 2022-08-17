@@ -35,7 +35,7 @@ class Lending < ApplicationRecord
   }
 
   scope :search_with_user_email, -> (email){
-    return if name.blank?
+    return if email.blank?
     where(['email like ?',"%#{email}%"])
   }
 
