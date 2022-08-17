@@ -28,4 +28,8 @@ class Review < ApplicationRecord
     return if min.blank?
     where('rating >= ?',min)
   }
+  scope :search_with_rating_max, -> (max){
+    return if max.blank?
+    where('rating <= ?',max)
+  }
 end
