@@ -19,6 +19,7 @@ export const AdminReviewsIndex = () => {
     userName:"",
     userEmail:"",
     bookTitle:"",
+    comment:"",
     rating:["",""]
   });
 
@@ -65,10 +66,12 @@ export const AdminReviewsIndex = () => {
       setSearchParam({...searchParam,userEmail:param})
     } else if (type === "bookTitle") {
       setSearchParam({...searchParam,bookTitle:param})
+    } else if (type === "comment") {
+      setSearchParam({...searchParam,comment:param})
     } else if (type === "ratingStart") {
       setSearchParam({...searchParam,rating:[param, searchParam.rating[1]]})
     } else if (type === "ratingEnd") {
-      setSearchParam({...searchParam,rating:[searchParam.rating[0],param ]})
+      setSearchParam({...searchParam,rating:[searchParam.rating[0],param]})
     }
   }
 
@@ -98,8 +101,34 @@ const onClick = (e,id) => {
   return(
     <>
       <Title>レビューデータ一覧</Title>
-      <ReservationSearch>
-      </ReservationSearch>
+      <ReviewSearch>
+        <p>
+          書籍タイトル<input type="text" value={searchParam.bookTitle} className="bookTitle" onChange={(e)=>{onChange(e.target.value,"bookTitle")}}/>
+          ユーザーID<input type="text" value={searchParam.userId} className="userId" onChange={(e)=>{onChange(e.target.value,"userId")}}/>
+          ユーザー名<input type="text" value={searchParam.userName} className="userName" onChange={(e)=>{onChange(e.target.value,"userName")}}/>
+          ユーザーemail<input type="text" value={searchParam.userEmail} className="userEmail" onChange={(e)=>{onChange(e.target.value,"userEmail")}}/>
+        </p>
+        <p>
+          レビュー本文<input type="text" value={searchParam.comment} className="comment" onChange={(e)=>{onChange(e.target.value,"comment")}}/>
+          評価<select value={searchParam.rating[0]} className="rating" onChange={(e)=>{onChange(e.target.value,"ratingStart")}}>
+            <option hidden></option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>~
+          <select value={searchParam.rating[1]} className="rating" onChange={(e)=>{onChange(e.target.value,"ratingEnd")}}>
+            <option hidden></option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+          <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}}>リセット</button>
+        </p>
+      </ReviewSearch>
       <Table>
         <tbody>
           <Row>
@@ -154,12 +183,21 @@ const Title = styled.h1`
   display: inline;
 `
 
-const ReservationSearch = styled.div`
+const ReviewSearch = styled.div`
   font-size: 0.8rem;
   p {
     margin: 0;
   }
   input {
+    outline: 0;
+    background: white;
+    border: 0;
+    margin: 0 0 10px;
+    padding: 5px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  select {
     outline: 0;
     background: white;
     border: 0;
@@ -189,6 +227,9 @@ const ReservationSearch = styled.div`
   }
   .userName {
     width: 70px;
+  }
+  .comment {
+    width: 300px;
   }
 `
 
