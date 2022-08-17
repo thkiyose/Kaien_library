@@ -81,11 +81,33 @@ export const AdminReviewsIndex = () => {
     setReviews(res.data.reviews)
     setPageCount(Math.ceil(res.data.reviews.length/perPage))
     setStart(0);
+    const hiddens = Array.from(document.getElementsByClassName("show"));
+    const buttons = Array.from(document.getElementsByClassName("detailButton"));
+    hiddens.map((element)=>{
+      element.classList.remove("show");
+      element.classList.add("hidden");
+      return element
+    })
+    buttons.map((element)=>{
+      element.innerText = "＋";
+      return element
+    })
   };
 
   const handleResetSearch = () => {
     setSearchParam({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired})
     handleSearch({userId: "",title:"",userName: "",userEmail: "",startDate:["",""],expiryDate:["",""],showExpired:searchParam.showExpired});
+    const hiddens = Array.from(document.getElementsByClassName("show"));
+    const buttons = Array.from(document.getElementsByClassName("detailButton"));
+    hiddens.map((element)=>{
+      element.classList.remove("show");
+      element.classList.add("hidden");
+      return element
+    })
+    buttons.map((element)=>{
+      element.innerText = "＋";
+      return element
+    })
   };
 
 const onClick = (e,id) => {
