@@ -12,6 +12,7 @@ export const AdminReviewsIndex = () => {
   const [ reviews, setReviews ] = useState([]);
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
+  const [ currentPage, setCurrentPage ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(0);
@@ -26,6 +27,7 @@ export const AdminReviewsIndex = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
+    setCurrentPage(e.selected);
     const hiddens = Array.from(document.getElementsByClassName("show"));
     const buttons = Array.from(document.getElementsByClassName("detailButton"));
     hiddens.map((element)=>{
@@ -81,6 +83,7 @@ export const AdminReviewsIndex = () => {
     setReviews(res.data.reviews)
     setPageCount(Math.ceil(res.data.reviews.length/perPage))
     setStart(0);
+    setCurrentPage(0);
     const hiddens = Array.from(document.getElementsByClassName("show"));
     const buttons = Array.from(document.getElementsByClassName("detailButton"));
     hiddens.map((element)=>{
@@ -177,6 +180,7 @@ const onClick = (e,id) => {
         </tbody>
       </Table>
       <MyPaginate
+        forcePage={currentPage}
         onPageChange={handlePageChange}
         pageCount={pageCount}
         marginPagesDisplayed={2}

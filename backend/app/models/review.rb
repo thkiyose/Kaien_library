@@ -8,4 +8,8 @@ class Review < ApplicationRecord
     return if title.blank?
     where(['title like ?',"%#{title}%"])
   }
+  scope :search_with_user_name, -> (name){
+    return if name.blank?
+    where(['name like ?',"%#{name}%"])
+  }
 end
