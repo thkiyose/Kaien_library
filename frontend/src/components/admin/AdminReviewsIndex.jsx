@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchReviewsAdmin } from '../../lib/api/admin';
 import { deleteReview } from '../../lib/api/admin';
+import { searchReviews } from '../../lib/api/admin';
 
 export const AdminReviewsIndex = () => {
   const [ reviews, setReviews ] = useState([]);
@@ -76,8 +77,9 @@ export const AdminReviewsIndex = () => {
   }
 
   const handleSearch = async(params) => {
-    const res =[];
-    setPageCount(Math.ceil(res.data.reservations.length/perPage))
+    const res = await searchReviews(params);
+    setReviews(res.data.reviews)
+    setPageCount(Math.ceil(res.data.reviews.length/perPage))
     setStart(0);
   };
 
