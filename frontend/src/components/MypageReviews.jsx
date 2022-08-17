@@ -60,7 +60,7 @@ export const MyPageReviews = () => {
           />
       </React.Fragment>
     );
-  }) : <p>まだレビューがありません。</p>}
+  }) : <NoReview>まだレビューがありません。</NoReview>}
   <MyPaginate
     forcePage={currentPage}
     onPageChange={handlePageChange}
@@ -120,4 +120,12 @@ const MyPaginate = styled(ReactPaginate).attrs({
   li.disabled a {
     cursor: default;
   }
+`
+const NoReview = styled.div`
+  background-color: ${Color.text};
+  margin-top: 20px;
+  margin-left: 70px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
 `
