@@ -63,3 +63,7 @@ export const fetchReviewsAdmin = (params) => {
 export const deleteReview = (review_id) => {
   return client.delete(`/admin/reviews/${review_id}`);
 };
+
+export const searchReviews = (params) => {
+  return client.get(`/admin/reviews/search`,{params});
+};
