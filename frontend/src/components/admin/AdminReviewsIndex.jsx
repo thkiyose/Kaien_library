@@ -5,6 +5,7 @@ import Color from '../parts/Color';
 import ReactPaginate from 'react-paginate';
 import { Modal } from '../parts/Modal';
 import { fetchReviewsAdmin } from '../../lib/api/admin';
+import { deleteReview } from '../../lib/api/admin';
 
 export const AdminReviewsIndex = () => {
   const [ reviews, setReviews ] = useState([]);
@@ -42,6 +43,13 @@ export const AdminReviewsIndex = () => {
     setShowModal(true);
     setTargetId(targetId);
   };
+
+  const handleDeleteReview = async(reviewId) => {
+    const res = await deleteReview(reviewId);
+    if (res.data.status === "SUCCESS") {
+      handleFetchReviews();
+    }
+  }
 
   const onChange = (param,type) => {
   }
@@ -117,7 +125,7 @@ const onClick = (e,id) => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} message={"レビューデータを削除してよろしいですか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteReview(targetId)} message={"レビューデータを削除してよろしいですか？"}/>
     </>
   );
 };
