@@ -17,7 +17,7 @@ class Api::V1::Admin::ReviewsController < ApplicationController
     reviews = Review.left_joins(:book,:user).order(created_at: :desc)
     .search_with_book_title(params[:book_title])
     .search_with_user_name(params[:user_name])
-    # .search_with_user_email(params[:user_email])
+    .search_with_user_email(params[:user_email])
     # .search_with_user_id(params[:user_id])
     # .search_with_comment(params[:comment])
     # .search_with_start_date(params[:start_date][0],params[:start_date][1])
