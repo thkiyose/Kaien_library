@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import { Wrapper } from '../parts/Wrapper';
 import { BookForm } from '../parts/BookForm';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 export const RegisterBook = () => {
   const navigate = useNavigate();
@@ -12,7 +13,17 @@ export const RegisterBook = () => {
     <>
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <BookForm />
+        <Tabs>
+          <TabList>
+            <Tab>1件ずつ登録</Tab>
+            <Tab>CSVから登録</Tab>
+          </TabList>
+          <TabPanel>
+            <BookForm />
+          </TabPanel>
+          <TabPanel>
+          </TabPanel>
+        </Tabs>
       </Wrapper>
     </>
   );
