@@ -12,6 +12,10 @@ export const deleteBook = (book_id) => {
   return client.delete(`/admin/books/${book_id}`);
 };
 
+export const importBooksFromCSV = (params) => {
+  return client.post("/admin/books/import_from_csv",params);
+};
+
 export const fetchUsersAdmin = () => {
   return client.get("/admin/users");
 };
