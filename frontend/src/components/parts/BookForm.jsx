@@ -141,11 +141,6 @@ const LocationDiv = styled.div`
     width: 100%;
   }
 `
-const RegisterTitle = styled.h1`
-  text-align: center;
-  font-weight: lighter;
-  color: rgb(85, 85, 85);
-`
 const ErrorMessage = styled.p`
   margin: 0;
   margin-top: 0;
@@ -214,7 +209,6 @@ export const BookForm = () => {
 
   return (
     <>
-      <RegisterTitle>書籍の登録</RegisterTitle>
       <Form onSubmit={handleSubmit(async(data) => {
         try {
           const res = await createBook({book:data});
