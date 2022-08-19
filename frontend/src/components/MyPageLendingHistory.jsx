@@ -37,6 +37,12 @@ const LendingRow = styled.tr`
     background-color: rgb(241, 241, 241);
   }
 `
+const NoLendings = styled.p`
+  padding: 20px;
+  margin: 0;
+  text-align: center;
+  background-color: ${Color.text};
+`
 
 const MyPaginate = styled(ReactPaginate).attrs({
   activeClassName: 'active',
@@ -91,9 +97,9 @@ export const MyPageLendingHistory = () => {
       setIsLoading(false);
     };
     fetchLendings();
-  }, []);
+  }, [currentUser.id]);
 
-  if (isLoading === false) {
+  if (isLoading === false && lendings.length > 0) {
     return(
       <>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
@@ -133,6 +139,13 @@ export const MyPageLendingHistory = () => {
           breakClassName='page-item'
           breakLinkClassName='page-link'
         />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
+        <NoLendings>レンタル履歴がありません。</NoLendings>
       </>
     );
   }
