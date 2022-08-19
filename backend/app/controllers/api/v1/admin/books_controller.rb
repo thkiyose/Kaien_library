@@ -17,4 +17,7 @@ class Api::V1::Admin::BooksController < ApplicationController
       render json: {message:"貸出中につき削除出来ません。"}
     end
   end
+
+  def import_from_csv
+  end
 end
