@@ -1,4 +1,6 @@
 class Api::V1::Admin::BooksController < ApplicationController
+  require 'csv'
+
   def index
     books = Book.includes(:reservations).where(deleted:false).map{|book|{ id: book.id, title: book.title, is_lent: book.is_lent, is_reserved: book.reservations.any? }}
     render json: { books: books }
@@ -19,6 +21,9 @@ class Api::V1::Admin::BooksController < ApplicationController
   end
 
   def import_from_csv
-    binding.pry
+    p params
+    # CSV.foreach(params[:csv], header_row: true) do |row|
+    #   p row
+    # end
   end
 end
