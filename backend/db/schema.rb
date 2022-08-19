@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_26_045311) do
+ActiveRecord::Schema.define(version: 2022_08_05_052312) do
 
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "isbn"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2022_07_26_045311) do
   end
 
   create_table "reservations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "book_id", null: false
     t.date "start_date", null: false
     t.date "expiry_date", null: false
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2022_07_26_045311) do
   end
 
   create_table "reviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "book_id", null: false
     t.float "rating", null: false
     t.text "comment"

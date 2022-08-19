@@ -94,7 +94,7 @@ export const ReviewDisplay = (props) => {
       {!showForm &&
         <Display>
           <tbody>
-            <DataRow><Data>投稿者:{userName}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
+            <DataRow><Data>投稿者:{userName || "退会済みのユーザー"}</Data><Data>{createdAt.slice(0,10)}</Data></DataRow>
             <CommentRow><td><ReactStarsReview/></td>{userId === currentUser.id && <td className="yourreview"><span>あなたのレビュー</span></td>}</CommentRow>
             <CommentRow><td colSpan="2">{comment}</td></CommentRow>
             { isEdit && <EditRow><td colSpan="3"><button onClick={()=>{handleShowForm()}}><Icon src={`${process.env.PUBLIC_URL}/edit.png`} />編集</button><button onClick={() =>{handleShowModal(reviewId)}}><Icon src={`${process.env.PUBLIC_URL}/delete.png`} />削除</button></td></EditRow>}

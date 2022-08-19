@@ -10,7 +10,6 @@ import ReactPaginate from 'react-paginate';
 export const MyPageReviews = () => {
   const { currentUser } = useContext(Context);
   const [ reviews, setReviews ] = useState([]);
-  const [ showForm, setShowForm] = useState(false);
   const [ perPage ] = useState(4);
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
@@ -61,7 +60,7 @@ export const MyPageReviews = () => {
           />
       </React.Fragment>
     );
-  }) : <p>まだレビューがありません。</p>}
+  }) : <NoReview>まだレビューがありません。</NoReview>}
   <MyPaginate
     forcePage={currentPage}
     onPageChange={handlePageChange}
@@ -121,4 +120,12 @@ const MyPaginate = styled(ReactPaginate).attrs({
   li.disabled a {
     cursor: default;
   }
+`
+const NoReview = styled.div`
+  background-color: ${Color.text};
+  margin-top: 20px;
+  margin-left: 70px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
 `

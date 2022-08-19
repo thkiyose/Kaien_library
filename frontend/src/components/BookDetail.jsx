@@ -198,6 +198,7 @@ const ShowFormButton = styled.button`
   margin: 0 auto;
   display: block;
   font-size: 1rem;
+  cursor: pointer;
   text-decoration: underline;
 `
 const MyPaginate = styled(ReactPaginate).attrs({
@@ -438,10 +439,10 @@ const InfoTab = (props) => {
                   <React.Fragment key={key}>
                   {lending.finishedAt === null ?
                     <tr>
-                      <td>{lending.name}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td className="on_going">{lending.finishedAt || "レンタル中"}</td>
+                      <td>{lending.name || "退会済みのユーザー"}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td className="on_going">{lending.finishedAt || "レンタル中"}</td>
                     </tr> :
                     <tr>
-                      <td>{lending.name}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td>{lending.finishedAt || "レンタル中"}</td>
+                      <td>{lending.name || "退会済みのユーザー"}</td><td>がレンタルしました:</td><td className="start_date">{lending.startDate}</td><td>-</td><td>{lending.finishedAt || "レンタル中"}</td>
                     </tr>}
                   </React.Fragment>
                 );

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
@@ -99,9 +99,9 @@ const ToReserve = styled.button`
   text-decoration: underline;
   cursor: pointer;
 `
-const PreviousLending = styled(Link)`
-  display: block;
-  text-align:right;
+const PreviousLending = styled.p`
+  text-align: right;
+  margin: 0;
 `
 
 export const MyPageLendings = () => {
@@ -114,15 +114,15 @@ export const MyPageLendings = () => {
   const today = new Date();
   const navigate = useNavigate();
 
-  const handleFetchLendings = async() => {
+  const handleFetchLendings = useCallback(async() => {
     const res = await fetchLendings(currentUser.id);
     setLendings(res.data.lendings);
     setReservations(res.data.reservations);
     setIsLoading(false);
-  };
+  },[currentUser.id]);
 
   useEffect(() => {handleFetchLendings();
-  },[currentUser]);
+  },[handleFetchLendings,currentUser]);
 
   const handleDestroyReservation = async(id) => {
     await destroyReservation(id);
@@ -195,7 +195,7 @@ export const MyPageLendings = () => {
             </Lendings>
           </> : <NoBooks>現在予約中の本はありません。</NoBooks>}
           <Modal showFlag={showModal} setShowModal={setShowModal} message={"本当にキャンセルしますか？"} yesAction={()=>{handleDestroyReservation(cancelTarget)}} />
-          <PreviousLending to="/mypage/history">過去のレンタル一覧</PreviousLending>
+          <PreviousLending><Link to="/mypage/history">過去のレンタル一覧</Link></PreviousLending>
         </>
     );
   }

@@ -16,7 +16,6 @@ Rails.application.routes.draw do
       end
       resources :books, only: [:index, :create, :show] do
         get 'index_for_admin', on: :collection
-        patch 'delete_book', on: :member
         post 'fetch_book_info', on: :collection
         get 'fetch_categories', on: :collection
         get 'fetch_locations', on: :collection
@@ -33,11 +32,28 @@ Rails.application.routes.draw do
         patch 'return', on: :member
       end
       resources :reservations, only: [:create, :destroy] do
-          get 'fetch_lendings_and_reservations', on: :member
-          get 'fetch_current_user_reservation', on: :member
+        get 'fetch_lendings_and_reservations', on: :member
+        get 'fetch_current_user_reservation', on: :member
       end
       resources :reviews, only: [:create,:destroy,:update,:index] do
-          get 'user_reviews', on: :collection
+        get 'user_reviews', on: :collection
+      end
+      namespace :admin do
+        resources :books, only: [:index,:destroy] do
+          get "search", on: :collection
+        end
+        resources :users, only: [:index, :destroy, :update] do
+          get "search", on: :collection
+        end
+        resources :lendings, only: [:index, :destroy, :update] do
+          get "search", on: :collection
+        end
+        resources :reservations, only: [:index, :destroy] do
+          get "search", on: :collection
+        end
+        resources :reviews, only: [:index, :destroy] do
+          get "search", on: :collection
+        end
       end
       namespace :auth do
         resources :sessions, only: %i[index]

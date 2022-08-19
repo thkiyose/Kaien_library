@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useContext, useRef } from 'react';
 import { Context } from '../App';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { Wrapper } from './parts/Wrapper';
 import styled from "styled-components";
@@ -173,7 +173,6 @@ export const Index = () => {
   const [ perPage ] = useState(18);
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
-  const navigate = useNavigate();
   const { currentUser } = useContext(Context);
   const { categories } = useContext(Context);
   const searchRef = useRef();

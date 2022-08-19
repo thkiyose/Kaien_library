@@ -9,9 +9,14 @@ import { MyPage } from './components/MyPage';
 import { MyPageLendings } from './components/MyPageLendings';
 import { MyPageLendingHistory } from './components/MyPageLendingHistory';
 import { MyPageReviews } from './components/MyPageReviews';
-import { AdminMenu } from './components/AdminMenu';
-import { AdminBookIndex } from './components/AdminBookIndex';
-import { RegisterBook } from './components/RegisterBook';
+import { AdminMenu } from './components/admin/AdminMenu';
+import { AdminData } from './components/admin/AdminData';
+import { AdminBookIndex } from './components/admin/AdminBookIndex';
+import { AdminUserIndex } from './components/admin/AdminUserIndex';
+import { AdminLendingsIndex } from './components/admin/AdminLendingsIndex';
+import { AdminReservationsIndex } from './components/admin/AdminReservationsIndex';
+import { AdminReviewsIndex } from './components/admin/AdminReviewsIndex';
+import { RegisterBook } from './components/admin/RegisterBook';
 import { Lending } from './components/Lending';
 import { Reservation } from './components/Reservation';
 import { ReservationToLending } from './components/ReservationToLending';
@@ -131,7 +136,13 @@ export const App = () => {
             <Route path={"/return/:id"} element={<LoggedInRoute currentUser={currentUser}><Return /></LoggedInRoute>} />
             <Route path={"/thankyouforreturn"} element={<LoggedInRoute currentUser={currentUser}><ThankYouForReturn /></LoggedInRoute>} />
             <Route path={"/admin"} element={<AdminProtectedRoute><AdminMenu /></AdminProtectedRoute>} />
-            <Route path={"/admin/books/index"} element={<AdminProtectedRoute><AdminBookIndex /></AdminProtectedRoute>} />
+            <Route path={"/admin/data_edit"} element={<AdminProtectedRoute><AdminData /></AdminProtectedRoute>} >
+              <Route path={"books"} element={<AdminProtectedRoute><AdminBookIndex /></AdminProtectedRoute>} />
+              <Route path={"users"} element={<AdminProtectedRoute><AdminUserIndex /></AdminProtectedRoute>} />
+              <Route path={"lendings"} element={<AdminProtectedRoute><AdminLendingsIndex /></AdminProtectedRoute>} />
+              <Route path={"reservations"} element={<AdminProtectedRoute><AdminReservationsIndex /></AdminProtectedRoute>} />
+              <Route path={"reviews"} element={<AdminProtectedRoute><AdminReviewsIndex /></AdminProtectedRoute>} />
+            </Route>
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>

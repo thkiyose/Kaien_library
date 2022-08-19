@@ -3,7 +3,10 @@ class Api::V1::ReviewsController < ApplicationController
 
   def index
     book = Book.find_by(id:params[:book_id])
-    render json: { reviews: book.reviews.joins(:user).order(created_at: :desc).select(:user_id, :name, :rating, :comment, :created_at ), already_reviewed: book.reviews.where(user_id:params[:user_id]).exists?, average: book.reviews.average(:rating).round(1).to_f}
+    render json: {
+      reviews: book.reviews.left_joins(:user).order(created_at: :desc).select(:user_id, :name, :rating, :comment, :created_at ),
+      already_reviewed: book.reviews.where(user_id:params[:user_id]).exists?,
+      average: book.reviews.average(:rating).round(1).to_f}
   end
 
   def user_reviews

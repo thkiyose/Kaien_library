@@ -47,7 +47,7 @@ class Api::V1::LendingsController < ApplicationController
     user = User.find_by(id:params[:user_id])
     book = Book.find_by(id:reservation.book_id)
     if reservation.user_id == user.id && book.deleted == false
-      user.lendings.create(book_id:reservation.book_id, start_date:reservation.start_date, expiry_date: reservation.expiry_date)
+      user.lendings.create(book_id:reservation.book_id, start_date:Date.today, expiry_date: reservation.expiry_date)
       book.update(is_lent: true)
       reservation.destroy
       render json: { status: "SUCCESS", location: book.location.location}

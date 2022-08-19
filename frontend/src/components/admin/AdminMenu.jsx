@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wrapper } from './parts/Wrapper';
+import { Wrapper } from '../parts/Wrapper';
 import { Link } from 'react-router-dom';
 
 const style= {
@@ -17,7 +17,7 @@ export const AdminMenu = () => {
         <div style={style}>
           <h1 style={styledTitle}>管理者メニュー</h1>
           <ul>
-            <li><Link to='/admin/books/index'>書籍の一覧</Link></li>
+            <li><Link to='/admin/data_edit/books'>各種データ管理</Link></li>
             <li><Link to='/admin/book_registration'>書籍の登録</Link></li>
           </ul>
         </div>
