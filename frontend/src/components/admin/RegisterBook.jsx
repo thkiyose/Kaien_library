@@ -25,6 +25,11 @@ export const RegisterBook = () => {
             </InsideTabPanel>
           </TabPanel>
           <TabPanel>
+            <InsideTabPanel>
+              <p>書籍の登録に使用するCSVファイルを選択して下さい。</p>
+              <input type="file" accept="text/csv"/>
+              <input type="submit" value="書籍を登録する"/>
+            </InsideTabPanel>
           </TabPanel>
         </Tabs>
       </Wrapper>
