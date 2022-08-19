@@ -62,7 +62,7 @@ const Form = styled.form`
     background: white;
     border: none;
     padding: 5px;
-    width: 800px;
+    width: 100%;
     height: 150px;
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1) inset;
   }

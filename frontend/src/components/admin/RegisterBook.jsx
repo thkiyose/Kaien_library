@@ -17,7 +17,7 @@ export const RegisterBook = () => {
         <Tabs>
           <TabList>
             <Tab>1件ずつ登録</Tab>
-            <Tab>CSVから登録</Tab>
+            <Tab>CSVから一括登録</Tab>
           </TabList>
           <TabPanel>
             <InsideTabPanel>
