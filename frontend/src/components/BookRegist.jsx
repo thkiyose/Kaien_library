@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Color from './parts/Color';
 
 
-export const MyPage = () => {
+export const BookRegist = () => {
   const { currentUser } = useContext(Context);
 
   return (
