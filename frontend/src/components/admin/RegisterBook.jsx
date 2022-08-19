@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Color from '../parts/Color';
 import { Wrapper } from '../parts/Wrapper';
 import { BookForm } from '../parts/BookForm';
+import { BookImport } from '../parts/BookImport';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 export const RegisterBook = () => {
@@ -26,9 +27,7 @@ export const RegisterBook = () => {
           </TabPanel>
           <TabPanel>
             <InsideTabPanel>
-              <p>書籍の登録に使用するCSVファイルを選択して下さい。</p>
-              <input type="file" accept="text/csv"/>
-              <input type="submit" value="書籍を登録する"/>
+              <BookImport/>
             </InsideTabPanel>
           </TabPanel>
         </Tabs>
