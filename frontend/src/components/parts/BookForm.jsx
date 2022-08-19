@@ -28,7 +28,7 @@ const Required = styled.span`
 `
 const Form = styled.form`
   .isbnInput {
-    border-bottom: solid rgb(213, 213, 213) 1px;
+    border-bottom: solid ${Color.text} 1px;
   }
   button {
     padding: 7px;
