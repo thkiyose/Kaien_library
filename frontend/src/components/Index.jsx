@@ -245,7 +245,7 @@ export const Index = () => {
           <SearchForm type="text" ref={searchRef} name="search" placeholder="フリーワード検索" onChange={(e)=>{handleChangeSearchParam(e)}}/>
           <SearchButton onClick={(e) => {handleSearch(e)}}>検索</SearchButton><ResetButton onClick={() => {handleResetSearch()}}>リセット</ResetButton>
         </SearchBar>
-        {toggleFlag ? <Watch><input type="image" src={`${process.env.PUBLIC_URL}/home.png`} onClick={()=>{showWatchList()}} /><p>一覧に戻る</p></Watch> : <Watch><input type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} onClick={()=>{showWatchList()}} /><p>ウォッチ</p><p>リスト</p></Watch>}
+        {toggleFlag ? <Watch><input alt="backToIndex" type="image" src={`${process.env.PUBLIC_URL}/home.png`} onClick={()=>{showWatchList()}} /><p>一覧に戻る</p></Watch> : <Watch><input alt="showWatchList" type="image" src={`${process.env.PUBLIC_URL}/watchlist.png`} onClick={()=>{showWatchList()}} /><p>ウォッチ</p><p>リスト</p></Watch>}
         {books.length >= 1 &&
           <BookList>
             {Object.keys(books).slice(start, start + perPage).map((key) => {
