@@ -7,6 +7,7 @@ export const BookImport = () => {
 
   const handleSubmit = async(csv) => {
     const res = await importBooksFromCSV(csv)
+    console.log(res)
   }
   return (
     <>

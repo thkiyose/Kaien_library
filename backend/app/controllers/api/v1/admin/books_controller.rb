@@ -20,5 +20,19 @@ class Api::V1::Admin::BooksController < ApplicationController
   end
 
   def import_from_csv
+    if params[:_json].length <= 1
+      render json: { error: "csvの内容が不足しているため、登録を行えません。"}
+      return
+    end
+    puts params[:json]
+    headers = params[:_json][0]
+    datas = params[:_json][1..-1]
+
+    datas.each do |row|
+      book = Book.new
+      headers.each_with_index do |head,index|
+        book[head] = row[index]
+      end
+    end
   end
 end
