@@ -16,6 +16,7 @@
     "react-awesome-stars-rating": "^0.13.0",
     "react-calendar": "^3.7.0",
     "react-confirm": "^0.2.3",
+    "react-csv-reader": "^3.5.0",
     "react-date-range": "^1.4.0",
     "react-day-picker": "^8.0.7",
     "react-dom": "^18.1.0",
