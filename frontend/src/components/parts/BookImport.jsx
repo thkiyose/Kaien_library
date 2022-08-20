@@ -1,9 +1,17 @@
 import React, { useState,useRef } from 'react';
 import { importBooksFromCSV } from '../../lib/api/admin';
-import CSVReader from 'react-csv-reader'
 
 export const BookImport = () => {
   const [ csv, setCsv ] = useState([]);
+
+  const handleFileSelect = async(e) => {
+    const textFromCsv = await e.target.files[0].text()
+    setCsv(parse(textFromCsv));
+  }
+
+  const parse = (text) => {
+    return text.split('\r\n').map((row) => row.split(','));
+  }
 
   const handleSubmit = async(csv) => {
     const res = await importBooksFromCSV(csv)
@@ -12,7 +20,7 @@ export const BookImport = () => {
   return (
     <>
       <p>書籍の登録に使用するCSVファイルを選択して下さい。</p>
-      <CSVReader onFileLoaded={(e)=>{setCsv(e)}} />
+      <input type="file" accept="text/csv" onChange={(e)=>{handleFileSelect(e)}} />
       <button onClick={()=>{handleSubmit(csv)}}>登録</button>
     </>
   );
