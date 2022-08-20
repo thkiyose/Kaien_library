@@ -28,40 +28,32 @@ class Api::V1::Admin::BooksController < ApplicationController
     header = params[:_json][0]
     data = params[:_json][1..-1]
     result = []
+    book_columns = Book.column_names - ["created_at","deleted", "updated_at", "is_lent"]
 
     data.each do |row|
       book = Book.new
       errors = []
       header.each_with_index do |head,index|
-        case head
-        when "isbn" then
-          book.isbn = row[index].to_s
-        when "title" then
-          book.title = row[index].to_s
-        when "author" then
-          book.author = row[index].to_s
-        when "category_id" then
-          book.category_id = row[index].to_i
-        when "published_year" then
-          book.published_year = row[index].to_s
-        when "description" then
-          book.description = row[index].to_s
-        when "image_url" then
-          book.image_url = row[index].to_s
-        when "location_id" then
-          book.location_id = row[index].to_i
-        when "version" then
-          book.version = row[index].to_i
+        if book_columns.include?(head)
+          book[head] = row[index]
         else
           errors << "#{head}:ヘッダーが正しくありません。"
         end
       end
-      load_image(book,book.image_url)
-      if book.save
-        result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors}
-      else
-        result << {title: book.title, id: nil, status: "FAILURE", errors: errors}
+      if book.isbn.present?
+        res = JSON.parse(Net::HTTP.get(URI.parse(
+          "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
+        )),symbolize_names: true)
+        if res[:totalItems] != 0
+          # res[:items][0][:volumeInfo][:title] && book.title res[:items][0][:volumeInfo][:title]
+        end
       end
+      # load_image(book,book.image_url)
+      # if book.save
+        # result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors}
+      # else
+      #   result << {title: book.title, id: nil, status: "FAILURE", errors: errors}
+      # end
     end
     render json: {result: result}
   end
