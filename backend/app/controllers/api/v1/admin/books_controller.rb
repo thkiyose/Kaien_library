@@ -1,4 +1,5 @@
 class Api::V1::Admin::BooksController < ApplicationController
+  require "open-uri"
 
   def index
     books = Book.includes(:reservations).where(deleted:false).map{|book|{ id: book.id, title: book.title, is_lent: book.is_lent, is_reserved: book.reservations.any? }}
@@ -24,15 +25,59 @@ class Api::V1::Admin::BooksController < ApplicationController
       render json: { error: "csvの内容が不足しているため、登録を行えません。"}
       return
     end
-    puts params[:json]
-    headers = params[:_json][0]
-    datas = params[:_json][1..-1]
+    header = params[:_json][0]
+    data = params[:_json][1..-1]
+    result = []
 
-    datas.each do |row|
+    data.each do |row|
       book = Book.new
-      headers.each_with_index do |head,index|
-        book[head] = row[index]
+      errors = []
+      header.each_with_index do |head,index|
+        case head
+        when "isbn" then
+          book.isbn = row[index].to_s
+        when "title" then
+          book.title = row[index].to_s
+        when "author" then
+          book.author = row[index].to_s
+        when "category_id" then
+          book.category_id = row[index].to_i
+        when "published_year" then
+          book.published_year = row[index].to_s
+        when "description" then
+          book.description = row[index].to_s
+        when "image_url" then
+          book.image_url = row[index].to_s
+        when "location_id" then
+          book.location_id = row[index].to_i
+        when "version" then
+          book.version = row[index].to_i
+        else
+          errors << "#{head}:ヘッダーが正しくありません。"
+        end
+      end
+      load_image(book,book.image_url)
+      if book.save
+        result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors}
+      else
+        result << {title: book.title, id: nil, status: "FAILURE", errors: errors}
       end
     end
+    render json: {result: result}
   end
+
+  private
+
+    def load_image(book,image_url)
+      if image_url.present?
+        url = image_url
+        file = "./public/#{book.id}.jpg"
+        URI.open(file, 'w') do |pass|
+          URI.open(url) do |recieve|
+            pass.write(recieve.read.force_encoding(Encoding::UTF_8))
+          end
+        end
+        book.image_url = file
+      end
+    end
 end
