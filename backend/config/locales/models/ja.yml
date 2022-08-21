@@ -3,17 +3,30 @@ ja:
     models:
       book: 書籍
       user: ユーザー
+      category: カテゴリ
+      location: 収蔵場所
       lending: レンタルデータ
       reservation: 予約データ
       watchlist: ウォッチリスト
       review: レビュー
+    errors:
+      models:
+        book:
+          format: "%{attribute}%{message}"
+          empty: データがありません。
+          blank: データがありません。
+          required: データがありません。
     attributes:
       book:
         title: タイトル
         author: 著者
+        category: カテゴリ
+        location: 収蔵場所
         category_id: カテゴリid
         published_year: 出版年
         description: 説明文
         image_url: 書影URL
         location_id: 収蔵場所id
         version: 版数
+      category:
+        category: カテゴリ

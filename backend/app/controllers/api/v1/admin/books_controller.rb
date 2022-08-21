@@ -46,7 +46,7 @@ class Api::V1::Admin::BooksController < ApplicationController
         load_image(book,warning)
         result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors, warning: warning}
       else
-        errors << book.errors
+        errors << book.errors.full_messages
         result << {title: book.title, id: nil, status: "FAILURE", errors: errors, warning: warning}
       end
     end
