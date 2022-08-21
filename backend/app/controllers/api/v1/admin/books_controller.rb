@@ -22,7 +22,7 @@ class Api::V1::Admin::BooksController < ApplicationController
 
   def import_from_csv
     if params[:_json].length <= 1
-      render json: { process:"Failed",error: "csvの内容が不足しているため、登録を行えません。"}
+      render json: { process:"FAILURE",error: "csvの内容が不足しているため、登録を行えません。"}
       return
     end
     header = params[:_json][0]
@@ -49,7 +49,7 @@ class Api::V1::Admin::BooksController < ApplicationController
         result << {title: book.title, id: nil, status: "FAILURE", errors: errors}
       end
     end
-    render json: {process: "Completed", result: result}
+    render json: {process: "COMPLETE", result: result}
   end
 
   private
