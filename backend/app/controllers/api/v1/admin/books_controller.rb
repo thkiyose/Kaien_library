@@ -71,7 +71,7 @@ class Api::V1::Admin::BooksController < ApplicationController
 
     def load_image(book)
       if book.image_url.present?
-        url = image_url
+        url = book.image_url
         file = "./public/#{book.id}.jpg"
         URI.open(file, 'w') do |pass|
           URI.open(url) do |recieve|
