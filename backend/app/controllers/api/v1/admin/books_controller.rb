@@ -40,7 +40,7 @@ class Api::V1::Admin::BooksController < ApplicationController
           errors << "#{head}:ヘッダーが正しくありません。"
         end
       end
-      # complement_by_api(book)
+      complement_by_api(book)
       if book.save
         load_image(book)
         result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors}

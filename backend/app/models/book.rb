@@ -13,10 +13,8 @@ class Book < ApplicationRecord
   validates :isbn, length: { minimum:10, maximum:13 }, allow_blank: true
   validates :title, presence: true, length: { maximum:255 }
   validates :author ,presence: true, length: { maximum:255 }
-  validates :category_id, presence: true
   validates :published_year, presence: true, length: { minimum: 4, maximum: 4, allow_blank: true }
   validates :description, presence: true
-  validates :location_id, presence: true
   validates :version, length: { maximum: 2 }
 
   scope :search_with_free_word, -> (word){
