@@ -1,0 +1,19 @@
+ja:
+  activerecord:
+    models:
+      book: 書籍
+      user: ユーザー
+      lending: レンタルデータ
+      reservation: 予約データ
+      watchlist: ウォッチリスト
+      review: レビュー
+    attributes:
+      book:
+        title: タイトル
+        author: 著者
+        category_id: カテゴリid
+        published_year: 出版年
+        description: 説明文
+        image_url: 書影URL
+        location_id: 収蔵場所id
+        version: 版数

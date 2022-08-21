@@ -33,6 +33,7 @@ class Api::V1::Admin::BooksController < ApplicationController
     data.each do |row|
       book = Book.new
       errors = []
+      warning = []
       header.each_with_index do |head,index|
         if book_columns.include?(head)
           book[head] = row[index]
@@ -42,11 +43,11 @@ class Api::V1::Admin::BooksController < ApplicationController
       end
       complement_by_api(book)
       if book.save
-        load_image(book)
-        result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors}
+        load_image(book,warning)
+        result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors, warning: warning}
       else
         errors << book.errors
-        result << {title: book.title, id: nil, status: "FAILURE", errors: errors}
+        result << {title: book.title, id: nil, status: "FAILURE", errors: errors, warning: warning}
       end
     end
     render json: {process: "COMPLETE", result: result}
@@ -69,16 +70,21 @@ class Api::V1::Admin::BooksController < ApplicationController
       end
     end
 
-    def load_image(book)
+    def load_image(book,warning)
+      valid_content = ['image/gif','image/png','image/jpg','image/jpeg','image/pjpeg','image/x-png']
       if book.image_url.present?
         url = book.image_url
         file = "./public/#{book.id}.jpg"
         URI.open(file, 'w') do |pass|
           URI.open(url) do |recieve|
-            pass.write(recieve.read.force_encoding(Encoding::UTF_8))
+            if recieve.respond_to?(:content_type) && valid_content.include?(recieve.content_type)
+              pass.write(recieve.read.force_encoding(Encoding::UTF_8))
+              book.image_url = file
+            else
+              warning << "書影ファイルの形式が不正です。"
+            end
           end
         end
-        book.image_url = file
       end
     end
 end
