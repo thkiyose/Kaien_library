@@ -35,6 +35,11 @@ export const ImportResult = () => {
                       <td>{result.title ? <Link to={`/books/${result.id}`}>{result.title}</Link> : "タイトルがありません"}</td>
                       <td className={`status ${result.status}`}>{ result.status === "SUCCESS" && "登録成功"}{ result.status === "FAILURE" && "登録失敗"}</td>
                     </tr>
+                    {result.warning &&
+                      <tr className="warning">
+                        <td colSpan="3">{result.warning}</td>
+                      </tr>
+                    }
                     { result.status === "FAILURE" &&
                       <tr className="error">
                         <td colSpan="3">{result.errors}</td>
@@ -66,6 +71,7 @@ export const ImportResult = () => {
           breakClassName='page-item'
           breakLinkClassName='page-link'
         />
+        <Link to="/admin">管理メニューに戻る</Link>
       </Wrapper>
     </>
   );
@@ -92,6 +98,9 @@ const Table = styled.table`
     }
     .error {
       color: rgb(157, 58, 58);
+    }
+    .warning {
+      color: rgb(199, 185, 57);
     }
     .index {
       width: 7%;

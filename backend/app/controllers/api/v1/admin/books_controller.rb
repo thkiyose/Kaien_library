@@ -58,7 +58,7 @@ class Api::V1::Admin::BooksController < ApplicationController
     def complement_by_api(book)
       if book.isbn.present?
         res = JSON.parse(Net::HTTP.get(URI.parse(
-          "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
+          "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn.ord}"
         )),symbolize_names: true)
         if res[:totalItems] != 0
           book.title = res[:items][0][:volumeInfo][:title] if res[:items][0][:volumeInfo][:title] && book.title.blank?
@@ -85,6 +85,8 @@ class Api::V1::Admin::BooksController < ApplicationController
             end
           end
         end
+      else
+        warning << "書影データがありません。"
       end
     end
 end
