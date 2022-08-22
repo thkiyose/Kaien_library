@@ -15,7 +15,7 @@ ja:
           format: "%{attribute}%{message}"
           empty: データがありません。
           blank: データがありません。
-          required: データがありません。
+          required: が存在しません。有効な%{attribute}IDを指定して下さい。
     attributes:
       book:
         title: タイトル

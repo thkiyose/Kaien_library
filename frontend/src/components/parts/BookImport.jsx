@@ -1,8 +1,10 @@
 import React, { useState,useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { importBooksFromCSV } from '../../lib/api/admin';
 
 export const BookImport = () => {
   const [ csv, setCsv ] = useState([]);
+  const navigate = useNavigate();
 
   const handleFileSelect = async(e) => {
     const textFromCsv = await e.target.files[0].text()
@@ -15,7 +17,7 @@ export const BookImport = () => {
 
   const handleSubmit = async(csv) => {
     const res = await importBooksFromCSV(csv)
-    console.log(res)
+
   }
   return (
     <>
