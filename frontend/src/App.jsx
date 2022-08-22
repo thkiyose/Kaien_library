@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Login } from './components/Login';
@@ -53,6 +53,8 @@ export const App = () => {
   };
   useEffect(() => {
     handleGetCurrentUser();
+    handleFetchCategories();
+    handleFetchLocations();
   }, [setCurrentUser]);
 
   const handleFetchCategories= async() => {
@@ -64,9 +66,6 @@ export const App = () => {
     const res = await fetchLocations();
     setLocations(res.data.location);
   }
-
-  useLayoutEffect(() => { handleFetchCategories() }, []);
-  useLayoutEffect(() => { handleFetchLocations() }, []);
 
   const LoggedInRoute = ( {children} ) => {
     if (!loading) {
