@@ -173,7 +173,7 @@ export const Index = () => {
   const [ perPage ] = useState(18);
   const [ currentPage, setCurrentPage ] = useState(0);
   const [ start, setStart ] = useState(0);
-  const { currentUser } = useContext(Context);
+  const { currentUser, setLoading } = useContext(Context);
   const { categories } = useContext(Context);
   const searchRef = useRef();
   const categoryRef = useRef();
@@ -183,7 +183,9 @@ export const Index = () => {
     const res = await fetchBooks();
     setBooks(res.data.books);
   };
-  useLayoutEffect(() => { handleFetchBooks() }, []);
+  useLayoutEffect(() => { setLoading(true);
+    handleFetchBooks();
+    setLoading(false); }, [setLoading]);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Context } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { importBooksFromCSV } from '../../lib/api/admin';
 
 export const BookImport = () => {
   const [ csv, setCsv ] = useState([]);
   const [ error, setError ] = useState([]);
+  const { setLoading } = useContext(Context);
   const navigate = useNavigate();
 
   const handleFileSelect = async(e) => {
@@ -17,11 +19,14 @@ export const BookImport = () => {
   }
 
   const handleSubmit = async(csv) => {
+    setLoading(true);
     const res = await importBooksFromCSV(csv)
     if (res.data.process === "COMPLETE"){
       navigate("result", {state: {result: res.data.result, successCount: res.data.successCount, failureCount: res.data.failureCount}})
+      setLoading(false);
     } else if (res.data.process === "FAILURE") {
       setError(res.data.error);
+      setLoading(false);
     }
   }
   return (
