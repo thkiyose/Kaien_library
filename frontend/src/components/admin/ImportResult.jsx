@@ -31,7 +31,7 @@ export const ImportResult = () => {
                 return (
                   <React.Fragment key={index}>
                     <tr className="result">
-                      <td className="index">{index + 1}</td>
+                      <td className="index">{index + 1 + start}</td>
                       <td>{result.title ? result.title : "タイトルがありません"}</td>
                       <td className={`status ${result.status}`}>{ result.status === "SUCCESS" && "登録成功"}{ result.status === "FAILURE" && "登録失敗"}</td>
                     </tr>
@@ -71,7 +71,7 @@ export const ImportResult = () => {
           breakClassName='page-item'
           breakLinkClassName='page-link'
         />
-        <Link to="/admin">管理メニューに戻る</Link>
+        <LinkToMenu to="/admin">管理メニューに戻る</LinkToMenu>
       </Wrapper>
     </>
   );
@@ -121,6 +121,8 @@ const Table = styled.table`
 `
 const Count = styled.p`
   text-align: center;
+  background-color: ${Color.text};
+  padding: 10px;
 `
 const Icon = styled.img`
   height: 0.9rem;
@@ -158,4 +160,9 @@ const MyPaginate = styled(ReactPaginate).attrs({
   li.disabled a {
     cursor: default;
   }
+`
+const LinkToMenu = styled(Link)`
+  text-align: center;
+  font-size: 1rem;
+  display: block;
 `
