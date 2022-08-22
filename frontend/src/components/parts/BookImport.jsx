@@ -19,7 +19,7 @@ export const BookImport = () => {
   const handleSubmit = async(csv) => {
     const res = await importBooksFromCSV(csv)
     if (res.data.process === "COMPLETE"){
-      navigate("result", {state: res.data.result})
+      navigate("result", {state: {result: res.data.result, successCount: res.data.successCount, failureCount: res.data.failureCount}})
     } else if (res.data.process === "FAILURE") {
       setError(res.data.error);
     }

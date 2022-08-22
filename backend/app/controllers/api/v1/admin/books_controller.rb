@@ -50,7 +50,7 @@ class Api::V1::Admin::BooksController < ApplicationController
         result << {title: book.title, id: nil, status: "FAILURE", errors: errors, warning: warning}
       end
     end
-    render json: {process: "COMPLETE", result: result}
+    render json: {process: "COMPLETE", result: result, success_count: result.count{|x|x[:status] == "SUCCESS"}, failure_count: result.count{|x|x[:status] == "FAILURE"}}
   end
 
   private
