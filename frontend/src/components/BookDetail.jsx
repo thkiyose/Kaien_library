@@ -257,6 +257,10 @@ export const BookDetail = () => {
 
   const handleShowDatas = async(bookId,currentUserId) => {
     try {
+      const reviewRes = await showReviews(bookId,currentUserId);
+      setReviews(reviewRes.data.reviews);
+      setAlreadyReviewed(reviewRes.data.alreadyReviewed);
+      setAverage(reviewRes.data.average);
       const bookRes = await showBook(bookId,currentUserId);
       setBook(bookRes.data.book);
       setLendings(bookRes.data.lendings);
@@ -268,10 +272,6 @@ export const BookDetail = () => {
       setOnGoingOtherUserReservation(bookRes.data.otherUserReserved.onGoing);
       setOnGoingCurrentUserReservation(bookRes.data.currentUserReserved.onGoing);
       setIsLoading(false);
-      const reviewRes = await showReviews(bookId,currentUserId);
-      setReviews(reviewRes.data.reviews);
-      setAlreadyReviewed(reviewRes.data.alreadyReviewed);
-      setAverage(reviewRes.data.average);
     } catch(e) {
       console.log(e);
       setIsLoading(false);
