@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-import Color from './Color';
 
 export const Spinner = () => {
   return (
@@ -20,6 +19,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
 `
 
 const Loader = styled.div`

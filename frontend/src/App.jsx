@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, useCallback, createContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Login } from './components/Login';
@@ -37,7 +37,7 @@ export const App = () => {
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
 
-  const handleGetCurrentUser = async () => {
+  const handleGetCurrentUser = useCallback(async () => {
   try {
     const res = await getCurrentUser();
     if (res?.data.isLogin === true) {
@@ -50,12 +50,12 @@ export const App = () => {
     console.log(e);
   }
     setLoading(false);
-  };
+  },[]);
   useEffect(() => {
     handleGetCurrentUser();
     handleFetchCategories();
     handleFetchLocations();
-  }, [setCurrentUser]);
+  }, [setCurrentUser, handleGetCurrentUser]);
 
   const handleFetchCategories= async() => {
     const res = await fetchCategories();
