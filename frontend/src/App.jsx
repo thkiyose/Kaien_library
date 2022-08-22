@@ -17,6 +17,7 @@ import { AdminLendingsIndex } from './components/admin/AdminLendingsIndex';
 import { AdminReservationsIndex } from './components/admin/AdminReservationsIndex';
 import { AdminReviewsIndex } from './components/admin/AdminReviewsIndex';
 import { RegisterBook } from './components/admin/RegisterBook';
+import { ImportResult } from './components/admin/ImportResult';
 import { Lending } from './components/Lending';
 import { Reservation } from './components/Reservation';
 import { ReservationToLending } from './components/ReservationToLending';
@@ -144,6 +145,7 @@ export const App = () => {
               <Route path={"reviews"} element={<AdminProtectedRoute><AdminReviewsIndex /></AdminProtectedRoute>} />
             </Route>
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
+            <Route path={"/admin/result"} element={<AdminProtectedRoute><ImportResult /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>
         </Routes>
