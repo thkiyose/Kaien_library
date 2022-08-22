@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
+import Color from './Color';
 
 export const Spinner = () => {
   return (
@@ -13,22 +14,12 @@ export const Spinner = () => {
 }
 
 const Container = styled.div`
-  margin: 0 auto;
-  height: 600px;
+  height: 400px;
+  margin: 200px auto;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  animation: fadeIn 1s ease 0.3s 1 normal;
-  animation: fadeOut 1s ease 0.3s 1 normal;
-  @keyframes fadeIn {
-    0% {opacity: 0}
-    100% {opacity: 1}
-  }
-  @keyframes fadeOut {
-    0% {opacity: 0}
-    100% {opacity: 1}
-  }
 `
 
 const Loader = styled.div`

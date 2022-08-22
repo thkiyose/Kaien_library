@@ -32,17 +32,17 @@ export const ImportResult = () => {
                   <React.Fragment key={index}>
                     <tr className="result">
                       <td className="index">{index + 1}</td>
-                      <td>{result.title ? <Link to={`/books/${result.id}`}>{result.title}</Link> : "タイトルがありません"}</td>
+                      <td>{result.title ? result.title : "タイトルがありません"}</td>
                       <td className={`status ${result.status}`}>{ result.status === "SUCCESS" && "登録成功"}{ result.status === "FAILURE" && "登録失敗"}</td>
                     </tr>
-                    {result.warning &&
+                    {result.warning.length > 0 &&
                       <tr className="warning">
-                        <td colSpan="3">{result.warning}</td>
+                        <td colSpan="3"><Icon src={`${process.env.PUBLIC_URL}/warning.png`} />{result.warning}</td>
                       </tr>
                     }
                     { result.status === "FAILURE" &&
                       <tr className="error">
-                        <td colSpan="3">{result.errors}</td>
+                        <td colSpan="3"><Icon src={`${process.env.PUBLIC_URL}/error.png`} />{result.errors}</td>
                       </tr>
                     }
                   </React.Fragment>
@@ -100,7 +100,7 @@ const Table = styled.table`
       color: rgb(157, 58, 58);
     }
     .warning {
-      color: rgb(199, 185, 57);
+      color: rgb(172, 157, 18);
     }
     .index {
       width: 7%;
@@ -121,6 +121,9 @@ const Table = styled.table`
 `
 const Count = styled.p`
   text-align: center;
+`
+const Icon = styled.img`
+  height: 0.9rem;
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({

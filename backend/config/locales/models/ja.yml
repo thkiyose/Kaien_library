@@ -12,10 +12,10 @@ ja:
     errors:
       models:
         book:
-          format: "%{attribute}%{message}"
-          empty: データがありません。
-          blank: データがありません。
-          required: が存在しません。有効な%{attribute}IDを指定して下さい。
+          format: "%{attribute}%{message}。"
+          empty: データがありません
+          blank: データがありません
+          required: が存在しません。有効な%{attribute}IDを指定して下さい
     attributes:
       book:
         title: タイトル
