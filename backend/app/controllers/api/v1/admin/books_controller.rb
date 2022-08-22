@@ -81,7 +81,7 @@ class Api::V1::Admin::BooksController < ApplicationController
               pass.write(recieve.read.force_encoding(Encoding::UTF_8))
               book.image_url = file
             else
-              warning << "書影ファイルの形式が不正です。"
+              warning << "書影ファイルの形式が不正なため、書影を登録出来ませんでした。"
             end
           end
         end

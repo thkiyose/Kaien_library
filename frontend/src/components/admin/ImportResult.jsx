@@ -18,8 +18,8 @@ export const ImportResult = () => {
   return (
     <>
       <Wrapper width={"800px"}>
-        <Title>インポート結果</Title>
-        <Count>{result.length}件のデータをインポートしました。   成功:{successCount}件 失敗:{failureCount}件</Count>
+        <Title>登録結果</Title>
+        <Count>{result.length}件のデータを読み込みました。   登録成功:{successCount}件 失敗:{failureCount}件</Count>
         <Table>
           <thead>
             <tr>
