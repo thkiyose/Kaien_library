@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Wrapper } from '../parts/Wrapper';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import { Link, useLocation } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
 
 export const ImportResult = () => {
   const location = useLocation();
+  const perPage = 18;
+  const [ start, setStart ] = useState(0);
   const {result, successCount, failureCount} = location.state;
+
+  const handlePageChange = (e) => {
+    setStart(e.selected * perPage);
+  }
 
   return (
     <>
@@ -20,7 +27,7 @@ export const ImportResult = () => {
             </tr>
           </thead>
           <tbody>
-            {result.map((result,index) => {
+            {result.slice(start, start + perPage).map((result,index) => {
                 return (
                   <React.Fragment key={index}>
                     <tr className="result">
@@ -39,6 +46,26 @@ export const ImportResult = () => {
             }
           </tbody>
         </Table>
+        <MyPaginate
+          onPageChange={handlePageChange}
+          pageCount={Math.ceil(result.length / perPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          containerClassName='pagination'
+          pageClassName='page-item'
+          pageLinkClassName='page-link'
+          activeClassName='active'
+          previousLabel='<'
+          nextLabel='>'
+          previousClassName='page-item'
+          nextClassName='page-item'
+          previousLinkClassName='page-link'
+          nextLinkClassName='page-link'
+          disabledClassName='disabled'
+          breakLabel='...'
+          breakClassName='page-item'
+          breakLinkClassName='page-link'
+        />
       </Wrapper>
     </>
   );
@@ -83,7 +110,40 @@ const Table = styled.table`
     }
   }
 `
-
 const Count = styled.p`
   text-align: center;
+`
+
+const MyPaginate = styled(ReactPaginate).attrs({
+  activeClassName: 'active',
+})`
+  margin-top: 10;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0 5rem;
+  li a {
+    border-radius: 7px;
+    padding: 0.1rem 1rem;
+    cursor: pointer;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: ${Color.primary};
+    color: white;
+    border-color: transparent;
+    min-width: 32px;
+  }
+  li.disabled a {
+    color: grey;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
 `
