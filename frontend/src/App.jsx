@@ -145,7 +145,7 @@ export const App = () => {
               <Route path={"reviews"} element={<AdminProtectedRoute><AdminReviewsIndex /></AdminProtectedRoute>} />
             </Route>
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
-            <Route path={"/admin/result"} element={<AdminProtectedRoute><ImportResult /></AdminProtectedRoute>} />
+            <Route path={"/admin/book_registration/result"} element={<AdminProtectedRoute><ImportResult /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>
         </Routes>
