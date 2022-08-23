@@ -57,7 +57,7 @@ export const BookImport = React.memo(() => {
         <p><input onClick={(e)=>{handleUsageSelect(e)}} type="radio" name="IsbnUsage" value="override"/>ISBNコードがある限り情報を取得し、CSV上のデータに上書きして保存する。</p>
         <p><input onClick={(e)=>{handleUsageSelect(e)}} type="radio" name="IsbnUsage" value="none"/>情報を取得しない。</p>
       </Radios>
-      <SubmitButton onClick={()=>{handleSubmit(csv,isbnUsage)}}>登録する</SubmitButton>
+      <SubmitButton onClick={()=>{handleSubmit(csv,isbnUsage)}}>読み込む</SubmitButton>
       <Error>{error}</Error>
     </>
   );

@@ -46,12 +46,12 @@ class Api::V1::Admin::BooksController < ApplicationController
       elsif params[:isbn_usage] == "override"
         override_by_api(book)
       end
-      if book.save
+      if book.valid?
         load_image(book,warning)
-        result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors, warning: warning}
+        result << {title: book.title, status: "SUCCESS", errors: errors, warning: warning}
       else
         errors << book.errors.full_messages
-        result << {title: book.title, id: nil, status: "FAILURE", errors: errors, warning: warning}
+        result << {title: book.title, status: "FAILURE", errors: errors, warning: warning}
       end
     end
     render json: {process: "COMPLETE", result: result, success_count: result.count{|x|x[:status] == "SUCCESS"}, failure_count: result.count{|x|x[:status] == "FAILURE"}}
