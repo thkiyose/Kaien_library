@@ -20,7 +20,7 @@ export const ImportResult = () => {
     <>
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
-        <Title>登録結果</Title>
+        <Title>読み込み結果</Title>
         <Count>{result.length}件のデータを読み込みました。   登録可能:{successCount}件 登録不可:{failureCount}件</Count>
         <Table>
           <thead>

@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         resources :books, only: [:index,:destroy] do
           get "search", on: :collection
           post "import_from_csv", on: :collection
+          post "create_from_imported", on: :collection
         end
         resources :users, only: [:index, :destroy, :update] do
           get "search", on: :collection

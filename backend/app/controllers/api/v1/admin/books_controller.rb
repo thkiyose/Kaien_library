@@ -57,7 +57,8 @@ class Api::V1::Admin::BooksController < ApplicationController
     render json: {process: "COMPLETE", result: result, success_count: result.count{|x|x[:status] == "SUCCESS"}, failure_count: result.count{|x|x[:status] == "FAILURE"}}
   end
 
-  def create_from_imported(result)
+  def create_from_imported
+    put params
     created_count = 0
     result.each do |book|
       if book.data.status == "SUCCESS"
