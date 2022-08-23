@@ -21,12 +21,12 @@ class Api::V1::Admin::BooksController < ApplicationController
   end
 
   def import_from_csv
-    if params[:_json].length <= 1
+    if params[:csv].length <= 1
       render json: { process:"FAILURE",error: "csvの内容が不足しているため、登録を行えません。"}
       return
     end
-    header = params[:_json][0]
-    data = params[:_json][1..-1]
+    header = params[:csv][0]
+    data = params[:csv][1..-1]
     result = []
     book_columns = Book.column_names - ["created_at","deleted", "updated_at", "is_lent"]
 
@@ -41,7 +41,11 @@ class Api::V1::Admin::BooksController < ApplicationController
           errors << "#{head}:ヘッダーが正しくありません。"
         end
       end
-      complement_by_api(book)
+      if params[:isbn_usage] == "compliment"
+        complement_by_api(book)
+      elsif params[:isbn_usage] == "override"
+        override_by_api(book)
+      end
       if book.save
         load_image(book,warning)
         result << {title: book.title, id: book.id, status: "SUCCESS", errors: errors, warning: warning}
@@ -66,6 +70,21 @@ class Api::V1::Admin::BooksController < ApplicationController
           book.published_year = res[:items][0][:volumeInfo][:publishedDate].slice(0,4).to_s if res[:items][0][:volumeInfo][:publishedDate] && book.published_year.blank?
           book.description = res[:items][0][:volumeInfo][:description] if res[:items][0][:volumeInfo][:description] && book.description.blank?
           book.image_url = res[:items][0][:volumeInfo][:imageLinks][:thumbnail] if res[:items][0][:volumeInfo][:imageLinks] && book.image_url.blank?
+        end
+      end
+    end
+
+    def override_by_api(book)
+      if book.isbn.present? && book.isbn.ascii_only?
+        res = JSON.parse(Net::HTTP.get(URI.parse(
+          "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
+        )),symbolize_names: true)
+        if res[:totalItems] != 0
+          book.title = res[:items][0][:volumeInfo][:title] if res[:items][0][:volumeInfo][:title]
+          book.author = res[:items][0][:volumeInfo][:authors].join(",").to_s if res[:items][0][:volumeInfo][:authors]
+          book.published_year = res[:items][0][:volumeInfo][:publishedDate].slice(0,4).to_s if res[:items][0][:volumeInfo][:publishedDate]
+          book.description = res[:items][0][:volumeInfo][:description] if res[:items][0][:volumeInfo][:description]
+          book.image_url = res[:items][0][:volumeInfo][:imageLinks][:thumbnail] if res[:items][0][:volumeInfo][:imageLinks]
         end
       end
     end

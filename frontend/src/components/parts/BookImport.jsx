@@ -7,6 +7,7 @@ import { importBooksFromCSV } from '../../lib/api/admin';
 
 export const BookImport = React.memo(() => {
   const [ csv, setCsv ] = useState([]);
+  const [ isbnUsage, setIsbnUsage ] = useState("compliment");
   const [ fileName, setFileName ] = useState("");
   const [ error, setError ] = useState([]);
   const { setLoading } = useContext(Context);
@@ -18,13 +19,18 @@ export const BookImport = React.memo(() => {
     setCsv(parse(textFromCsv));
   }
 
+  const handleUsageSelect = (e) => {
+    setIsbnUsage(e.target.value);
+  }
+
   const parse = (text) => {
     return text.split('\r\n').map((row) => row.split(','));
   }
-  const handleSubmit = async(csv) => {
+
+  const handleSubmit = async(csv,isbnUsage) => {
     if (csv.length > 1){
       setLoading(true);
-      const res = await importBooksFromCSV(csv)
+      const res = await importBooksFromCSV(csv,isbnUsage)
       if (res.data.process === "COMPLETE"){
         navigate("result", {state: {result: res.data.result, successCount: res.data.successCount, failureCount: res.data.failureCount}})
       } else if (res.data.process === "FAILURE") {
@@ -32,7 +38,7 @@ export const BookImport = React.memo(() => {
       }
       setLoading(false);
     } else {
-      const res = await importBooksFromCSV(csv)
+      const res = await importBooksFromCSV(csv,isbnUsage)
       setError(res.data.error);
     }
   }
@@ -45,7 +51,13 @@ export const BookImport = React.memo(() => {
         </label>
         <p>{fileName}</p>
       </FileDiv>
-      <SubmitButton onClick={()=>{handleSubmit(csv)}}>登録する</SubmitButton>
+      <Radios>
+        <p>ISBNコードによる情報取得方法</p>
+        <p><input defaultChecked onClick={(e)=>{handleUsageSelect(e)}} type="radio" name="IsbnUsage" value="compliment"/>必須項目が欠けている時のみ、ISBNコードを使用して情報の補完を試みる。</p>
+        <p><input onClick={(e)=>{handleUsageSelect(e)}} type="radio" name="IsbnUsage" value="override"/>ISBNコードがある限り情報を取得し、CSV上のデータに上書きして保存する。</p>
+        <p><input onClick={(e)=>{handleUsageSelect(e)}} type="radio" name="IsbnUsage" value="none"/>情報を取得しない。</p>
+      </Radios>
+      <SubmitButton onClick={()=>{handleSubmit(csv,isbnUsage)}}>登録する</SubmitButton>
       <Error>{error}</Error>
     </>
   );
@@ -81,6 +93,12 @@ const FileDiv = styled.div`
     cursor: pointer;
   }
 `
+const Radios = styled.div`
+  margin-top: 20px;
+  p {
+    margin: 0;
+    padding: 5px;
+  }`
 
 const SubmitButton = styled.button`
   margin: 0 auto;
