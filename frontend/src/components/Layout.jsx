@@ -18,7 +18,7 @@ const Div = styled.div`
 
 export const Layout = () => {
   const { loading } = useContext(Context);
-  console.log(loading);
+
   return (
     <Div>
       <Header />
