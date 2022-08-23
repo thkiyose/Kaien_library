@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { importBooksFromCSV } from '../../lib/api/admin';
 
-export const BookImport = () => {
+export const BookImport = React.memo(() => {
   const [ csv, setCsv ] = useState([]);
   const [ fileName, setFileName ] = useState("");
   const [ error, setError ] = useState([]);
@@ -21,16 +21,19 @@ export const BookImport = () => {
   const parse = (text) => {
     return text.split('\r\n').map((row) => row.split(','));
   }
-
   const handleSubmit = async(csv) => {
-    setLoading(true);
-    const res = await importBooksFromCSV(csv)
-    if (res.data.process === "COMPLETE"){
-      navigate("result", {state: {result: res.data.result, successCount: res.data.successCount, failureCount: res.data.failureCount}})
+    if (csv.length > 1){
+      setLoading(true);
+      const res = await importBooksFromCSV(csv)
+      if (res.data.process === "COMPLETE"){
+        navigate("result", {state: {result: res.data.result, successCount: res.data.successCount, failureCount: res.data.failureCount}})
+      } else if (res.data.process === "FAILURE") {
+        setError(res.data.error);
+      }
       setLoading(false);
-    } else if (res.data.process === "FAILURE") {
+    } else {
+      const res = await importBooksFromCSV(csv)
       setError(res.data.error);
-      setLoading(false);
     }
   }
   return (
@@ -43,10 +46,15 @@ export const BookImport = () => {
         <p>{fileName}</p>
       </FileDiv>
       <SubmitButton onClick={()=>{handleSubmit(csv)}}>登録する</SubmitButton>
-      <p>{error}</p>
+      <Error>{error}</Error>
     </>
   );
-}
+})
+
+const Error = styled.p`
+  text-align:center;
+`
+
 const FileDiv = styled.div`
   width: 80%;
   min-height: 80px;
