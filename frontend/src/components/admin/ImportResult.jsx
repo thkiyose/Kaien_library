@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Wrapper } from '../parts/Wrapper';
 import styled from "styled-components";
 import Color from '../parts/Color';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
 export const ImportResult = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const perPage = 18;
   const [ start, setStart ] = useState(0);
   const {result, successCount, failureCount} = location.state;
@@ -18,8 +19,9 @@ export const ImportResult = () => {
   return (
     <>
       <Wrapper width={"800px"}>
+        <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
         <Title>登録結果</Title>
-        <Count>{result.length}件のデータを読み込みました。   登録成功:{successCount}件 失敗:{failureCount}件</Count>
+        <Count>{result.length}件のデータを読み込みました。   登録可能:{successCount}件 登録不可:{failureCount}件</Count>
         <Table>
           <thead>
             <tr>
@@ -33,7 +35,7 @@ export const ImportResult = () => {
                     <tr className="result">
                       <td className="index">{index + 1 + start}</td>
                       <td>{result.title ? result.title : "タイトルがありません"}</td>
-                      <td className={`status ${result.status}`}>{ result.status === "SUCCESS" && "登録成功"}{ result.status === "FAILURE" && "登録失敗"}</td>
+                      <td className={`status ${result.status}`}>{ result.status === "SUCCESS" && "登録可能"}{ result.status === "FAILURE" && "登録不可"}</td>
                     </tr>
                     {result.warning.length > 0 &&
                       <tr className="warning">
@@ -165,4 +167,14 @@ const LinkToMenu = styled(Link)`
   text-align: center;
   font-size: 1rem;
   display: block;
+`
+
+const BackButton = styled.button`
+  outline: 0;
+  background: ${Color.primary};
+  font-size: 0.8rem;
+  border: 0;
+  padding: 5px 15px;
+  color: #FFFFFF;
+  cursor: pointer;
 `
