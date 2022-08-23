@@ -34,7 +34,7 @@ export const ImportResult = () => {
                   <React.Fragment key={index}>
                     <tr className="result">
                       <td className="index">{index + 1 + start}</td>
-                      <td>{result.title ? result.title : "タイトルがありません"}</td>
+                      <td>{result.data.title ? result.data.title : "タイトルがありません"}</td>
                       <td className={`status ${result.status}`}>{ result.status === "SUCCESS" && "登録可能"}{ result.status === "FAILURE" && "登録不可"}</td>
                     </tr>
                     {result.warning.length > 0 &&

@@ -48,13 +48,24 @@ class Api::V1::Admin::BooksController < ApplicationController
       end
       if book.valid?
         load_image(book,warning)
-        result << {title: book.title, status: "SUCCESS", errors: errors, warning: warning}
+        result << {data: book, status: "SUCCESS", errors: errors, warning: warning}
       else
         errors << book.errors.full_messages
-        result << {title: book.title, status: "FAILURE", errors: errors, warning: warning}
+        result << {data: book, status: "FAILURE", errors: errors, warning: warning}
       end
     end
     render json: {process: "COMPLETE", result: result, success_count: result.count{|x|x[:status] == "SUCCESS"}, failure_count: result.count{|x|x[:status] == "FAILURE"}}
+  end
+
+  def create_from_imported(result)
+    created_count = 0
+    result.each do |book|
+      if book.data.status == "SUCCESS"
+        Book.create(book.data)
+        created_count += 1
+      end
+    end
+    render json: { status: "SUCCESS", count: created_count}
   end
 
   private
