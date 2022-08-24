@@ -1,27 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '../../App';
 import { Wrapper } from '../parts/Wrapper';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import { createFromImported } from '../../lib/api/admin';
 
 export const ImportResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const perPage = 18;
+  const { loading } = useContext(Context);
   const [ start, setStart ] = useState(0);
-  const {result, successCount, failureCount} = location.state;
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
 
+  const handleSubmit = async() => {
+    const res = await createFromImported({result: location.state.result})
+    navigate("/admin");
+    console.log(res);
+  }
+if (location.state) {
   return (
     <>
       <Wrapper width={"800px"}>
         <BackButton onClick={() =>{navigate(-1)}}>&lt; 戻る</BackButton>
         <Title>読み込み結果</Title>
-        <Count>{result.length}件のデータを読み込みました。   登録可能:{successCount}件 登録不可:{failureCount}件</Count>
+        <Count>{location.state?.result.length}件のデータを読み込みました。　登録可能: {location.state?.successCount}件　登録不可: {location.state?.failureCount}件</Count>
         <Table>
           <thead>
             <tr>
@@ -29,7 +37,7 @@ export const ImportResult = () => {
             </tr>
           </thead>
           <tbody>
-            {result.slice(start, start + perPage).map((result,index) => {
+            {location.state?.result.slice(start, start + perPage).map((result,index) => {
                 return (
                   <React.Fragment key={index}>
                     <tr className="result">
@@ -55,7 +63,7 @@ export const ImportResult = () => {
         </Table>
         <MyPaginate
           onPageChange={handlePageChange}
-          pageCount={Math.ceil(result.length / perPage)}
+          pageCount={Math.ceil(location.state?.result.length / perPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           containerClassName='pagination'
@@ -73,10 +81,18 @@ export const ImportResult = () => {
           breakClassName='page-item'
           breakLinkClassName='page-link'
         />
-        <LinkToMenu to="/admin">管理メニューに戻る</LinkToMenu>
+        <SubmitButton onClick={()=>{handleSubmit(location.state?.result)}}>書籍を登録する</SubmitButton>
       </Wrapper>
     </>
-  );
+  );} else {
+    return (
+      <>
+        <Wrapper width="500px">
+          データがありません。正しい手順で登録をやり直して下さい。
+        </Wrapper>
+      </>
+    );
+  }
 }
 
 const Title = styled.h1`
@@ -163,10 +179,18 @@ const MyPaginate = styled(ReactPaginate).attrs({
     cursor: default;
   }
 `
-const LinkToMenu = styled(Link)`
-  text-align: center;
-  font-size: 1rem;
+const SubmitButton = styled.button`
+  margin: 0 auto;
+  margin-top: 20px;
   display: block;
+  font-size: 1rem;
+  width: 50%;
+  text-align: center;
+  border: 0;
+  padding: 10px 40px;
+  color: #ffffff;
+  background-color: ${Color.primary};
+  cursor: pointer;
 `
 
 const BackButton = styled.button`

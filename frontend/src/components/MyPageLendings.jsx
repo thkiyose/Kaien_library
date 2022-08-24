@@ -1,4 +1,4 @@
-import React, { useContext, useState,useMemo, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from "styled-components";
 import Color from './parts/Color';
@@ -107,6 +107,7 @@ const PreviousLending = styled.p`
 export const MyPageLendings = () => {
   const { currentUser,loading, setLoading } = useContext(Context);
   const [ lendings, setLendings ] = useState({});
+  const [ lendingsExists, setLendingsExists] = useState(false)
   const [ reservations, setReservations ] = useState({});
   const [ showModal, setShowModal] = useState(false);
   const [ cancelTarget, setCancelTarget ] = useState(0);
@@ -116,11 +117,10 @@ export const MyPageLendings = () => {
   const handleFetchLendings = useCallback(async() => {
     const res = await fetchLendings(currentUser.id);
     setLendings(res.data.lendings);
+    setLendingsExists(res.data.lendings.length > 0)
     setReservations(res.data.reservations);
     setLoading(false);
   },[currentUser.id,setLoading]);
-
-  const length = useMemo(()=>lendings.length, [lendings])
 
   useEffect(() => {handleFetchLendings();
   },[handleFetchLendings,currentUser,setLoading]);
@@ -134,11 +134,11 @@ export const MyPageLendings = () => {
     setShowModal(true);
     setCancelTarget(reservationId);
   }
-  if (lendings && reservations && loading === false) {
+  if (loading === false) {
     return (
       <>
       <Title>レンタル中の本</Title>
-      {length > 0 ?
+      {lendingsExists ?
         <>
           <Lendings>
             <tbody>

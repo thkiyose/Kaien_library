@@ -58,11 +58,20 @@ class Api::V1::Admin::BooksController < ApplicationController
   end
 
   def create_from_imported
-    put params
+    result = params[:result]
     created_count = 0
     result.each do |book|
-      if book.data.status == "SUCCESS"
-        Book.create(book.data)
+      if book[:status] == "SUCCESS"
+        book = Book.create(isbn: book[:data][:isbn],
+                    title: book[:data][:title],
+                    author: book[:data][:author],
+                    category_id: book[:data][:category_id],
+                    published_year: book[:data][:published_year],
+                    description: book[:data][:description],
+                    image_url: book[:data][:image_url],
+                    location_id: book[:data][:location_id],
+                    version: book[:data][:version])
+        save_image(book)
         created_count += 1
       end
     end
@@ -71,54 +80,64 @@ class Api::V1::Admin::BooksController < ApplicationController
 
   private
 
-    def complement_by_api(book)
-      if book.isbn.present? && book.isbn.ascii_only?
-        res = JSON.parse(Net::HTTP.get(URI.parse(
-          "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
-        )),symbolize_names: true)
-        if res[:totalItems] != 0
-          book.title = res[:items][0][:volumeInfo][:title] if res[:items][0][:volumeInfo][:title] && book.title.blank?
-          book.author = res[:items][0][:volumeInfo][:authors].join(",").to_s if res[:items][0][:volumeInfo][:authors] && book.author.blank?
-          book.published_year = res[:items][0][:volumeInfo][:publishedDate].slice(0,4).to_s if res[:items][0][:volumeInfo][:publishedDate] && book.published_year.blank?
-          book.description = res[:items][0][:volumeInfo][:description] if res[:items][0][:volumeInfo][:description] && book.description.blank?
-          book.image_url = res[:items][0][:volumeInfo][:imageLinks][:thumbnail] if res[:items][0][:volumeInfo][:imageLinks] && book.image_url.blank?
-        end
+  def complement_by_api(book)
+    if book.isbn.present? && book.isbn.ascii_only?
+      res = JSON.parse(Net::HTTP.get(URI.parse(
+        "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
+      )),symbolize_names: true)
+      if res[:totalItems] != 0
+        book.title = res[:items][0][:volumeInfo][:title] if res[:items][0][:volumeInfo][:title] && book.title.blank?
+        book.author = res[:items][0][:volumeInfo][:authors].join(",").to_s if res[:items][0][:volumeInfo][:authors] && book.author.blank?
+        book.published_year = res[:items][0][:volumeInfo][:publishedDate].slice(0,4).to_s if res[:items][0][:volumeInfo][:publishedDate] && book.published_year.blank?
+        book.description = res[:items][0][:volumeInfo][:description] if res[:items][0][:volumeInfo][:description] && book.description.blank?
+        book.image_url = res[:items][0][:volumeInfo][:imageLinks][:thumbnail] if res[:items][0][:volumeInfo][:imageLinks] && book.image_url.blank?
       end
     end
+  end
 
-    def override_by_api(book)
-      if book.isbn.present? && book.isbn.ascii_only?
-        res = JSON.parse(Net::HTTP.get(URI.parse(
-          "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
-        )),symbolize_names: true)
-        if res[:totalItems] != 0
-          book.title = res[:items][0][:volumeInfo][:title] if res[:items][0][:volumeInfo][:title]
-          book.author = res[:items][0][:volumeInfo][:authors].join(",").to_s if res[:items][0][:volumeInfo][:authors]
-          book.published_year = res[:items][0][:volumeInfo][:publishedDate].slice(0,4).to_s if res[:items][0][:volumeInfo][:publishedDate]
-          book.description = res[:items][0][:volumeInfo][:description] if res[:items][0][:volumeInfo][:description]
-          book.image_url = res[:items][0][:volumeInfo][:imageLinks][:thumbnail] if res[:items][0][:volumeInfo][:imageLinks]
-        end
+  def override_by_api(book)
+    if book.isbn.present? && book.isbn.ascii_only?
+      res = JSON.parse(Net::HTTP.get(URI.parse(
+        "https://www.googleapis.com/books/v1/volumes?q=isbn:#{book.isbn}"
+      )),symbolize_names: true)
+      if res[:totalItems] != 0
+        book.title = res[:items][0][:volumeInfo][:title] if res[:items][0][:volumeInfo][:title]
+        book.author = res[:items][0][:volumeInfo][:authors].join(",").to_s if res[:items][0][:volumeInfo][:authors]
+        book.published_year = res[:items][0][:volumeInfo][:publishedDate].slice(0,4).to_s if res[:items][0][:volumeInfo][:publishedDate]
+        book.description = res[:items][0][:volumeInfo][:description] if res[:items][0][:volumeInfo][:description]
+        book.image_url = res[:items][0][:volumeInfo][:imageLinks][:thumbnail] if res[:items][0][:volumeInfo][:imageLinks]
       end
     end
+  end
 
-    def load_image(book,warning)
-      valid_content = ['image/gif','image/png','image/jpg','image/jpeg','image/pjpeg','image/x-png']
-      if book.image_url.present?
-        url = book.image_url
-        file = "./public/#{book.id}.jpg"
-        URI.open(file, 'w') do |pass|
-          URI.open(url) do |recieve|
-            if recieve.respond_to?(:content_type) && valid_content.include?(recieve.content_type)
-              pass.write(recieve.read.force_encoding(Encoding::UTF_8))
-              book.image_url = file
-            else
-              book.update(image_url: nil)
-              warning << "書影ファイルの形式が不正なため、書影を登録出来ませんでした。"
-            end
+  def load_image(book,warning)
+    valid_content = ['image/gif','image/png','image/jpg','image/jpeg','image/pjpeg','image/x-png']
+    if book.image_url.present?
+      url = book.image_url
+      file = "./public/#{book.id}.jpg"
+      URI.open(file, 'w') do |pass|
+        URI.open(url) do |recieve|
+          unless recieve.respond_to?(:content_type) && valid_content.include?(recieve.content_type)
+            book.update(image_url: nil)
+            warning << "書影ファイルの形式が不正なため、書影を読み込めません。"
           end
         end
-      else
-        warning << "書影データがありません。"
+      end
+    else
+      warning << "書影データがありません。"
+    end
+  end
+
+  def save_image(book)
+    if book.image_url.present?
+      url = book.image_url
+      file = "./public/#{book.id}.jpg"
+      URI.open(file, 'w') do |pass|
+        URI.open(url) do |recieve|
+          pass.write(recieve.read.force_encoding(Encoding::UTF_8))
+          book.image_url = file
+        end
       end
     end
+  end
 end
