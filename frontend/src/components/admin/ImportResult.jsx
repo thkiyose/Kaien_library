@@ -11,17 +11,20 @@ export const ImportResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const perPage = 18;
-  const { loading } = useContext(Context);
+  const { loading, setLoading } = useContext(Context);
   const [ start, setStart ] = useState(0);
+  console.log(loading)
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
 
   const handleSubmit = async() => {
+    setLoading(true);
     const res = await createFromImported({result: location.state.result})
     navigate("/admin");
     console.log(res);
+    setLoading(false);
   }
 if (location.state) {
   return (
@@ -81,7 +84,7 @@ if (location.state) {
           breakClassName='page-item'
           breakLinkClassName='page-link'
         />
-        <SubmitButton onClick={()=>{handleSubmit(location.state?.result)}}>書籍を登録する</SubmitButton>
+        <SubmitButton onClick={()=>{handleSubmit(location.state?.result)}}>このデータで書籍を登録する</SubmitButton>
       </Wrapper>
     </>
   );} else {
