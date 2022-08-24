@@ -22,7 +22,7 @@ export const ImportResult = () => {
   const handleSubmit = async() => {
     setLoading(true);
     const res = await createFromImported({result: location.state.result})
-    navigate("/admin");
+    navigate("/admin",{state: { status: res.data.status, count: res.data.count }});
     console.log(res);
     setLoading(false);
   }
