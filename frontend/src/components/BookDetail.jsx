@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useLayoutEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactStarsRating from 'react-awesome-stars-rating';
 import { Context } from '../App';
@@ -241,7 +241,7 @@ export const BookDetail = () => {
   const [ book, setBook ] = useState({});
   const [ reviews, setReviews ] = useState([]);
   const [ average, setAverage ] = useState(0);
-  const { currentUser } = useContext(Context);
+  const { currentUser, setLoading } = useContext(Context);
   const [ lendings, setLendings ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ alreadyReviewed, setAlreadyReviewed ] = useState(false);
@@ -257,6 +257,10 @@ export const BookDetail = () => {
 
   const handleShowDatas = async(bookId,currentUserId) => {
     try {
+      const reviewRes = await showReviews(bookId,currentUserId);
+      setReviews(reviewRes.data.reviews);
+      setAlreadyReviewed(reviewRes.data.alreadyReviewed);
+      setAverage(reviewRes.data.average);
       const bookRes = await showBook(bookId,currentUserId);
       setBook(bookRes.data.book);
       setLendings(bookRes.data.lendings);
@@ -268,19 +272,17 @@ export const BookDetail = () => {
       setOnGoingOtherUserReservation(bookRes.data.otherUserReserved.onGoing);
       setOnGoingCurrentUserReservation(bookRes.data.currentUserReserved.onGoing);
       setIsLoading(false);
-      const reviewRes = await showReviews(bookId,currentUserId);
-      setReviews(reviewRes.data.reviews);
-      setAlreadyReviewed(reviewRes.data.alreadyReviewed);
-      setAverage(reviewRes.data.average);
     } catch(e) {
       console.log(e);
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-   handleShowDatas(bookId.id, currentUser.id);
- }, [bookId, currentUser]);
+  useLayoutEffect(() => {
+    setLoading(true);
+    handleShowDatas(bookId.id, currentUser.id);
+    setLoading(false);
+ }, [bookId, currentUser,setLoading]);
 
   if (!isLoading && !isEmpty) {
     return(

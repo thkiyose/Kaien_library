@@ -12,6 +12,14 @@ export const deleteBook = (book_id) => {
   return client.delete(`/admin/books/${book_id}`);
 };
 
+export const importBooksFromCSV = (csv,isbnUsage) => {
+  return client.post("/admin/books/import_from_csv",{csv,isbnUsage});
+};
+
+export const createFromImported = (result) => {
+  return client.post("/admin/books/create_from_imported",result);
+};
+
 export const fetchUsersAdmin = () => {
   return client.get("/admin/users");
 };

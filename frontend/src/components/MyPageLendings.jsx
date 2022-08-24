@@ -105,9 +105,9 @@ const PreviousLending = styled.p`
 `
 
 export const MyPageLendings = () => {
-  const { currentUser } = useContext(Context);
-  const [ isLoading, setIsLoading ] = useState(true);
+  const { currentUser,loading, setLoading } = useContext(Context);
   const [ lendings, setLendings ] = useState({});
+  const [ lendingsExists, setLendingsExists] = useState(false)
   const [ reservations, setReservations ] = useState({});
   const [ showModal, setShowModal] = useState(false);
   const [ cancelTarget, setCancelTarget ] = useState(0);
@@ -117,12 +117,13 @@ export const MyPageLendings = () => {
   const handleFetchLendings = useCallback(async() => {
     const res = await fetchLendings(currentUser.id);
     setLendings(res.data.lendings);
+    setLendingsExists(res.data.lendings.length > 0)
     setReservations(res.data.reservations);
-    setIsLoading(false);
-  },[currentUser.id]);
+    setLoading(false);
+  },[currentUser.id,setLoading]);
 
   useEffect(() => {handleFetchLendings();
-  },[handleFetchLendings,currentUser]);
+  },[handleFetchLendings,currentUser,setLoading]);
 
   const handleDestroyReservation = async(id) => {
     await destroyReservation(id);
@@ -133,11 +134,11 @@ export const MyPageLendings = () => {
     setShowModal(true);
     setCancelTarget(reservationId);
   }
-  if (isLoading === false) {
+  if (loading === false) {
     return (
       <>
       <Title>レンタル中の本</Title>
-      {lendings.length > 0 ?
+      {lendingsExists ?
         <>
           <Lendings>
             <tbody>

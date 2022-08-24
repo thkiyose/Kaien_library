@@ -28,7 +28,7 @@ const Required = styled.span`
 `
 const Form = styled.form`
   .isbnInput {
-    border-bottom: solid rgb(213, 213, 213) 1px;
+    border-bottom: solid ${Color.text} 1px;
   }
   button {
     padding: 7px;
@@ -62,7 +62,7 @@ const Form = styled.form`
     background: white;
     border: none;
     padding: 5px;
-    width: 800px;
+    width: 100%;
     height: 150px;
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1) inset;
   }
@@ -141,11 +141,6 @@ const LocationDiv = styled.div`
     width: 100%;
   }
 `
-const RegisterTitle = styled.h1`
-  text-align: center;
-  font-weight: lighter;
-  color: rgb(85, 85, 85);
-`
 const ErrorMessage = styled.p`
   margin: 0;
   margin-top: 0;
@@ -214,7 +209,6 @@ export const BookForm = () => {
 
   return (
     <>
-      <RegisterTitle>書籍の登録</RegisterTitle>
       <Form onSubmit={handleSubmit(async(data) => {
         try {
           const res = await createBook({book:data});

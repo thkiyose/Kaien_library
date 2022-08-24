@@ -12,6 +12,7 @@ require "action_text/engine"
 require "action_view/railtie"
 require "action_cable/engine"
 require "rails/test_unit/railtie"
+require "csv"
 
 Bundler.require(*Rails.groups)
 
@@ -20,5 +21,8 @@ module Backend
     config.load_defaults 6.1
     config.api_only = true
     config.autoload_paths += Dir[Rails.root.join('app', 'uploaders')]
+    config.i18n.default_locale = :ja
+    config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml').to_s]
+    config.active_model.i18n_customize_full_message = true
   end
 end

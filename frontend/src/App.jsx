@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, createContext } from 'react';
+import React, { useState, useEffect, useCallback, createContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Login } from './components/Login';
@@ -17,6 +17,8 @@ import { AdminLendingsIndex } from './components/admin/AdminLendingsIndex';
 import { AdminReservationsIndex } from './components/admin/AdminReservationsIndex';
 import { AdminReviewsIndex } from './components/admin/AdminReviewsIndex';
 import { RegisterBook } from './components/admin/RegisterBook';
+import { ImportResult } from './components/admin/ImportResult';
+import { ImportComplete } from './components/admin/ImportComplete';
 import { Lending } from './components/Lending';
 import { Reservation } from './components/Reservation';
 import { ReservationToLending } from './components/ReservationToLending';
@@ -36,7 +38,7 @@ export const App = () => {
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
 
-  const handleGetCurrentUser = async () => {
+  const handleGetCurrentUser = useCallback(async () => {
   try {
     const res = await getCurrentUser();
     if (res?.data.isLogin === true) {
@@ -49,10 +51,12 @@ export const App = () => {
     console.log(e);
   }
     setLoading(false);
-  };
+  },[]);
   useEffect(() => {
     handleGetCurrentUser();
-  }, [setCurrentUser]);
+    handleFetchCategories();
+    handleFetchLocations();
+  }, [setCurrentUser, handleGetCurrentUser]);
 
   const handleFetchCategories= async() => {
     const res = await fetchCategories();
@@ -63,9 +67,6 @@ export const App = () => {
     const res = await fetchLocations();
     setLocations(res.data.location);
   }
-
-  useLayoutEffect(() => { handleFetchCategories() }, []);
-  useLayoutEffect(() => { handleFetchLocations() }, []);
 
   const LoggedInRoute = ( {children} ) => {
     if (!loading) {
@@ -144,6 +145,8 @@ export const App = () => {
               <Route path={"reviews"} element={<AdminProtectedRoute><AdminReviewsIndex /></AdminProtectedRoute>} />
             </Route>
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
+            <Route path={"/admin/book_registration/result"} element={<AdminProtectedRoute><ImportResult /></AdminProtectedRoute>} />
+            <Route path={"/admin/book_registration/complete"} element={<AdminProtectedRoute><ImportComplete /></AdminProtectedRoute>} />
             <Route path="*" element={<p>There's nothing here: 404!</p>} />
           </Route>
         </Routes>
