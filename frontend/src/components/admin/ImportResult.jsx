@@ -1,29 +1,28 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Context } from '../../App';
+import React, { useState, useEffect } from 'react';
 import { Wrapper } from '../parts/Wrapper';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import { SpinnerForCSVImport } from '../parts/SpinnerForCSVImport';
 import { createFromImported } from '../../lib/api/admin';
 
 export const ImportResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const perPage = 18;
-  const { loading, setLoading } = useContext(Context);
+  const [ submitting, setSubmitting ] = useState(false);
   const [ start, setStart ] = useState(0);
-  console.log(loading)
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
   }
 
   const handleSubmit = async() => {
-    setLoading(true);
+    setSubmitting(true);
     const res = await createFromImported({result: location.state.result})
     navigate("/admin/book_registration/complete",{state: { status: res.data.status, count: res.data.count }});
-    setLoading(false);
+    setSubmitting(false);
   }
 if (location.state) {
   return (
@@ -84,6 +83,7 @@ if (location.state) {
           breakLinkClassName='page-link'
         />
         <SubmitButton onClick={()=>{handleSubmit(location.state?.result)}}>このデータで書籍を登録する</SubmitButton>
+        {submitting === true && <SpinnerForCSVImport message={"登録しています..."} />}
       </Wrapper>
     </>
   );} else {

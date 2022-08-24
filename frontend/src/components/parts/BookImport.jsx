@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { Context } from '../../App';
+import React, { useState } from 'react';
 import Color from './Color';
 import styled from "styled-components";
+import { SpinnerForCSVImport } from './SpinnerForCSVImport';
 import { useNavigate } from 'react-router-dom';
 import { importBooksFromCSV } from '../../lib/api/admin';
 
@@ -10,7 +10,7 @@ export const BookImport = React.memo(() => {
   const [ isbnUsage, setIsbnUsage ] = useState("compliment");
   const [ fileName, setFileName ] = useState("");
   const [ error, setError ] = useState([]);
-  const { setLoading } = useContext(Context);
+  const [ submitting, setSubmitting ] = useState(false);
   const navigate = useNavigate();
 
   const handleFileSelect = async(e) => {
@@ -29,14 +29,14 @@ export const BookImport = React.memo(() => {
 
   const handleSubmit = async(csv,isbnUsage) => {
     if (csv.length > 1){
-      setLoading(true);
+      setSubmitting(true);
       const res = await importBooksFromCSV(csv,isbnUsage)
       if (res.data.process === "COMPLETE"){
         navigate("result", {state: {result: res.data.result, successCount: res.data.successCount, failureCount: res.data.failureCount}})
       } else if (res.data.process === "FAILURE") {
         setError(res.data.error);
       }
-      setLoading(false);
+      setSubmitting(false);
     } else {
       const res = await importBooksFromCSV(csv,isbnUsage)
       setError(res.data.error);
@@ -59,6 +59,7 @@ export const BookImport = React.memo(() => {
       </Radios>
       <SubmitButton onClick={()=>{handleSubmit(csv,isbnUsage)}}>読み込む</SubmitButton>
       <Error>{error}</Error>
+      {submitting === true && <SpinnerForCSVImport message={"CSVを読み込んでいます..."} />}
     </>
   );
 })
