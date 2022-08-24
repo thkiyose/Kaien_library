@@ -5,7 +5,7 @@ namespace :mail do
     lendings = Lending.where(finished_at: nil)
     today = Date.today
     lendings.each do |lending|
-      if (lending.expiry_date - today).to_i < 2
+      if (lending.expiry_date - today).to_i < 3
         puts "返却期限が近づいています:#{lending.book.title}:#{lending.expiry_date}"
       end
     end
