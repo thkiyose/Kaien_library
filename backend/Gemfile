@@ -21,6 +21,7 @@ group :development, :test do
   gem 'capybara'
   gem 'rspec-rails'
   gem 'factory_bot_rails'
+  gem 'letter_opener_web'
   gem 'faker'
   gem 'spring-commands-rspec'
   gem 'database_cleaner'

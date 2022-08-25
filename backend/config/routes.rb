@@ -60,6 +60,9 @@ Rails.application.routes.draw do
       namespace :auth do
         resources :sessions, only: %i[index]
       end
+      if Rails.env.development?
+        mount LetterOpenerWeb::Engine, at: "/letter_opener"
+      end
     end
   end
 end
