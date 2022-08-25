@@ -6,7 +6,7 @@ namespace :mail do
   task return_reminder: :environment do
     lendings = Lending.where(finished_at: nil)
     lendings.each do |lending|
-      if (lending.expiry_date - today).to_i < 3
+      if (lending.expiry_date - today).to_i < 2
         LendingMailer.with(lending: lending).return_reminder_email.deliver_now
       end
     end
