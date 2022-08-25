@@ -14,10 +14,6 @@ set :environment, rails_env
 
 set :output, "#{Rails.root}/log/cron.log"
 
-every :hour do
-  rake 'mail:return_reminder'
-end
-
-every 1.day, at: jst('12:00 pm') do
+every 1.day, at: jst('12:00 am') do
   rake 'mail:return_reminder'
 end
