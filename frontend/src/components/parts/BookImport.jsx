@@ -18,7 +18,6 @@ export const BookImport = React.memo(() => {
     setFileName(e.target.files[0].name)
     setCsv(parse(textFromCsv));
   }
-
   const handleUsageSelect = (e) => {
     setIsbnUsage(e.target.value);
   }
