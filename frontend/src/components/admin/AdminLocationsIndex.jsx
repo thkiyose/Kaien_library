@@ -78,16 +78,16 @@ export const AdminLocationsIndex = () => {
 
   return (
     <>
-      <Title>カテゴリデータ一覧</Title>
+      <Title>収蔵場所データ一覧</Title>
       <Search>
         ID<input type="text" value={searchParam.id} className="id" onChange={(e)=>{searchOnChange(e.target.value,"id")}}/>
-        カテゴリ名<input type="text" value={searchParam.location} className="location" onChange={(e)=>{searchOnChange(e.target.value,"location")}}/>
+        収蔵場所名<input type="text" value={searchParam.location} className="location" onChange={(e)=>{searchOnChange(e.target.value,"location")}}/>
         <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}} >リセット</button>
       </Search>
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>カテゴリ名</th><th>ステータス</th><th></th>
+            <th>ID</th><th>収蔵場所名</th><th>ステータス</th><th></th>
           </Row>
           {locations.slice(start, start + perPage).map((location,index) => {
             return (
@@ -99,8 +99,8 @@ export const AdminLocationsIndex = () => {
         </tbody>
       </Table>
       <CreateForm>
-        <p>カテゴリを新しく追加する:
-          カテゴリ名<input  value={params} onChange={(e)=>{onChange(e)}}/>
+        <p>収蔵場所を新しく追加する:
+          収蔵場所名<input  value={params} onChange={(e)=>{onChange(e)}}/>
           <button onClick={()=>{handleCreateLocation()}}>新規作成</button>
         </p>
       </CreateForm>
@@ -125,7 +125,7 @@ export const AdminLocationsIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteLocation(targetId)} message={"カテゴリを削除してよろしいですか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteLocation(targetId)} message={"収蔵場所を削除してよろしいですか？"}/>
     </>
   );
 }

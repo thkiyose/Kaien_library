@@ -88,6 +88,22 @@ export const deleteCategory = (category_id) => {
   return client.delete(`/admin/categories/${category_id}`);
 };
 
+export const fetchLocationsForAdmin = () => {
+  return client.get("/admin/locations");
+};
+
 export const searchCategories = (params) => {
   return client.get(`/admin/categories/search`,{params});
+};
+
+export const createLocation = (params) => {
+  return client.post("/admin/locations", params);
+};
+
+export const deleteLocation = (location_id) => {
+  return client.delete(`/admin/locations/${location_id}`);
+};
+
+export const searchLocations = (params) => {
+  return client.get(`/admin/locations/search`,{params});
 };

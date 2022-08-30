@@ -14,7 +14,7 @@ class Api::V1::Admin::LocationsController < ApplicationController
   end
 
   def destroy
-    loation = Location.find_by(id: params[:id])
+    location = Location.find_by(id: params[:id])
     if location.destroy
       render json: {status:"SUCCESS"}
     else
@@ -25,7 +25,7 @@ class Api::V1::Admin::LocationsController < ApplicationController
   def search
     locations = Location.all
     .search_with_id(params[:id])
-    .search_with_category(params[:location])
+    .search_with_location(params[:location])
     .map{|location| {id: location.id, location: location.location, used: Book.where(location_id: location.id).present?}}
     render json: { locations: locations }
   end
