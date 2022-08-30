@@ -30,7 +30,8 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def fetch_categories
-    render json: { category: Category.all}
+    categories = Category.all.map{|category| {id: category.id, category: category.category, used: Book.where(category_id: category.id).present?}}
+    render json: { categories: categories}
   end
 
   def fetch_locations

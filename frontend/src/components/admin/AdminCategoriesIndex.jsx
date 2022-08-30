@@ -1,17 +1,25 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Context } from '../../App';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import { Modal } from '../parts/Modal';
 import ReactPaginate from 'react-paginate';
+import { fetchCategories } from '../../lib/api/book';
 
 export const AdminCategoriesIndex = () => {
-  const { categories } = useContext(Context);
+  const [ categories, setCategories ] = useState([]);
   const [ perPage ] = useState(15);
   const [ start, setStart ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(Math.ceil(categories.length/perPage));
+
+  const handleFetchCategories = useCallback(async() => {
+    const res = await fetchCategories();
+    setCategories(res.data.categories);
+    setPageCount(Math.ceil(res.data.categories.length/perPage));
+  },[perPage])
+  useEffect(() => { handleFetchCategories() }, [handleFetchCategories]);
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
@@ -29,12 +37,12 @@ export const AdminCategoriesIndex = () => {
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>カテゴリ名</th><th></th>
+            <th>ID</th><th>カテゴリ名</th><th>ステータス</th>
           </Row>
           {categories.slice(start, start + perPage).map((category,index) => {
             return (
               <Row key={index}>
-                <td className="id">{category.id}</td><td>{category.category}</td><td className="control"><DeleteButton onClick={() => {handleShowModal(category.id)}}>削除</DeleteButton></td>
+                <td className="id">{category.id}</td><td>{category.category}</td><td className="control">{category.used ? "使用中": <><span>未使用</span><DeleteButton onClick={() => {handleShowModal(category.id)}}>削除</DeleteButton></>}</td>
               </Row>
             );
           })}
@@ -92,7 +100,8 @@ const Row = styled.tr`
     text-align: center;
   }
   .control {
-    width: 6%;
+    width: 10%;
+    text-align: center;
   }
   :nth-child(odd) {
     background-color: #c2dbcf;
