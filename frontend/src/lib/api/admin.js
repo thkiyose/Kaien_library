@@ -87,3 +87,7 @@ export const createCategory = (params) => {
 export const deleteCategory = (category_id) => {
   return client.delete(`/admin/categories/${category_id}`);
 };
+
+export const searchCategories = (params) => {
+  return client.get(`/admin/categories/search`,{params});
+};

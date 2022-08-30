@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { fetchCategoriesForAdmin } from '../../lib/api/admin';
 import { createCategory } from '../../lib/api/admin';
 import { deleteCategory } from '../../lib/api/admin';
+import { searchCategories } from '../../lib/api/admin';
 
 export const AdminCategoriesIndex = () => {
   const [ categories, setCategories ] = useState([]);
@@ -56,6 +57,18 @@ export const AdminCategoriesIndex = () => {
   const handleDeleteCategory = async(categoryId) => {
     await deleteCategory(categoryId);
     handleFetchCategories();
+  };
+
+  const handleSearch = async(params) => {
+    const res = await searchCategories(params);
+    setCategories(res.data.categories)
+    setPageCount(Math.ceil(res.data.categories.length/perPage))
+    setStart(0);
+  };
+
+  const handleResetSearch = () => {
+    setSearchParam({id: "", category: ""})
+    handleSearch({id: "", category: ""});
   };
 
   return (
