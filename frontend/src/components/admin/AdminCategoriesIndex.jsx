@@ -13,6 +13,7 @@ export const AdminCategoriesIndex = () => {
   const [ perPage ] = useState(15);
   const [ params, setParams ] = useState("");
   const [ start, setStart ] = useState(0);
+  const [ currentPage, setCurrentPage ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(Math.ceil(categories.length/perPage));
@@ -27,6 +28,7 @@ export const AdminCategoriesIndex = () => {
 
   const handlePageChange = (e) => {
     setStart(e.selected * perPage);
+    setCurrentPage(e.selected)
   }
 
   const handleShowModal = (targetId) => {
@@ -64,12 +66,14 @@ export const AdminCategoriesIndex = () => {
     setCategories(res.data.categories)
     setPageCount(Math.ceil(res.data.categories.length/perPage))
     setStart(0);
+    setCurrentPage(0);
   };
 
   const handleResetSearch = () => {
     setSearchParam({id: "", category: ""})
     handleSearch({id: "", category: ""});
     setStart(0);
+    setCurrentPage(0);
   };
 
   return (
@@ -101,6 +105,7 @@ export const AdminCategoriesIndex = () => {
         </p>
       </CreateForm>
       <MyPaginate
+        forcePage={currentPage}
         onPageChange={handlePageChange}
         pageCount={pageCount}
         marginPagesDisplayed={2}
