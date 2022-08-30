@@ -23,7 +23,6 @@ class Api::V1::Admin::CategoriesController < ApplicationController
   end
 
   def search
-    puts params
     categories = Category.all
     .search_with_id(params[:id])
     .search_with_category(params[:category])
