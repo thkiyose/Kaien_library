@@ -115,7 +115,9 @@ export const App = () => {
            currentUser,
            setCurrentUser,
            categories,
-           locations
+           setCategories,
+           locations,
+           setLocations
          }}
        >
       <BrowserRouter>
