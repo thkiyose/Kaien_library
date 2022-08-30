@@ -59,8 +59,8 @@ export const AdminCategoriesIndex = () => {
     handleFetchCategories();
   };
 
-  const handleSearch = async(params) => {
-    const res = await searchCategories(params);
+  const handleSearch = async(searchParam) => {
+    const res = await searchCategories(searchParam);
     setCategories(res.data.categories)
     setPageCount(Math.ceil(res.data.categories.length/perPage))
     setStart(0);
@@ -69,15 +69,16 @@ export const AdminCategoriesIndex = () => {
   const handleResetSearch = () => {
     setSearchParam({id: "", category: ""})
     handleSearch({id: "", category: ""});
+    setStart(0);
   };
 
   return (
     <>
       <Title>カテゴリデータ一覧</Title>
       <Search>
-        ID<input type="text" name="id" className="id" onChange={(e)=>{searchOnChange(e.target.value,"id")}}/>
-        カテゴリ名<input type="text" name="category" className="category" onChange={(e)=>{searchOnChange(e.target.value,"category")}}/>
-        <button className="searchButton">検索</button><button className="resetButton" >リセット</button>
+        ID<input type="text" value={searchParam.id} className="id" onChange={(e)=>{searchOnChange(e.target.value,"id")}}/>
+        カテゴリ名<input type="text" value={searchParam.category} className="category" onChange={(e)=>{searchOnChange(e.target.value,"category")}}/>
+        <button className="searchButton" onClick={()=>{handleSearch(searchParam)}}>検索</button><button className="resetButton" onClick={()=>{handleResetSearch()}} >リセット</button>
       </Search>
       <Table>
         <tbody>
