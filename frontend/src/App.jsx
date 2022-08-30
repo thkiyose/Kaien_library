@@ -16,6 +16,7 @@ import { AdminUserIndex } from './components/admin/AdminUserIndex';
 import { AdminLendingsIndex } from './components/admin/AdminLendingsIndex';
 import { AdminReservationsIndex } from './components/admin/AdminReservationsIndex';
 import { AdminReviewsIndex } from './components/admin/AdminReviewsIndex';
+import { AdminCategoriesIndex } from './components/admin/AdminCategoriesIndex';
 import { RegisterBook } from './components/admin/RegisterBook';
 import { ImportResult } from './components/admin/ImportResult';
 import { ImportComplete } from './components/admin/ImportComplete';
@@ -143,6 +144,7 @@ export const App = () => {
               <Route path={"lendings"} element={<AdminProtectedRoute><AdminLendingsIndex /></AdminProtectedRoute>} />
               <Route path={"reservations"} element={<AdminProtectedRoute><AdminReservationsIndex /></AdminProtectedRoute>} />
               <Route path={"reviews"} element={<AdminProtectedRoute><AdminReviewsIndex /></AdminProtectedRoute>} />
+              <Route path={"categories"} element={<AdminProtectedRoute><AdminCategoriesIndex /></AdminProtectedRoute>} />
             </Route>
             <Route path={"/admin/book_registration"} element={<AdminProtectedRoute><RegisterBook /></AdminProtectedRoute>} />
             <Route path={"/admin/book_registration/result"} element={<AdminProtectedRoute><ImportResult /></AdminProtectedRoute>} />
