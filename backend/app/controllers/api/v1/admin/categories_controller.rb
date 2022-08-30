@@ -6,7 +6,7 @@ class Api::V1::Admin::CategoriesController < ApplicationController
 
   def create
     category = Category.new(category:params[:category])
-    if category.create
+    if category.save
       render json: {status:"SUCCESS"}
     else
       render json: category.errors

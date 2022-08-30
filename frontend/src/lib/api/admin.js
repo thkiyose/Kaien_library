@@ -79,3 +79,7 @@ export const searchReviews = (params) => {
 export const fetchCategoriesForAdmin = () => {
   return client.get("/admin/categories");
 };
+
+export const createCategory = (params) => {
+  return client.post("/admin/categories", params);
+};

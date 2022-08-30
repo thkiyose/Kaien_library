@@ -4,10 +4,12 @@ import Color from '../parts/Color';
 import { Modal } from '../parts/Modal';
 import ReactPaginate from 'react-paginate';
 import { fetchCategoriesForAdmin } from '../../lib/api/admin';
+import { createCategory } from '../../lib/api/admin';
 
 export const AdminCategoriesIndex = () => {
   const [ categories, setCategories ] = useState([]);
   const [ perPage ] = useState(15);
+  const [ params, setParams ] = useState("");
   const [ start, setStart ] = useState(0);
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
@@ -29,10 +31,22 @@ export const AdminCategoriesIndex = () => {
     setTargetId(targetId);
   };
 
+  const onChange = (e) => {
+    setParams(e.target.value)
+  }
+
+  const handleCreateCategory = async() => {
+    const res = await createCategory({category: params});
+    if (res.data.status === "SUCCESS") {
+      setParams("");
+      handleFetchCategories();
+    }
+  };
 
   return (
     <>
       <Title>カテゴリデータ一覧</Title>
+
       <Table>
         <tbody>
           <Row>
@@ -47,6 +61,12 @@ export const AdminCategoriesIndex = () => {
           })}
         </tbody>
       </Table>
+      <CreateForm>
+        <p>カテゴリを新しく追加する:
+          カテゴリ名<input  value={params} onChange={(e)=>{onChange(e)}}/>
+          <button onClick={()=>{handleCreateCategory()}}>新規作成</button>
+        </p>
+      </CreateForm>
       <MyPaginate
         onPageChange={handlePageChange}
         pageCount={pageCount}
@@ -115,6 +135,12 @@ const DeleteButton = styled.button`
   color: #FFFFFF;
   cursor: pointer;
   margin-left: 10px;
+`
+const CreateForm = styled.div`
+  p {
+    font-size: 0.9rem;
+    text-align: center;
+  }
 `
 
 const MyPaginate = styled(ReactPaginate).attrs({
