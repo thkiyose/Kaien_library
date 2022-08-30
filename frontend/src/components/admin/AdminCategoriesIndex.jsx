@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Context } from '../../App';
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from "styled-components";
 import Color from '../parts/Color';
 import { Modal } from '../parts/Modal';
 import ReactPaginate from 'react-paginate';
-import { fetchCategories } from '../../lib/api/book';
+import { fetchCategoriesForAdmin } from '../../lib/api/admin';
 
 export const AdminCategoriesIndex = () => {
   const [ categories, setCategories ] = useState([]);
@@ -15,7 +14,7 @@ export const AdminCategoriesIndex = () => {
   const [ pageCount, setPageCount] = useState(Math.ceil(categories.length/perPage));
 
   const handleFetchCategories = useCallback(async() => {
-    const res = await fetchCategories();
+    const res = await fetchCategoriesForAdmin();
     setCategories(res.data.categories);
     setPageCount(Math.ceil(res.data.categories.length/perPage));
   },[perPage])

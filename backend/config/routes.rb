@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         resources :reviews, only: [:index, :destroy] do
           get "search", on: :collection
         end
+        resources :categories, only: [:index, :destroy, :create]
       end
       namespace :auth do
         resources :sessions, only: %i[index]
