@@ -5,6 +5,7 @@ import { Modal } from '../parts/Modal';
 import ReactPaginate from 'react-paginate';
 import { fetchCategoriesForAdmin } from '../../lib/api/admin';
 import { createCategory } from '../../lib/api/admin';
+import { deleteCategory } from '../../lib/api/admin';
 
 export const AdminCategoriesIndex = () => {
   const [ categories, setCategories ] = useState([]);
@@ -14,6 +15,7 @@ export const AdminCategoriesIndex = () => {
   const [ showModal, setShowModal ] = useState(false);
   const [ targetId, setTargetId ] = useState(0);
   const [ pageCount, setPageCount] = useState(Math.ceil(categories.length/perPage));
+  const [ searchParam, setSearchParam ] = useState({id:"",category:""});
 
   const handleFetchCategories = useCallback(async() => {
     const res = await fetchCategoriesForAdmin();
@@ -35,6 +37,14 @@ export const AdminCategoriesIndex = () => {
     setParams(e.target.value)
   }
 
+  const searchOnChange = (param,type) => {
+    if (type === "id"){
+      setSearchParam({...searchParam,id:param})
+    } else if (type === "category") {
+      setSearchParam({...searchParam,category:param})
+    }
+  }
+
   const handleCreateCategory = async() => {
     const res = await createCategory({category: params});
     if (res.data.status === "SUCCESS") {
@@ -43,19 +53,28 @@ export const AdminCategoriesIndex = () => {
     }
   };
 
+  const handleDeleteCategory = async(categoryId) => {
+    await deleteCategory(categoryId);
+    handleFetchCategories();
+  };
+
   return (
     <>
       <Title>カテゴリデータ一覧</Title>
-
+      <Search>
+        ID<input type="text" name="id" className="id" onChange={(e)=>{searchOnChange(e.target.value,"id")}}/>
+        カテゴリ名<input type="text" name="category" className="category" onChange={(e)=>{searchOnChange(e.target.value,"category")}}/>
+        <button className="searchButton">検索</button><button className="resetButton" >リセット</button>
+      </Search>
       <Table>
         <tbody>
           <Row>
-            <th>ID</th><th>カテゴリ名</th><th>ステータス</th>
+            <th>ID</th><th>カテゴリ名</th><th>ステータス</th><th></th>
           </Row>
           {categories.slice(start, start + perPage).map((category,index) => {
             return (
               <Row key={index}>
-                <td className="id">{category.id}</td><td>{category.category}</td><td className="control">{category.used ? "使用中": <><span>未使用</span><DeleteButton onClick={() => {handleShowModal(category.id)}}>削除</DeleteButton></>}</td>
+                <td className="id">{category.id}</td><td>{category.category}</td><td className="status">{category.used ? "使用中" : "未使用"}</td><td className="control">{!category.used && <DeleteButton onClick={() => {handleShowModal(category.id)}}>削除</DeleteButton>}</td>
               </Row>
             );
           })}
@@ -87,11 +106,45 @@ export const AdminCategoriesIndex = () => {
         breakClassName='page-item'
         breakLinkClassName='page-link'
       />
-      <Modal showFlag={showModal} setShowModal={setShowModal} message={"カテゴリを削除してよろしいですか？"}/>
+      <Modal showFlag={showModal} setShowModal={setShowModal} yesAction={()=>handleDeleteCategory(targetId)} message={"カテゴリを削除してよろしいですか？"}/>
     </>
   );
 }
 
+const Search = styled.div`
+  font-size: 0.9rem;
+  input {
+    outline: 0;
+    background: white;
+    border: 0;
+    margin: 0 0 10px;
+    padding: 5px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  button {
+    outline: 0;
+    font-size: 0.8rem;
+    border: 0;
+    padding: 5px 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+  }
+  .searchButton {
+    background-color: ${Color.primary};
+    padding: 5px 10px;
+  }
+  .resetButton {
+    background-color: ${Color.dark};
+    float:right;
+  }
+  .id {
+    width: 50px;
+  }
+  .category {
+    width: 450px;
+  }
+`
 const Title = styled.h1`
   margin: 0 auto;
   font-size: 1.3rem;
@@ -113,13 +166,18 @@ const Row = styled.tr`
   td {
     font-size: 0.9rem;
     border: none;
+    padding: 3px 0px;
   }
   .id {
     width: 5%;
     text-align: center;
   }
-  .control {
+  .status {
     width: 10%;
+    text-align:center;
+  }
+  .control {
+    width: 7%;
     text-align: center;
   }
   :nth-child(odd) {
@@ -131,7 +189,7 @@ const DeleteButton = styled.button`
   background: ${Color.primary};
   font-size: 0.8rem;
   border: 0;
-  padding: 5px 5px;
+  padding: 3px 5px;
   color: #FFFFFF;
   cursor: pointer;
   margin-left: 10px;
@@ -140,6 +198,25 @@ const CreateForm = styled.div`
   p {
     font-size: 0.9rem;
     text-align: center;
+  }
+  input {
+    outline: 0;
+    background: white;
+    border: 0;
+    margin: 0 0 10px;
+    padding: 5px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  button {
+    outline: 0;
+    background: ${Color.primary};
+    font-size: 0.8rem;
+    border: 0;
+    padding: 3px 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    margin-left: 10px;
   }
 `
 

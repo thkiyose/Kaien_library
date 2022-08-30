@@ -12,4 +12,13 @@ class Api::V1::Admin::CategoriesController < ApplicationController
       render json: category.errors
     end
   end
+
+  def destroy
+    category = Category.find_by(id: params[:id])
+    if category.destroy
+      render json: {status:"SUCCESS"}
+    else
+      render json: category.errors
+    end
+  end
 end

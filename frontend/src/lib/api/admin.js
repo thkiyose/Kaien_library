@@ -83,3 +83,7 @@ export const fetchCategoriesForAdmin = () => {
 export const createCategory = (params) => {
   return client.post("/admin/categories", params);
 };
+
+export const deleteCategory = (category_id) => {
+  return client.delete(`/admin/categories/${category_id}`);
+};
