@@ -59,6 +59,9 @@ Rails.application.routes.draw do
         resources :categories, only: [:index, :destroy, :create] do
           get "search", on: :collection
         end
+        resources :locations, only: [:index, :destroy, :create] do
+          get "search", on: :collection
+        end
       end
       namespace :auth do
         resources :sessions, only: %i[index]
