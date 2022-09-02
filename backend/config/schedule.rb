@@ -16,4 +16,5 @@ set :output, "#{Rails.root}/log/cron.log"
 
 every 1.day, at: jst('9:00 am') do
   rake 'mail:return_reminder'
+  rake 'mail:can_lend_reminder'
 end

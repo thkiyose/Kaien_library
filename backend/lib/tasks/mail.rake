@@ -11,4 +11,14 @@ namespace :mail do
       end
     end
   end
+
+  task can_lend_reminder: :environment do
+    today = Date.today
+    reservations = Reservation.where('expiry_date > ?', today)
+    reservations.each do |reservation|
+      if reservation.start_date == today && reservation.book.is_lent == false
+        ReservationMailer.with(reservation: reservation).can_lend_reminder_email.deliver_now
+      end
+    end
+  end
 end
