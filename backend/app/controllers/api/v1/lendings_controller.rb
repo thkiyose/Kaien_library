@@ -72,6 +72,12 @@ class Api::V1::LendingsController < ApplicationController
       lending.update(finished_at: Date.today)
       book.update(is_lent: false)
       render json: { status: "SUCCESS"}
+      if book.reservations.where('start_date <= ?', Date.today).where('expiry_date >= ?', Date.today).exists?
+        reservations = book.reservations.where('start_date <= ?', Date.today).where('expiry_date >= ?', Date.today)
+        reservations.each do |reservation|
+          ReservationMailer.with(reservation: reservation).can_lend_reminder_email.deliver_now
+        end
+      end
     end
   end
 
