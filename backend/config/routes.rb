@@ -56,9 +56,18 @@ Rails.application.routes.draw do
         resources :reviews, only: [:index, :destroy] do
           get "search", on: :collection
         end
+        resources :categories, only: [:index, :destroy, :create] do
+          get "search", on: :collection
+        end
+        resources :locations, only: [:index, :destroy, :create] do
+          get "search", on: :collection
+        end
       end
       namespace :auth do
         resources :sessions, only: %i[index]
+      end
+      if Rails.env.development?
+        mount LetterOpenerWeb::Engine, at: "/letter_opener"
       end
     end
   end

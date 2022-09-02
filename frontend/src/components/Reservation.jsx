@@ -95,11 +95,10 @@ export const Reservation = () => {
       key: 'selection'
     }
   });
-
   const disableDates = async(bookId) => {
     const res = await fetchLendingsAndReservations(bookId)
     const toDisable = []
-    res.data.lendings.forEach(lending => {toDisable.push(...eachDayOfInterval({start: new Date(lending.startDate), end: new Date(lending.expiryDate)}))})
+    res.data.lendings.forEach(lending => {toDisable.push(...eachDayOfInterval({start: new Date(lending.startDate), end: new Date() > new Date(lending.expiryDate) ? new Date() : new Date(lending.expiryDate) }))})
     res.data.reservations.forEach(reservation => {toDisable.push(...eachDayOfInterval({start: new Date(reservation.startDate), end: new Date(reservation.expiryDate)}))})
     setDisabled(toDisable);
   };

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang='ja' content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>予約していた書籍がレンタル可能になりました。</h1>
+    <p><%= @user.name %> 様</p>
+    <p>予約済の書籍: 「<%= @reservation.book.title %>」がレンタル可能です。</p>
+    <p>是非ご利用下さい。</p>
+  </body>
+</html>
