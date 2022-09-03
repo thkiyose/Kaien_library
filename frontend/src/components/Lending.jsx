@@ -107,7 +107,7 @@ export const Lending = () => {
 
   const handleSelect = (item,disabled) => {
     const nearestDisabled = new Date(Math.min.apply(null,disabled));
-    if (disabled.length > 0) {
+    if (disabled.length > 0 && new Date() < nearestDisabled) {
         if (item.selection.endDate < nearestDisabled) {
           setState({
             selection: {
