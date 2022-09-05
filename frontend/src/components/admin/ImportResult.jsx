@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Wrapper } from '../parts/Wrapper';
 import styled from "styled-components";
 import Color from '../parts/Color';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { SpinnerForCSVImport } from '../parts/SpinnerForCSVImport';
 import { createFromImported } from '../../lib/api/admin';
