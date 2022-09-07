@@ -9,7 +9,7 @@ const options = {
 
 export const client = applyCaseMiddleware(
   axios.create({
-    baseURL: 'https://react-rails-library.herokuapp.com/api/v1'
+    baseURL: 'http://localhost:3000/api/v1'
   }),
  options
 );
