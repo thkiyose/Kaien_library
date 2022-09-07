@@ -1,6 +1,7 @@
 class Api::V1::BooksController < ApplicationController
   require "open-uri"
   require "date"
+  require 'net/http'
 
   def index
     books = Book.where(deleted:false)
